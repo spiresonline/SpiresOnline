@@ -1,0 +1,125 @@
+/* Spires Online | Professional Alpha Styling */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;900&display=swap');
+
+:root {
+    --bg-dark: #020617;
+    --accent-blue: #3b82f6;
+    --panel-glass: rgba(15, 23, 42, 0.85);
+    --border-glass: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    cursor: default;
+}
+
+body {
+    background-color: var(--bg-dark);
+    font-family: 'Outfit', sans-serif;
+    user-select: none;
+}
+
+/* Layer Management */
+.view-layer {
+    position: absolute;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+}
+
+/* Auth Screen Specifics */
+.auth-backdrop {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.7)), 
+                url('https://images.unsplash.com/photo-1614728263952-84ea206f99b6?auto=format&fit=crop&w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+
+/* Buttons & Interactions */
+.btn-primary {
+    background: var(--accent-blue);
+    color: white;
+    padding: 1.25rem 4rem;
+    border-radius: 1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.875rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+    background: white;
+    color: black;
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+}
+
+/* Panels & UI Components */
+.glass-panel {
+    background: var(--panel-glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glass);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.map-card {
+    background: var(--panel-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    padding: 2.5rem;
+    border-radius: 2rem;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.map-card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-5px);
+}
+
+/* Vitals & Progress Bars */
+.progress-bg {
+    background: rgba(255, 255, 255, 0.05);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Chat Styling */
+#chat-logs::-webkit-scrollbar {
+    width: 3px;
+}
+
+#chat-logs::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.chat-minimized {
+    height: 38px !important;
+}
+
+/* Canvas Optimization */
+#game-canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    image-rendering: pixelated; /* Ensures the 64px grid stays sharp */
+}
+
+/* Utility */
+.hidden {
+    display: none !important;
+}
