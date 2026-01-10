@@ -1,22 +1,32 @@
 /**
  * SPIRES ONLINE | INVENTORY SYSTEM (inventory.js)
- * Alpha 1.2: Grid Rendering, Equipment Swapping, and Item Usage.
+ * Alpha 1.3: Persistence, Rarity Colors, and Gear Swapping.
  */
 
 import { Game } from './game.js';
 
 export const Inventory = {
-    items: [],
     capacity: 20,
 
     init() {
-        // Initial rendering of the UI (Empty slots)
         this.renderGrid();
         this.updateGearUI();
-        console.log("Inventory System: UI Linked.");
+        console.log("Inventory: Linked & Ready.");
+    },
+
+    get items() {
+        // Helper to access state directly
+        return Game.state.player.inventory || []; 
+    },
+
+    set items(newItems) {
+        Game.state.player.inventory = newItems;
     },
 
     addItem(item) {
+        // Initialize inventory array if missing (migration safety)
+        if (!Game.state.player.inventory) Game.state.player.inventory = [];
+
         if (this.items.length >= this.capacity) {
             Game.ui.log("Inventory Full! Cannot pick up item.");
             return false;
@@ -26,60 +36,54 @@ export const Inventory = {
         this.items.push(item);
         Game.ui.log(`Loot: Acquired [${item.name}].`);
         
-        // Refresh UI
+        // Refresh UI & Save
         this.renderGrid();
+        Game.saveGame(); 
         return true;
     },
 
-    /**
-     * Handles logic when a user clicks an item in the bag.
-     * @param {number} index - Index in items array
-     */
     useOrEquipItem(index) {
         const item = this.items[index];
         if (!item) return;
 
+        let actionTaken = false;
+
         if (item.type === 'consumable') {
-            // 1. Consume Item
             if (item.onUse) {
+                // Execute effect
                 item.onUse(Game.state.player);
                 Game.ui.log(`Used: ${item.name}`);
-                this.items.splice(index, 1);
                 
-                // Update Vitals immediately
+                // Remove from bag
+                this.items.splice(index, 1);
                 Game.ui.updateVitals();
+                actionTaken = true;
             }
         } 
         else if (item.type === 'gear') {
-            // 2. Equip Gear
             const slot = item.slot;
             const currentEquipped = Game.state.player.gear[slot];
 
-            // If slot occupied, move old item to bag (Swap)
+            // Swap Logic
             if (currentEquipped) {
-                this.items[index] = currentEquipped; // Replace slot in bag with old item
+                this.items[index] = currentEquipped;
                 Game.ui.log(`Swapped: ${currentEquipped.name} for ${item.name}.`);
             } else {
-                // If slot empty, remove from bag
                 this.items.splice(index, 1);
                 Game.ui.log(`Equipped: ${item.name}.`);
             }
 
-            // Apply new item
             Game.state.player.gear[slot] = item;
-            
-            // Update Gear UI
             this.updateGearUI();
+            actionTaken = true;
         }
 
-        // Re-render grid to show changes
-        this.renderGrid();
+        if (actionTaken) {
+            this.renderGrid();
+            Game.saveGame();
+        }
     },
 
-    /**
-     * Handles logic when a user clicks a gear slot to remove item.
-     * @param {string} slot - 'head', 'body', 'legs', 'weapon'
-     */
     unequipItem(slot) {
         const item = Game.state.player.gear[slot];
         if (!item) return;
@@ -89,25 +93,29 @@ export const Inventory = {
             return;
         }
 
-        // Remove from body
         Game.state.player.gear[slot] = null;
-        
-        // Add back to bag
         this.items.push(item);
+        
         Game.ui.log(`Unequipped: ${item.name}.`);
 
         this.updateGearUI();
         this.renderGrid();
+        Game.saveGame();
     },
 
-    /**
-     * Draws the icons into the HTML grid.
-     */
+    updateUI() {
+        this.renderGrid();
+        this.updateGearUI();
+    },
+
     renderGrid() {
         const grid = document.getElementById('inventory-grid');
         if (!grid) return;
 
-        grid.innerHTML = ''; // Clear current grid
+        grid.innerHTML = ''; 
+
+        // Ensure inventory exists
+        if (!Game.state.player.inventory) Game.state.player.inventory = [];
 
         for (let i = 0; i < this.capacity; i++) {
             const el = document.createElement('div');
@@ -116,24 +124,25 @@ export const Inventory = {
             if (this.items[i]) {
                 const item = this.items[i];
                 el.innerText = item.icon;
-                el.title = `${item.name}\n${item.description}\nValue: ${item.value}`;
+                
+                // Tooltip
+                el.title = `${item.name}\n${item.description}\nValue: ${item.value}g`;
+                
                 el.onclick = () => this.useOrEquipItem(i);
                 
-                // Visual flare for rare items (Optional)
-                if (item.value > 100) el.style.borderColor = '#3b82f6'; // Blue border
+                // Rarity Borders
+                if (item.value >= 400) el.style.borderColor = '#a855f7'; // Purple (Epic)
+                else if (item.value >= 100) el.style.borderColor = '#3b82f6'; // Blue (Rare)
+                else if (item.type === 'misc') el.style.borderColor = '#78716c'; // Grey (Junk)
             }
 
             grid.appendChild(el);
         }
         
-        // Update Gold Display inside Inventory Modal
         const goldEl = document.getElementById('txt-gold-inv');
         if(goldEl) goldEl.innerText = `${Game.state.player.gold} GOLD`;
     },
 
-    /**
-     * Updates the Character Doll slots (Left side of modal).
-     */
     updateGearUI() {
         const slots = ['head', 'body', 'legs', 'weapon'];
         
@@ -142,15 +151,14 @@ export const Inventory = {
             const item = Game.state.player.gear[slot];
             
             if (el) {
-                // Clear previous click events to prevent stacking
                 const newEl = el.cloneNode(true);
                 el.parentNode.replaceChild(newEl, el);
 
                 if (item) {
                     newEl.innerText = item.icon;
-                    newEl.style.borderColor = '#eab308'; // Gold border
+                    newEl.style.borderColor = '#eab308';
                     newEl.style.backgroundColor = 'rgba(234, 179, 8, 0.2)';
-                    newEl.title = `Equipped: ${item.name}`;
+                    newEl.title = `Equipped: ${item.name} (+${item.stats.attack||0} Atk, +${item.stats.defense||0} Def)`;
                     newEl.onclick = () => this.unequipItem(slot);
                 } else {
                     newEl.innerText = slot.toUpperCase();

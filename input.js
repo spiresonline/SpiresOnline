@@ -1,6 +1,6 @@
 /**
  * SPIRES ONLINE | INPUT SYSTEM (input.js)
- * Alpha 1.2: NPC Dialogue, Window Toggles, and Movement.
+ * Alpha 1.3: NPC Quest Triggers and Dynamic Interactions.
  */
 
 import { Game } from './game.js';
@@ -11,7 +11,7 @@ import { Logic } from './logic.js';
 export const Input = {
     keys: new Set(),
     lastMoveTime: 0,
-    moveCooldown: 120, // Speed of movement (lower = faster)
+    moveCooldown: 120, // Speed of movement
 
     init() {
         window.addEventListener('keydown', (e) => {
@@ -39,15 +39,8 @@ export const Input = {
         }
 
         // --- UI HOTKEYS ---
-        // Toggle Inventory (I)
-        if (lowerKey === 'i') {
-            window.UI.toggleModal('inventory');
-        }
-        // Toggle Talents (N - for Neural)
-        if (lowerKey === 'n') {
-            window.UI.toggleModal('talents');
-        }
-        // ESC: Close all windows
+        if (lowerKey === 'i') window.UI.toggleModal('inventory');
+        if (lowerKey === 'n') window.UI.toggleModal('talents');
         if (originalKey === 'Escape') {
             document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
         }
@@ -67,12 +60,11 @@ export const Input = {
         const now = Date.now();
         if (now - this.lastMoveTime < this.moveCooldown) return;
 
-        // Disable movement if a modal is open
-        const isModalOpen = !document.getElementById('modal-inventory').classList.contains('hidden') ||
-                            !document.getElementById('modal-profile').classList.contains('hidden') ||
-                            !document.getElementById('modal-talents').classList.contains('hidden');
+        // Block movement if typing in chat or modal is open
+        const isChatFocused = document.activeElement === document.getElementById('chat-input');
+        const isModalOpen = document.querySelector('.modal:not(.hidden)');
         
-        if (isModalOpen) return;
+        if (isChatFocused || isModalOpen) return;
 
         let dX = 0;
         let dY = 0;
@@ -96,16 +88,13 @@ export const Input = {
         const nX = player.x + dX;
         const nY = player.y + dY;
 
-        // 1. Boundary Check
+        // 1. Boundary
         if (nX < 0 || nX >= currentMap.width || nY < 0 || nY >= currentMap.height) return;
 
-        // 2. Collision Check (Entities)
+        // 2. Collision
         const isEntityInWay = entities.some(en => en.alive && en.x === nX && en.y === nY);
         
-        // 3. Wall Check (If map has walls defined)
-        const isWall = currentMap.walls && currentMap.walls.some(w => w.x === nX && w.y === nY);
-
-        if (!isEntityInWay && !isWall) {
+        if (!isEntityInWay) {
             player.x = nX;
             player.y = nY;
         }
@@ -121,6 +110,7 @@ export const Input = {
             const itemData = ItemDatabase[worldItem.itemId];
             if (Inventory.addItem(itemData)) {
                 worldItems.splice(itemIndex, 1);
+                // Play sound logic here later
             }
             return;
         }
@@ -130,17 +120,53 @@ export const Input = {
             const dist = Math.abs(player.x - en.x) + Math.abs(player.y - en.y);
             
             if (dist <= 1 && en.type === 'npc') {
-                if (en.id === 'bartender') {
-                    // Full Heal
-                    player.hp = player.maxHp;
-                    player.mana = player.maxMana;
-                    Game.ui.updateVitals();
-                    Game.ui.log("Barman: 'Here, a stim-shot on the house. You look terrible.'");
-                } 
-                else if (en.id === 'guard') {
-                    Game.ui.log("Guard: 'Beyond this gate lies the Wilds. Don't die out there.'");
-                }
+                this.handleNpcDialogue(en);
             }
         });
+    },
+
+    handleNpcDialogue(npc) {
+        const { quests } = Game.state;
+
+        if (npc.id === 'questgiver') {
+            // Check if we already have the quest
+            const hasQuest = quests.find(q => q.id === 'q_goblins');
+            
+            if (!hasQuest) {
+                // ASSIGN QUEST
+                Game.state.quests.push({
+                    id: 'q_goblins',
+                    title: "Cull the Weak",
+                    description: "Captain Vance wants you to kill 5 Goblins in the Wilds.",
+                    type: 'kill',
+                    targetId: 'goblin',
+                    current: 0,
+                    required: 5,
+                    rewardXP: 50,
+                    rewardGold: 100,
+                    completed: false
+                });
+                
+                Game.ui.log("Vance: 'The Wilds are crawling with filth. Kill 5 Goblins for me.'");
+                Game.ui.showFloatText(npc.x, npc.y, "QUEST ACCEPTED", "#fbbf24");
+                Logic.updateQuestUI(); // Update tracker
+            } 
+            else if (hasQuest.completed) {
+                Game.ui.log("Vance: 'Good work, mercenary. I'll have more for you later.'");
+            } 
+            else {
+                Game.ui.log(`Vance: 'You still have ${hasQuest.required - hasQuest.current} Goblins to kill. Get moving.'`);
+            }
+        }
+        
+        else if (npc.id === 'bartender') {
+            Game.state.player.hp = Game.state.player.maxHp;
+            Game.ui.updateVitals();
+            Game.ui.log("Barman: 'Drink this. It'll put hair on your chest.' (HP Restored)");
+        } 
+        
+        else if (npc.id === 'guard') {
+            Game.ui.log("Guard: 'Keep your weapon sharp. The forest is dangerous at night.'");
+        }
     }
 };

@@ -1,22 +1,30 @@
 /**
  * SPIRES ONLINE | ITEM DATABASE (items.js)
- * Alpha 1.2: Expanded Catalog with Full Gear Sets.
+ * Alpha 1.3: Expanded Gear, Consumables, and Quest Rewards.
  */
 
 export const ItemDatabase = {
-    // --- MISC / LOOT ---
+    // --- MISC / TROPHIES ---
     "scrap_metal": {
         id: "scrap_metal",
         name: "Scrap Metal",
-        description: "Rusted parts. Can be sold for Gold.",
+        description: "Rusted parts. Worth a few coins.",
         value: 10,
         icon: "⚙️",
+        type: "misc"
+    },
+    "goblin_ear": {
+        id: "goblin_ear",
+        name: "Goblin Ear",
+        description: "A grim trophy from the wilds.",
+        value: 15,
+        icon: "👂",
         type: "misc"
     },
     "wolf_pelt": {
         id: "wolf_pelt",
         name: "Wolf Pelt",
-        description: "Soft fur from a wild beast.",
+        description: "Soft fur. Used for crafting.",
         value: 25,
         icon: "🧶",
         type: "misc"
@@ -25,20 +33,29 @@ export const ItemDatabase = {
     // --- CONSUMABLES ---
     "health_stim": {
         id: "health_stim",
-        name: "Medical Stim",
-        description: "Restores 50 Health.",
-        value: 50,
+        name: "Small Stim",
+        description: "Restores 30 Health.",
+        value: 20,
         icon: "💉",
         type: "consumable",
         onUse: (player) => {
-            const oldHp = player.hp;
-            player.hp = Math.min(player.maxHp, player.hp + 50);
-            // Return true/false or handle sound here in future
+            player.hp = Math.min(player.maxHp, player.hp + 30);
+        }
+    },
+    "medkit": {
+        id: "medkit",
+        name: "Field Medkit",
+        description: "Restores 80 Health.",
+        value: 100,
+        icon: "❤️",
+        type: "consumable",
+        onUse: (player) => {
+            player.hp = Math.min(player.maxHp, player.hp + 80);
         }
     },
     "mana_crystal": {
         id: "mana_crystal",
-        name: "Mana Crystal",
+        name: "Mana Shard",
         description: "Restores 50 Mana.",
         value: 75,
         icon: "💎",
@@ -52,66 +69,86 @@ export const ItemDatabase = {
     "rusty_shiv": {
         id: "rusty_shiv",
         name: "Rusty Shiv",
-        description: "Better than fists, but barely.",
+        description: "Better than nothing.",
         value: 15,
         icon: "🗡️",
         type: "gear",
         slot: "weapon",
-        stats: { attack: 5 }
+        stats: { attack: 3 }
     },
-    "power_blade": {
-        id: "power_blade",
-        name: "Power Blade",
-        description: "Vibrating edge that cuts steel.",
-        value: 450,
+    "steel_sword": {
+        id: "steel_sword",
+        name: "Steel Sword",
+        description: "Standard issue infantry blade.",
+        value: 150,
         icon: "⚔️",
         type: "gear",
         slot: "weapon",
-        stats: { attack: 15 }
+        stats: { attack: 10 }
+    },
+    "plasma_cutter": {
+        id: "plasma_cutter",
+        name: "Plasma Cutter",
+        description: "Industrial tool weaponized.",
+        value: 500,
+        icon: "⚡",
+        type: "gear",
+        slot: "weapon",
+        stats: { attack: 25 }
     },
 
     // --- BODY ARMOR ---
     "worn_jacket": {
         id: "worn_jacket",
         name: "Worn Jacket",
-        description: "Offers minimal protection.",
+        description: "Smells like rain and dirt.",
         value: 40,
         icon: "🧥",
         type: "gear",
         slot: "body",
-        stats: { defense: 5 }
+        stats: { defense: 2 }
     },
-    "tactical_vest": {
-        id: "tactical_vest",
-        name: "Tactical Vest",
-        description: "Ballistic weave armor.",
-        value: 200,
+    "leather_armor": {
+        id: "leather_armor",
+        name: "Leather Armor",
+        description: "Sturdy hardened leather.",
+        value: 120,
         icon: "🦺",
         type: "gear",
         slot: "body",
-        stats: { defense: 15 }
+        stats: { defense: 8 }
+    },
+    "plate_mail": {
+        id: "plate_mail",
+        name: "Plate Mail",
+        description: "Heavy metal protection.",
+        value: 400,
+        icon: "🛡️",
+        type: "gear",
+        slot: "body",
+        stats: { defense: 18 }
     },
 
     // --- HEAD GEAR ---
     "mining_helmet": {
         id: "mining_helmet",
         name: "Mining Helmet",
-        description: "Protects the noggin.",
+        description: "Safety first.",
         value: 80,
         icon: "⛑️",
         type: "gear",
         slot: "head",
-        stats: { defense: 5 }
+        stats: { defense: 3 }
     },
-    "cyber_visor": {
-        id: "cyber_visor",
-        name: "Cyber Visor",
-        description: "Enhances aim and protects eyes.",
-        value: 300,
-        icon: "🥽",
+    "iron_helm": {
+        id: "iron_helm",
+        name: "Iron Helm",
+        description: "Protects the skull.",
+        value: 150,
+        icon: "🤺",
         type: "gear",
         slot: "head",
-        stats: { defense: 8, attack: 2 } // Multi-stat item
+        stats: { defense: 6 }
     },
 
     // --- LEG GEAR ---
@@ -123,16 +160,16 @@ export const ItemDatabase = {
         icon: "👖",
         type: "gear",
         slot: "legs",
-        stats: { defense: 2 }
+        stats: { defense: 1 }
     },
-    "reinforced_boots": {
-        id: "reinforced_boots",
+    "alloy_boots": {
+        id: "alloy_boots",
         name: "Alloy Boots",
-        description: "Heavy boots for heavy steps.",
-        value: 150,
+        description: "Magnetic grip soles.",
+        value: 200,
         icon: "👢",
         type: "gear",
         slot: "legs",
-        stats: { defense: 8 }
+        stats: { defense: 5, agility: 2 }
     }
 };

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spires Online | Alpha 1.2</title>
+    <title>Spires Online | Alpha 1.3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css"> 
 </head>
@@ -12,44 +12,58 @@
     <div id="app-interface" class="relative w-screen h-screen">
         
         <div id="screen-auth" class="view-layer flex flex-col items-center justify-center p-6 text-center z-50 bg-slate-950">
-            <h1 class="text-8xl font-black italic tracking-tighter mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">SPIRES<span class="text-white">.</span></h1>
-            <p class="text-slate-500 uppercase tracking-[0.4em] text-[10px] mb-12 font-bold">Alpha 1.2 | System Update</p>
-            <button id="btn-initialize" class="btn-primary">INITIALIZE LINK</button>
+            <h1 class="text-8xl font-black italic tracking-tighter mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-emerald-400">SPIRES<span class="text-white">.</span></h1>
+            <p class="text-slate-500 uppercase tracking-[0.4em] text-[10px] mb-12 font-bold">Alpha 1.3 | Systems Update</p>
+            <button id="btn-initialize" class="btn-primary">INITIALIZE SESSION</button>
         </div>
 
         <canvas id="game-canvas" class="absolute inset-0 z-0"></canvas>
+        
+        <div id="overlay-time" class="view-layer z-0 pointer-events-none transition-colors duration-[5000ms] mix-blend-multiply bg-transparent"></div>
+
+        <div id="layer-fx" class="view-layer z-5 pointer-events-none overflow-hidden"></div>
 
         <div id="screen-hud" class="view-layer hidden pointer-events-none z-10 flex flex-col justify-between p-4">
             
             <div class="flex justify-between items-start pointer-events-auto">
-                <div class="glass-panel px-4 py-2">
+                <div class="glass-panel px-4 py-2 flex flex-col">
                     <h2 id="txt-location" class="text-xs font-black tracking-widest text-slate-400 uppercase">Unknown Zone</h2>
+                    <span id="txt-time" class="text-[10px] text-yellow-500 font-mono">12:00 PM</span>
                 </div>
 
-                <div class="relative group">
-                    <button class="glass-panel px-4 py-2 hover:bg-white/10 text-xs font-bold tracking-widest transition">SYSTEM MENU ▼</button>
-                    <div class="absolute right-0 mt-2 w-48 glass-panel flex flex-col hidden group-hover:flex">
-                        <button onclick="window.UI.toggleModal('profile')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold border-b border-white/5">👤 PROFILE</button>
-                        <button onclick="window.UI.toggleModal('inventory')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold border-b border-white/5">🎒 INVENTORY (I)</button>
-                        <button onclick="window.UI.toggleModal('talents')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold border-b border-white/5">🔮 TALENTS (N)</button>
-                        <button onclick="window.UI.toggleModal('settings')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold">⚙️ SETTINGS</button>
+                <div class="flex space-x-2">
+                    <button onclick="window.UI.toggleModal('admin')" class="glass-panel px-3 py-2 hover:bg-red-500/20 text-red-400 text-xs font-bold tracking-widest transition">ADMIN</button>
+                    
+                    <div class="relative group">
+                        <button class="glass-panel px-4 py-2 hover:bg-white/10 text-xs font-bold tracking-widest transition">SYSTEM ▼</button>
+                        <div class="absolute right-0 mt-2 w-48 glass-panel flex flex-col hidden group-hover:flex">
+                            <button onclick="window.UI.toggleModal('profile')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold border-b border-white/5">👤 PROFILE</button>
+                            <button onclick="window.UI.toggleModal('inventory')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold border-b border-white/5">🎒 INVENTORY (I)</button>
+                            <button onclick="window.UI.toggleModal('talents')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold border-b border-white/5">🔮 TALENTS (N)</button>
+                            <button onclick="window.UI.toggleModal('settings')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold">⚙️ SETTINGS</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="flex-grow flex items-center">
-                <div class="pointer-events-auto w-80 h-64 glass-panel flex flex-col">
+            <div class="flex-grow flex items-center justify-between">
+                <div class="pointer-events-auto w-80 h-64 glass-panel flex flex-col mt-4">
                     <div class="bg-black/40 px-3 py-1 text-[10px] font-bold text-slate-500 border-b border-white/5">COMMS LOG</div>
-                    <div id="chat-logs" class="flex-grow overflow-y-auto p-2 space-y-1 text-xs font-mono scrollbar-hide">
-                        </div>
+                    <div id="chat-logs" class="flex-grow overflow-y-auto p-2 space-y-1 text-xs font-mono scrollbar-hide"></div>
                     <div class="p-2 border-t border-white/5">
                         <input type="text" id="chat-input" placeholder="Enter command..." class="w-full bg-transparent text-xs focus:outline-none text-white placeholder-slate-600">
+                    </div>
+                </div>
+
+                <div id="quest-tracker" class="pointer-events-auto w-64 glass-panel p-4 self-start mt-12 mr-4 opacity-90">
+                    <h3 class="text-xs font-black text-amber-500 uppercase mb-2 border-b border-white/10 pb-1">Current Objectives</h3>
+                    <div id="quest-list" class="space-y-3">
+                        <div class="text-xs text-slate-400 italic">No active quests.</div>
                     </div>
                 </div>
             </div>
 
             <div class="flex items-end justify-between pointer-events-auto relative mt-4">
-                
                 <div class="orb-container relative w-32 h-32 bg-black rounded-full border-4 border-slate-800 overflow-hidden shadow-2xl">
                     <div id="orb-hp" class="absolute bottom-0 w-full bg-red-600 transition-all duration-300" style="height: 100%"></div>
                     <div class="absolute inset-0 orb-shine rounded-full"></div>
@@ -57,10 +71,13 @@
                 </div>
 
                 <div class="flex-grow mx-4 mb-4 flex flex-col justify-end">
-                    <div class="w-full h-2 bg-slate-900 rounded-full mb-2 border border-slate-700 overflow-hidden">
-                        <div id="bar-xp" class="h-full bg-purple-500 w-[0%]"></div>
+                    <div class="flex justify-between text-[10px] font-bold text-slate-400 mb-1 px-1">
+                        <span>TOTAL LEVEL: <span id="val-total-level" class="text-white">1</span></span>
+                        <span>NEXT TALENT: <span id="val-xp-rem">100 XP</span></span>
                     </div>
-                    
+                    <div class="w-full h-2 bg-slate-900 rounded-full mb-2 border border-slate-700 overflow-hidden">
+                        <div id="bar-xp" class="h-full bg-purple-500 w-[0%] transition-all"></div>
+                    </div>
                     <div class="flex justify-center space-x-2">
                         <div class="slot-hotkey">1</div>
                         <div class="slot-hotkey">2</div>
@@ -78,24 +95,47 @@
             </div>
         </div>
 
+        <div id="modal-admin" class="modal hidden">
+            <div class="modal-content w-[600px] h-[500px] p-6 flex flex-col bg-slate-900 border-2 border-red-900/50">
+                <h2 class="text-2xl font-black text-red-500 mb-6 flex items-center">
+                    <span class="mr-2">⚡</span> ADMIN CONSOLE
+                </h2>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase">Player</h3>
+                        <button id="btn-admin-heal" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs font-mono text-left">Full Heal</button>
+                        <button id="btn-admin-xp" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs font-mono text-left">+1000 Global XP</button>
+                        <button id="btn-admin-talent" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs font-mono text-left">+1 Talent Point</button>
+                        <button id="btn-admin-god" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs font-mono text-left text-red-400">Toggle God Mode</button>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase">World</h3>
+                        <button id="btn-admin-spawn-goblin" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs font-mono text-left">Spawn Goblin</button>
+                        <button id="btn-admin-spawn-item" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs font-mono text-left">Spawn Random Loot</button>
+                        <button id="btn-admin-time" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs font-mono text-left">Toggle Day/Night</button>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-4 border-t border-white/10">
+                    <div class="text-[10px] text-slate-600 font-mono">DEBUG_ID: ALPHA_1.3_BUILD_742</div>
+                </div>
+                <button class="absolute top-4 right-4 text-slate-500 hover:text-white" onclick="window.UI.toggleModal('admin')">✖</button>
+            </div>
+        </div>
+
         <div id="modal-profile" class="modal hidden">
             <div class="modal-content w-[800px] h-[600px] flex">
                 <div class="w-1/3 bg-slate-900/50 p-6 border-r border-white/10 flex flex-col items-center">
                     <div class="w-32 h-32 bg-slate-800 rounded-full mb-4 border-2 border-slate-600 flex items-center justify-center text-4xl">👤</div>
                     <h2 id="profile-name" class="text-2xl font-black italic">WANDERER</h2>
-                    <p class="text-xs text-blue-400 font-bold mb-6">LEVEL <span id="profile-level">1</span></p>
+                    <p class="text-xs text-blue-400 font-bold mb-6">TOTAL LEVEL <span id="profile-level">1</span></p>
                     <textarea class="w-full h-32 bg-black/40 border border-white/10 rounded p-2 text-xs resize-none" placeholder="Write your bio..."></textarea>
                 </div>
-                <div class="w-2/3 p-6 grid grid-cols-2 gap-4">
-                    <div class="col-span-2 text-sm font-bold border-b border-white/10 pb-2 mb-2">CORE STATS</div>
-                    <div class="stat-row"><span>Strength</span> <span class="text-blue-400">10</span></div>
-                    <div class="stat-row"><span>Agility</span> <span class="text-blue-400">10</span></div>
-                    <div class="stat-row"><span>Intellect</span> <span class="text-blue-400">10</span></div>
-                    <div class="stat-row"><span>Stamina</span> <span class="text-blue-400">10</span></div>
-                    
-                    <div class="col-span-2 text-sm font-bold border-b border-white/10 pb-2 mb-2 mt-4">PERSONALITY</div>
-                    <div class="stat-row"><span>Resilience</span> <span id="val-resilience" class="text-emerald-400">0</span></div>
-                    <div class="stat-row"><span>Mood</span> <span id="val-mood" class="text-yellow-400">Neutral</span></div>
+                <div class="w-2/3 p-6 overflow-y-auto">
+                    <h3 class="font-bold text-slate-500 mb-4 border-b border-white/10 pb-2">SKILL MASTERY</h3>
+                    <div id="profile-skills" class="space-y-3">
+                        </div>
                 </div>
                 <button class="absolute top-4 right-4 text-slate-500 hover:text-white" onclick="window.UI.toggleModal('profile')">✖</button>
             </div>
@@ -117,8 +157,7 @@
                         <span>BACKPACK</span>
                         <span id="txt-gold-inv" class="text-yellow-500">0 GOLD</span>
                     </h3>
-                    <div id="inventory-grid" class="grid grid-cols-5 gap-2">
-                        </div>
+                    <div id="inventory-grid" class="grid grid-cols-5 gap-2"></div>
                 </div>
                 <button class="absolute top-4 right-4 text-slate-500 hover:text-white" onclick="window.UI.toggleModal('inventory')">✖</button>
             </div>
@@ -130,8 +169,7 @@
                     <h2 class="font-black italic text-2xl">NEURAL TALENT TREE</h2>
                     <span class="text-xs font-mono text-purple-400">AVAILABLE POINTS: <span id="txt-talent-points">0</span></span>
                 </div>
-                <div id="talents-container" class="flex-grow relative overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed">
-                    </div>
+                <div id="talents-container" class="flex-grow relative overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed"></div>
                 <button class="absolute top-4 right-4 text-slate-500 hover:text-white" onclick="window.UI.toggleModal('talents')">✖</button>
             </div>
         </div>
@@ -139,15 +177,9 @@
         <div id="modal-settings" class="modal hidden">
             <div class="modal-content w-[500px] h-[600px] p-6">
                 <h2 class="text-2xl font-black mb-6">SETTINGS</h2>
-                <div class="flex space-x-4 border-b border-white/10 mb-4">
-                    <button class="px-4 py-2 text-sm font-bold border-b-2 border-blue-500 text-white">CONTROLS</button>
-                    <button class="px-4 py-2 text-sm font-bold text-slate-500 hover:text-white">SYSTEM</button>
-                </div>
                 <div class="space-y-4">
                     <div class="flex justify-between items-center bg-white/5 p-3 rounded"><span>MOVE UP</span> <kbd class="bg-black px-2 rounded border border-slate-700">W</kbd></div>
                     <div class="flex justify-between items-center bg-white/5 p-3 rounded"><span>MOVE DOWN</span> <kbd class="bg-black px-2 rounded border border-slate-700">S</kbd></div>
-                    <div class="flex justify-between items-center bg-white/5 p-3 rounded"><span>MOVE LEFT</span> <kbd class="bg-black px-2 rounded border border-slate-700">A</kbd></div>
-                    <div class="flex justify-between items-center bg-white/5 p-3 rounded"><span>MOVE RIGHT</span> <kbd class="bg-black px-2 rounded border border-slate-700">D</kbd></div>
                     <div class="flex justify-between items-center bg-white/5 p-3 rounded"><span>ATTACK</span> <kbd class="bg-black px-2 rounded border border-slate-700">SPACE</kbd></div>
                     <div class="flex justify-between items-center bg-white/5 p-3 rounded"><span>INTERACT</span> <kbd class="bg-black px-2 rounded border border-slate-700">E</kbd></div>
                 </div>
