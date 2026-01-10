@@ -1,6 +1,6 @@
 /**
- * SPIRES ONLINE | CORE ENGINE (game.js)
- * Alpha 1.3: Skill Mastery, Quest State, and Fixed Initialization.
+ * SPIRES ONLINE | MASTER ENGINE (game.js)
+ * Alpha 1.3.2: Aggressive Initialization & Error Catching
  */
 
 import { Renderer } from './renderer.js';
@@ -11,12 +11,7 @@ import { Talents } from './talents.js';
 import { Admin } from './admin.js';
 
 export const Game = {
-    config: {
-        tileSize: 64,
-        fps: 60,
-        version: "1.3.1"
-    },
-
+    config: { tileSize: 64, fps: 60, version: "1.3.2" },
     state: {
         isRunning: false,
         locationName: "Unknown",
@@ -27,8 +22,7 @@ export const Game = {
             x: 15, y: 15,
             hp: 100, maxHp: 100,
             mana: 100, maxMana: 100,
-            xp: 0, 
-            level: 1, 
+            xp: 0, level: 1, 
             skills: {
                 blades: { level: 1, xp: 0 },
                 defense: { level: 1, xp: 0 },
@@ -47,7 +41,6 @@ export const Game = {
             id: 'town',
             name: "Spires Outpost",
             width: 30, height: 30,
-            walls: [], 
             portals: [{ x: 29, y: 15, target: 'forest', targetX: 1, targetY: 15 }],
             npcs: [
                 { id: 'bartender', x: 10, y: 10, type: 'npc', name: 'Barman', icon: '🍺' },
@@ -56,93 +49,90 @@ export const Game = {
             ]
         },
         forest: {
-            id: 'forest',
-            name: "Whispering Wilds",
-            width: 50, height: 50,
-            walls: [],
+            id: 'forest', name: "Whispering Wilds", width: 50, height: 50,
             portals: [{ x: 0, y: 15, target: 'town', targetX: 28, targetY: 15 }],
             enemies: []
         }
     },
 
-    init() {
-        console.log("Game: Initializing Systems...");
+    async init() {
+        console.log("CORE: Initializing Spires...");
         
-        // 1. Initialize Sub-Systems
-        Renderer.init();
-        Input.init();
-        Inventory.init();
-        Talents.init();
-        Admin.init();
+        try {
+            // 1. Initialize Sub-Systems
+            await Renderer.init();
+            Input.init();
+            Inventory.init();
+            Talents.init();
+            Admin.init();
 
-        this.setupUI();
+            this.setupUI();
 
-        // 2. Bind Button with Safety
-        const btnInit = document.getElementById('btn-initialize');
-        if (btnInit) {
-            btnInit.onclick = () => {
-                console.log("Game: Start Button Clicked.");
-                this.startGame();
+            // 2. Aggressive Button Binding
+            const tryBind = () => {
+                const btn = document.getElementById('btn-initialize');
+                if (btn) {
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        console.log("CORE: Initialize Clicked");
+                        this.startGame();
+                    };
+                    console.log("CORE: Button successfully bound.");
+                } else {
+                    console.warn("CORE: Button not found, retrying...");
+                    setTimeout(tryBind, 500);
+                }
             };
-        } else {
-            console.error("Game: 'btn-initialize' not found in DOM.");
-        }
+            tryBind();
 
-        this.ui.log(`Spires Engine v${this.config.version} Online.`);
+        } catch (err) {
+            console.error("CRITICAL STARTUP ERROR:", err);
+        }
     },
 
     setupUI() {
         window.UI = {
             toggleModal: (modalId) => {
                 const modal = document.getElementById(`modal-${modalId}`);
-                if (modal) {
-                    const isHidden = modal.classList.contains('hidden');
-                    document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
-                    
-                    if (isHidden) {
-                        modal.classList.remove('hidden');
-                        if (modalId === 'profile') this.ui.updateProfile();
-                        if (modalId === 'inventory') Inventory.updateUI();
-                        if (modalId === 'talents') Talents.render();
-                    }
+                if (!modal) return;
+                const isHidden = modal.classList.contains('hidden');
+                document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
+                if (isHidden) {
+                    modal.classList.remove('hidden');
+                    if (modalId === 'profile') this.ui.updateProfile();
+                    if (modalId === 'inventory') Inventory.updateUI();
+                    if (modalId === 'talents') Talents.render();
                 }
             }
         };
     },
 
     startGame() {
+        console.log("CORE: Executing startGame()");
         const screenAuth = document.getElementById('screen-auth');
         const screenHud = document.getElementById('screen-hud');
 
         if (screenAuth && screenHud) {
-            screenAuth.classList.add('hidden');
+            screenAuth.style.display = 'none'; // Force hide
             screenHud.classList.remove('hidden');
+            screenHud.style.display = 'flex'; // Force show
             
             this.loadMap('town');
             this.state.isRunning = true;
             this.loop();
-            this.ui.log("Neural link established. Welcome back.");
+            this.ui.log("Neural link established.");
         } else {
-            console.error("Game: UI screens missing from DOM.");
+            alert("UI Elements missing! Check index.html for screen-auth and screen-hud.");
         }
     },
 
     loadMap(mapId) {
         const mapData = this.maps[mapId];
         if (!mapData) return;
-
         this.state.currentMap = mapData;
-        this.state.locationName = mapData.name;
-        
-        this.state.entities = [];
-        if (mapData.npcs) {
-            this.state.entities.push(...mapData.npcs.map(n => ({...n, alive: true})));
-        }
-        
+        this.state.entities = mapData.npcs ? [...mapData.npcs.map(n => ({...n, alive: true}))] : [];
         const locText = document.getElementById('txt-location');
         if (locText) locText.innerText = mapData.name;
-
-        this.ui.log(`Zone Entered: ${mapData.name}`);
     },
 
     loop() {
@@ -154,88 +144,44 @@ export const Game = {
     },
 
     saveGame() {
-        const data = JSON.stringify(this.state.player);
-        localStorage.setItem('spires_save_alpha1', data);
+        localStorage.setItem('spires_save', JSON.stringify(this.state.player));
     },
 
     ui: {
         log(msg) {
             const logs = document.getElementById('chat-logs');
-            if (logs) {
-                const entry = document.createElement('div');
-                entry.className = "text-slate-300 py-0.5 border-l-2 border-blue-500/50 pl-2 hover:bg-white/5 transition";
-                entry.innerHTML = `<span class="opacity-40 text-[9px] mr-2 font-mono">${new Date().toLocaleTimeString()}</span>${msg}`;
-                logs.appendChild(entry);
-                logs.scrollTop = logs.scrollHeight;
-            }
+            if (!logs) return;
+            const entry = document.createElement('div');
+            entry.className = "text-slate-300 py-0.5 border-l-2 border-blue-500/50 pl-2 text-xs";
+            entry.innerHTML = msg;
+            logs.appendChild(entry);
+            logs.scrollTop = logs.scrollHeight;
         },
-
         updateVitals() {
             const p = Game.state.player;
-            const hpPct = (p.hp / p.maxHp) * 100;
-            const manaPct = (p.mana / p.maxMana) * 100;
-            
-            document.getElementById('orb-hp').style.height = `${hpPct}%`;
-            document.getElementById('orb-mana').style.height = `${manaPct}%`;
+            document.getElementById('orb-hp').style.height = `${(p.hp / p.maxHp) * 100}%`;
+            document.getElementById('orb-mana').style.height = `${(p.mana / p.maxMana) * 100}%`;
             document.getElementById('txt-hp').innerText = Math.ceil(p.hp);
             document.getElementById('txt-mana').innerText = Math.ceil(p.mana);
-
-            const xpPct = (p.xp % 1000) / 10;
-            document.getElementById('bar-xp').style.width = `${xpPct}%`;
             document.getElementById('val-total-level').innerText = p.level;
-            document.getElementById('val-xp-rem').innerText = `${p.xp} XP`;
         },
-
         updateProfile() {
-            const p = Game.state.player;
-            document.getElementById('profile-name').innerText = "WANDERER";
-            document.getElementById('profile-level').innerText = p.level;
-            
-            const list = document.getElementById('profile-skills');
-            if(list) {
-                list.innerHTML = '';
-                for (const [key, skill] of Object.entries(p.skills)) {
-                    const row = document.createElement('div');
-                    row.className = "flex justify-between items-center text-xs border-b border-white/5 pb-1";
-                    row.innerHTML = `
-                        <span class="uppercase font-bold text-slate-400">${key}</span>
-                        <div class="flex items-center space-x-4">
-                            <span class="text-blue-500">Lv.${skill.level}</span>
-                            <span class="text-slate-600">${skill.xp} XP</span>
-                        </div>
-                    `;
-                    list.appendChild(row);
-                }
-            }
+            document.getElementById('profile-level').innerText = Game.state.player.level;
         },
-
         showFloatText(x, y, text, color = '#fff') {
             const layer = document.getElementById('layer-fx');
+            if (!layer) return;
             const el = document.createElement('div');
             el.innerText = text;
-            
-            const { tileSize } = Game.config;
-            const canvas = document.getElementById('game-canvas');
-            const cameraX = (canvas.width / 2) - (Game.state.player.x * tileSize) - (tileSize / 2);
-            const cameraY = (canvas.height / 2) - (Game.state.player.y * tileSize) - (tileSize / 2);
-            
-            const screenX = cameraX + x * tileSize + (tileSize/2);
-            const screenY = cameraY + y * tileSize;
-
-            el.style.left = `${screenX}px`;
-            el.style.top = `${screenY}px`;
+            el.className = "absolute text-lg font-black pointer-events-none transition-all duration-1000";
             el.style.color = color;
-            el.className = "absolute text-lg font-black text-shadow pointer-events-none transition-all duration-1000 ease-out transform -translate-x-1/2";
-            
             layer.appendChild(el);
-            requestAnimationFrame(() => {
-                el.style.transform = "translate(-50%, -50px)";
-                el.style.opacity = "0";
-            });
             setTimeout(() => el.remove(), 1000);
         }
     }
 };
 
-// Start initialization
-Game.init();
+// Initialize on Load
+window.addEventListener('DOMContentLoaded', () => {
+    Game.init();
+});
