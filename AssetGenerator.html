@@ -2,45 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Spires Online - Asset Generator 2.0</title>
+    <title>Spires Online - Grimdark Forge</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
-        body { background: #1a1a1a; color: #eee; font-family: monospace; display: flex; flex-direction: column; align-items: center; }
-        #canvas-container { display: flex; flex-wrap: wrap; gap: 5px; padding: 20px; justify-content: center; width: 90%; }
-        .sprite-card { background: #222; border: 1px solid #444; width: 64px; text-align: center; }
-        .sprite-card img { width: 32px; height: 32px; margin-top: 5px; image-rendering: pixelated; }
-        .sprite-card div { font-size: 9px; color: #888; overflow: hidden; white-space: nowrap; }
-        button { padding: 10px 20px; font-size: 1.2rem; background: #4caf50; color: white; border: none; cursor: pointer; margin: 20px; }
+        body { background: #0d0d0d; color: #a0a0a0; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; }
+        h1 { color: #d32f2f; text-shadow: 0 0 5px #d32f2f; margin-top: 20px; text-transform: uppercase; }
+        
+        #controls { margin: 20px; display: flex; gap: 20px; align-items: center; }
+        
+        #canvas-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); 
+            gap: 10px; 
+            padding: 20px; 
+            width: 95%; 
+            background: #111;
+            border: 1px solid #333;
+            box-shadow: inset 0 0 20px #000;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .sprite-card { 
+            background: #1a1a1a; 
+            border: 1px solid #333; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 5px;
+            transition: 0.2s;
+        }
+        .sprite-card:hover { border-color: #d32f2f; background: #222; }
+        
+        .sprite-card img { 
+            width: 64px; 
+            height: 64px; 
+            image-rendering: pixelated; 
+            background: #000;
+        }
+        
+        .sprite-card div { 
+            font-size: 10px; 
+            color: #666; 
+            margin-top: 5px; 
+            overflow: hidden; 
+            white-space: nowrap; 
+            width: 100%;
+            text-align: center;
+        }
+
+        button { 
+            padding: 15px 40px; 
+            font-size: 1.2rem; 
+            background: #222; 
+            color: #d32f2f; 
+            border: 1px solid #d32f2f; 
+            cursor: pointer; 
+            font-family: inherit;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover { background: #d32f2f; color: #000; box-shadow: 0 0 15px #d32f2f; }
+        button:disabled { border-color: #444; color: #444; background: #111; box-shadow: none; cursor: not-allowed; }
+
+        #status { color: #888; font-size: 0.9rem; }
     </style>
 </head>
 <body>
-    <h1>Asset Generator 2.0 (18-DB Support)</h1>
-    <button id="btn-download" disabled>Generate & Download</button>
-    <div id="status">Waiting for local server...</div>
+
+    <h1>Grimdark Forge (64px)</h1>
+    <div id="controls">
+        <div id="status">Initializing Neural Link...</div>
+        <button id="btn-download" disabled>FORGE ASSETS</button>
+    </div>
+    
     <div id="canvas-container"></div>
 
     <script type="module">
-        // Config: What files generate visual assets?
+        // --- CONFIGURATION ---
+        const CANVAS_SIZE = 64; // 64-bit High Res
         const ASSET_SOURCES = [
             { url: 'data/Items.csv', type: 'Item' },
-            { url: 'data/Equipment.csv', type: 'Item' },
+            { url: 'data/Equipment.csv', type: 'Equipment' },
             { url: 'data/Monsters.csv', type: 'Monster' },
             { url: 'data/Skills.csv', type: 'Skill' },
             { url: 'data/Perks.csv', type: 'Perk' },
             { url: 'data/Talents.csv', type: 'Talent' }
         ];
 
-        const ASSETS = {}; // Stores base64 images
+        // Dystopian Palette
+        const PALETTE = {
+            steel:   '#546e7a',
+            rust:    '#5d4037',
+            blood:   '#8a0000',
+            gold:    '#ffb300', // Dull Gold
+            void:    '#311b92',
+            toxic:   '#2e7d32',
+            neon:    '#00bcd4', // Tech accent
+            bone:    '#bdbdbd',
+            bg:      '#000000'
+        };
+
+        const ASSETS = {}; 
 
         window.addEventListener('load', async () => {
             const status = document.getElementById('status');
             const container = document.getElementById('canvas-container');
             const btn = document.getElementById('btn-download');
 
-            status.innerText = "Loading Data...";
-            
+            status.innerText = "Scanning Database Archives...";
+
             try {
+                let totalFound = 0;
                 for(let src of ASSET_SOURCES) {
                     let txt = await fetch(src.url).then(r => r.text());
                     let rows = parseCSV(txt);
@@ -48,16 +122,29 @@
                     rows.forEach(row => {
                         if(!row.ID) return;
                         
-                        // Generate Art
+                        // Check if we already did this ID (Equipment sometimes duplicates Items)
+                        if(ASSETS[row.ID]) return;
+
                         let canvas = document.createElement('canvas');
-                        canvas.width = 32; canvas.height = 32;
+                        canvas.width = CANVAS_SIZE; canvas.height = CANVAS_SIZE;
                         let ctx = canvas.getContext('2d');
-                        drawAsset(ctx, row, src.type);
                         
+                        // --- ART GENERATION PIPELINE ---
+                        // 1. Draw Background
+                        ctx.fillStyle = '#00000000'; // Transparent
+                        ctx.clearRect(0,0,64,64);
+
+                        // 2. Draw Object
+                        drawEntity(ctx, row.ID, src.type, row);
+
+                        // 3. Apply Dystopian Filter (Noise/Grime)
+                        applyGrime(ctx);
+
                         let data = canvas.toDataURL("image/png");
                         ASSETS[row.ID] = data;
+                        totalFound++;
 
-                        // UI Preview
+                        // Add to UI
                         let card = document.createElement('div');
                         card.className = 'sprite-card';
                         let img = document.createElement('img');
@@ -69,10 +156,12 @@
                         container.appendChild(card);
                     });
                 }
-                status.innerText = "Done! " + Object.keys(ASSETS).length + " assets generated.";
+                status.innerText = `Forging Complete. ${totalFound} Assets Ready.`;
+                status.style.color = "#d32f2f";
                 btn.disabled = false;
             } catch(e) {
-                status.innerText = "Error: " + e.message + " (Check Local Server!)";
+                status.innerText = "CRITICAL FAILURE: " + e.message;
+                status.style.color = "#f44336";
             }
 
             btn.onclick = () => {
@@ -83,58 +172,265 @@
             };
         });
 
+        // --- ARTIFICIAL ARTIST ---
+        function drawEntity(ctx, id, type, data) {
+            id = id.toLowerCase();
+            const name = (data.Name || "").toLowerCase();
+            
+            // Default Color Logic
+            let mainColor = PALETTE.steel;
+            if(id.includes('gold') || id.includes('leg')) mainColor = PALETTE.gold;
+            else if(id.includes('rust') || id.includes('old')) mainColor = PALETTE.rust;
+            else if(id.includes('blood') || id.includes('red')) mainColor = PALETTE.blood;
+            else if(id.includes('void') || id.includes('dark')) mainColor = PALETTE.void;
+            else if(id.includes('tox') || id.includes('psn')) mainColor = PALETTE.toxic;
+
+            // --- CATEGORY DISPATCH ---
+            if (type === 'Monster') {
+                drawMonster(ctx, mainColor, id);
+            } else if (type === 'Skill' || type === 'Perk' || type === 'Talent') {
+                drawAbstractIcon(ctx, mainColor, type, name);
+            } else {
+                // ITEMS
+                if(id.includes('swd') || id.includes('bld') || id.includes('clay')) drawSword(ctx, mainColor);
+                else if(id.includes('axe')) drawAxe(ctx, mainColor);
+                else if(id.includes('pot') || id.includes('med') || id.includes('flask')) drawPotion(ctx, mainColor);
+                else if(id.includes('helm') || id.includes('hood')) drawHelm(ctx, mainColor);
+                else if(id.includes('chest') || id.includes('arm') || id.includes('vest')) drawArmor(ctx, mainColor);
+                else if(id.includes('boot')) drawBoots(ctx, mainColor);
+                else if(id.includes('ring') || id.includes('amulet')) drawJewelry(ctx, mainColor);
+                else if(id.includes('scroll') || id.includes('book')) drawScroll(ctx, mainColor);
+                else if(id.includes('key')) drawKey(ctx, mainColor);
+                else drawGenericLoot(ctx, mainColor); // Fallback for everything else
+            }
+        }
+
+        // --- DRAWING ROUTINES (64x64) ---
+
+        function drawSword(ctx, color) {
+            // Blade
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(32, 6); ctx.lineTo(40, 48); ctx.lineTo(32, 54); ctx.lineTo(24, 48);
+            ctx.fill();
+            // Edge Highlight
+            ctx.fillStyle = 'rgba(255,255,255,0.4)';
+            ctx.fillRect(31, 6, 2, 48);
+            // Crossguard
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillRect(20, 46, 24, 6);
+            // Hilt
+            ctx.fillStyle = PALETTE.rust;
+            ctx.fillRect(28, 52, 8, 10);
+            // Pommel
+            ctx.fillStyle = '#1a1a1a';
+            ctx.beginPath(); ctx.arc(32,62,4,0,Math.PI*2); ctx.fill();
+        }
+
+        function drawAxe(ctx, color) {
+            // Handle
+            ctx.fillStyle = PALETTE.rust;
+            ctx.fillRect(28, 10, 8, 50);
+            // Head
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(32, 12); 
+            ctx.lineTo(54, 8); ctx.lineTo(58, 40); ctx.lineTo(32, 32); // Right blade
+            ctx.moveTo(32, 12);
+            ctx.lineTo(10, 8); ctx.lineTo(6, 40); ctx.lineTo(32, 32); // Left blade
+            ctx.fill();
+        }
+
+        function drawPotion(ctx, color) {
+            // Bottle Outline
+            ctx.fillStyle = 'rgba(255,255,255,0.1)';
+            ctx.beginPath(); ctx.arc(32, 40, 16, 0, Math.PI*2); ctx.fill();
+            ctx.fillRect(26, 14, 12, 12); // Neck
+            
+            // Liquid
+            ctx.fillStyle = color;
+            ctx.beginPath(); ctx.arc(32, 42, 12, 0, Math.PI*2); ctx.fill();
+            
+            // Cork
+            ctx.fillStyle = '#5d4037';
+            ctx.fillRect(26, 10, 12, 6);
+            
+            // Bubbles
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(30, 36, 2, 2); ctx.fillRect(34, 44, 2, 2);
+        }
+
+        function drawHelm(ctx, color) {
+            ctx.fillStyle = color;
+            // Dome
+            ctx.beginPath(); ctx.arc(32, 32, 20, Math.PI, 0); ctx.fill();
+            ctx.fillRect(12, 32, 40, 20);
+            // Visor (Dark)
+            ctx.fillStyle = '#000';
+            ctx.fillRect(20, 36, 24, 4);
+            ctx.fillRect(30, 36, 4, 16);
+        }
+
+        function drawArmor(ctx, color) {
+            ctx.fillStyle = color;
+            // Shoulders
+            ctx.beginPath(); ctx.arc(16, 20, 10, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(48, 20, 10, 0, Math.PI*2); ctx.fill();
+            // Chest
+            ctx.fillRect(16, 20, 32, 36);
+            // Detail
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            ctx.fillRect(28, 20, 8, 36);
+        }
+
+        function drawBoots(ctx, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(14, 20, 12, 30); // L Leg
+            ctx.fillRect(14, 46, 16, 10); // L Foot
+            ctx.fillRect(38, 20, 12, 30); // R Leg
+            ctx.fillRect(38, 46, 16, 10); // R Foot
+        }
+
+        function drawJewelry(ctx, color) {
+            // Chain
+            ctx.strokeStyle = PALETTE.gold;
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(32, 24, 16, 0, Math.PI*2); ctx.stroke();
+            // Gem
+            ctx.fillStyle = color;
+            ctx.beginPath(); ctx.moveTo(32, 40); ctx.lineTo(40, 50); ctx.lineTo(32, 60); ctx.lineTo(24, 50); ctx.fill();
+        }
+
+        function drawScroll(ctx, color) {
+            ctx.fillStyle = '#e0e0e0'; // Paper
+            ctx.fillRect(14, 10, 36, 44);
+            // Runes
+            ctx.fillStyle = color;
+            ctx.fillRect(20, 20, 20, 2);
+            ctx.fillRect(20, 26, 14, 2);
+            ctx.fillRect(20, 32, 24, 2);
+            // Seal
+            ctx.fillStyle = '#d32f2f';
+            ctx.beginPath(); ctx.arc(32, 46, 6, 0, Math.PI*2); ctx.fill();
+        }
+
+        function drawKey(ctx, color) {
+            ctx.fillStyle = PALETTE.gold;
+            ctx.beginPath(); ctx.arc(32, 16, 10, 0, Math.PI*2); ctx.fill(); // Ring
+            ctx.fillRect(28, 24, 8, 30); // Shaft
+            ctx.fillRect(36, 44, 8, 4); // Teeth
+            ctx.fillRect(36, 50, 6, 4);
+        }
+
+        function drawMonster(ctx, color, id) {
+            // Silhouette Style
+            ctx.fillStyle = color;
+            // Body
+            ctx.beginPath(); ctx.arc(32, 32, 24, 0, Math.PI*2); ctx.fill();
+            // Distort
+            ctx.fillRect(10, 30, 10, 20); ctx.fillRect(44, 30, 10, 20);
+            
+            // Glowing Eyes (Dystopian)
+            ctx.fillStyle = '#ff0000';
+            ctx.shadowBlur = 10; ctx.shadowColor = 'red';
+            ctx.fillRect(24, 28, 4, 4); ctx.fillRect(36, 28, 4, 4);
+            ctx.shadowBlur = 0;
+            
+            // Tech/Mutant bits
+            if(id.includes('mech') || id.includes('bot')) {
+                ctx.fillStyle = PALETTE.neon;
+                ctx.fillRect(20, 10, 4, 10); // Antenna
+            }
+        }
+
+        function drawAbstractIcon(ctx, color, type, name) {
+            // Background Frame
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(4,4,56,56);
+            ctx.fillStyle = '#111';
+            ctx.fillRect(6,6,52,52);
+            
+            // Letter
+            ctx.fillStyle = color;
+            ctx.font = 'bold 40px monospace';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            let char = name ? name[0].toUpperCase() : type[0];
+            ctx.fillText(char, 32, 34);
+
+            // Tech Corners
+            ctx.fillStyle = PALETTE.neon;
+            ctx.fillRect(4,4,4,4); ctx.fillRect(56,4,4,4);
+            ctx.fillRect(4,56,4,4); ctx.fillRect(56,56,4,4);
+        }
+
+        function drawGenericLoot(ctx, color) {
+            // A crate or bag
+            ctx.fillStyle = '#3e2723'; // Dark wood
+            ctx.fillRect(10, 16, 44, 32);
+            ctx.strokeStyle = '#5d4037';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(10, 16, 44, 32);
+            // X mark
+            ctx.beginPath(); ctx.moveTo(10,16); ctx.lineTo(54,48); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(54,16); ctx.lineTo(10,48); ctx.stroke();
+        }
+
+        // --- THE DYSTOPIAN FILTER ---
+        function applyGrime(ctx) {
+            let imgData = ctx.getImageData(0,0,64,64);
+            let pixels = imgData.data;
+            for(let i=0; i<pixels.length; i+=4) {
+                // If pixel is not transparent
+                if(pixels[i+3] > 0) {
+                    // 1. Add Random Noise (Dirt)
+                    if(Math.random() > 0.8) {
+                        let dirt = Math.random() * 50 - 25;
+                        pixels[i] += dirt;     // R
+                        pixels[i+1] += dirt;   // G
+                        pixels[i+2] += dirt;   // B
+                    }
+                    // 2. Desaturate slightly (Grim)
+                    // let avg = (pixels[i] + pixels[i+1] + pixels[i+2]) / 3;
+                    // pixels[i] = pixels[i] * 0.8 + avg * 0.2;
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        // --- ROBUST PARSER ---
         function parseCSV(text) {
             let lines = text.split('\n');
-            // Skip empty start lines
-            let i=0; while(lines[i] && lines[i].replace(/,/g,'').trim() === '') i++;
-            let delimiter = lines[i].includes('\t') ? '\t' : ',';
-            let headers = lines[i].split(delimiter).map(h=>h.trim());
-            // Skip empty first header col
+            let i=0; 
+            // Find header line
+            while(lines[i] && lines[i].replace(/,/g,'').trim() === '') i++;
+            if (i >= lines.length) return [];
+            
+            let d = lines[i].includes('\t') ? '\t' : ',';
+            let headers = lines[i].split(d).map(h=>h.trim());
+            // Fix empty first column header
             let offset = headers[0] === "" ? 1 : 0;
+            
             let res = [];
             for(let j=i+1; j<lines.length; j++) {
                 if(!lines[j].trim()) continue;
-                let cols = splitCSV(lines[j], delimiter);
+                let cols = splitCSV(lines[j], d);
                 let obj = {};
-                headers.slice(offset).forEach((h, idx) => obj[h] = cols[idx+offset]);
-                res.push(obj);
+                // Map columns to headers
+                headers.slice(offset).forEach((h, idx) => {
+                    obj[h] = cols[idx+offset]?.replace(/"/g,'').trim();
+                });
+                // Validation: Must have ID
+                if(obj.ID) res.push(obj);
             }
             return res;
         }
 
         function splitCSV(str, d) {
-            if(d === '\t') return str.split('\t');
-            return (str.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || str.split(',')).map(s => s.replace(/"/g, ''));
-        }
-
-        function drawAsset(ctx, data, type) {
-            let id = data.ID.toLowerCase();
-            let color = '#777';
-            
-            // Logic for colors
-            if(type === 'Monster') color = '#d32f2f'; // Red
-            else if(type === 'Skill') color = '#1976d2'; // Blue
-            else if(type === 'Perk') color = '#ff9800'; // Orange
-            else if(type === 'Talent') color = '#9c27b0'; // Purple
-            else if(id.includes('gold') || id.includes('leg')) color = '#ffd700'; // Gold Item
-            else if(id.includes('junk')) color = '#8d6e63'; // Brown
-
-            // Draw Background
-            ctx.fillStyle = color;
-            ctx.fillRect(4, 4, 24, 24);
-            
-            // Draw Letter Overlay
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 16px monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            let letter = (data.Name ? data.Name[0] : id[0]).toUpperCase();
-            ctx.fillText(letter, 16, 16);
-            
-            // Border
-            ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(4, 4, 24, 24);
+            if(d==='\t') return str.split('\t');
+            // Regex to handle commas inside quotes
+            return (str.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || str.split(','));
         }
     </script>
 </body>

@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spires Online - Alpha 2.0</title>
+    <title>Spires Online - Grid Alpha</title>
     <style>
         :root {
-            --bg-color: #121212;
-            --panel-bg: #1e1e1e;
-            --text-color: #e0e0e0;
-            --accent-color: #00bcd4;
-            --danger-color: #f44336;
+            --bg-color: #050505;
+            --panel-bg: #111;
+            --text-color: #aaa;
+            --accent-color: #00bcd4; /* Cyan */
             --border-color: #333;
         }
 
@@ -22,152 +21,121 @@
             height: 100vh;
             overflow: hidden;
             display: grid;
-            grid-template-rows: 60px 1fr;
+            grid-template-rows: 50px 1fr;
         }
 
-        /* Header */
+        /* --- HEADER --- */
         header {
             background-color: var(--panel-bg);
             border-bottom: 1px solid var(--border-color);
-            padding: 0 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 20px;
         }
-        h1 { margin: 0; font-size: 1.2rem; color: var(--accent-color); letter-spacing: 2px; }
+        h1 { margin: 0; font-size: 1.2rem; color: var(--accent-color); letter-spacing: 2px; text-transform: uppercase; }
 
-        /* Main Layout */
+        /* --- MAIN LAYOUT --- */
         #game-layout {
             display: grid;
-            grid-template-columns: 300px 1fr 300px;
+            grid-template-columns: 250px 1fr 250px; /* Left - Game - Right */
             height: 100%;
-            overflow: hidden;
         }
 
-        /* Panels */
+        /* --- PANELS --- */
         .panel {
-            background: #181818;
+            background: #0a0a0a;
             border-right: 1px solid var(--border-color);
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
+            gap: 15px;
         }
         .panel-right { border-left: 1px solid var(--border-color); border-right: none; }
+        
+        h3 { border-bottom: 1px solid #333; padding-bottom: 5px; margin: 0; font-size: 0.9rem; color: #fff; }
 
-        /* Stats Bars */
-        .bar-box { margin-bottom: 10px; }
-        .bar-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
-        .bar-track { background: #333; height: 8px; width: 100%; }
-        .bar-fill { height: 100%; transition: width 0.3s; }
-        .hp { background: #d32f2f; }
-        .stm { background: #4caf50; }
-        .san { background: #9c27b0; }
-
-        /* Inventory Grid */
-        .inventory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .inv-slot {
-            width: 100%;
-            aspect-ratio: 1;
-            background: #222;
-            border: 1px solid #444;
+        /* --- THE GAME VIEW (CANVAS) --- */
+        #main-view {
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
+            background-color: #000;
             position: relative;
-        }
-        .inv-slot:hover { border-color: var(--accent-color); }
-        .inv-slot img { width: 80%; height: 80%; image-rendering: pixelated; }
-        .inv-qty {
-            position: absolute; bottom: 2px; right: 2px;
-            font-size: 10px; color: white; background: rgba(0,0,0,0.7);
-            padding: 1px 3px; border-radius: 2px;
+            overflow: hidden;
         }
 
-        /* Central Log */
-        #main-view {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            background: #121212;
+        canvas {
+            border: 2px solid #333;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            image-rendering: pixelated; /* Crucial for sharp 64x64 art */
         }
-        #game-log {
-            flex-grow: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
+
+        /* --- STAT BARS --- */
+        .bar-container { width: 100%; background: #222; height: 10px; margin-top: 5px; }
+        .bar-fill { height: 100%; transition: width 0.2s; }
+        .hp { background: #d32f2f; width: 100%; }
+        .stm { background: #388e3c; width: 100%; }
+
+        /* --- INVENTORY GRID --- */
+        .inv-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
         }
-        .log-entry { padding: 4px 0; border-bottom: 1px solid #222; animation: fadeIn 0.2s; }
-        .log-entry.combat { color: #ff8a80; }
-        .log-entry.loot { color: #ffd740; }
-        
-        /* Controls */
-        #controls { display: flex; gap: 10px; }
-        input { flex-grow: 1; background: #222; border: 1px solid #444; color: white; padding: 10px; font-family: inherit; }
-        button { background: var(--accent-color); border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .inv-slot {
+            aspect-ratio: 1;
+            background: #151515;
+            border: 1px solid #333;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .inv-slot:hover { border-color: var(--accent-color); cursor: pointer; }
+        .inv-slot img { width: 80%; height: 80%; image-rendering: pixelated; }
+
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Spires Online <span style="font-size:0.5em; opacity:0.7;">ALPHA 2.0</span></h1>
-        <div id="world-info">LOC: <span id="loc-id">LOADING</span> | TIME: <span id="time-val">0800</span></div>
+        <h1>Spires Online</h1>
+        <div style="font-size: 0.8rem;">ALPHA 2.1 [GRID]</div>
     </header>
 
     <div id="game-layout">
+        
         <aside class="panel">
-            <h3>VITALS</h3>
-            <div class="bar-box">
-                <div class="bar-label"><span>HP</span> <span id="hp-txt">0/0</span></div>
-                <div class="bar-track"><div id="hp-bar" class="bar-fill hp" style="width: 0%"></div></div>
+            <div>
+                <h3>STATUS</h3>
+                <div style="margin-top:10px;">HP</div>
+                <div class="bar-container"><div class="bar-fill hp"></div></div>
+                <div style="margin-top:5px;">STM</div>
+                <div class="bar-container"><div class="bar-fill stm"></div></div>
             </div>
-            <div class="bar-box">
-                <div class="bar-label"><span>STM</span> <span id="stm-txt">0/0</span></div>
-                <div class="bar-track"><div id="stm-bar" class="bar-fill stm" style="width: 0%"></div></div>
+            <div>
+                <h3>COORDINATES</h3>
+                <div id="debug-coords" style="color: var(--accent-color); margin-top: 5px;">X: 0 | Y: 0</div>
             </div>
-
-            <h3>ACTIVE EFFECTS</h3>
-            <div id="status-list" style="font-size: 0.8rem; color: #888;">No active effects.</div>
         </aside>
 
         <main id="main-view">
-            <div id="game-log">
-                <div class="log-entry">> System Initializing...</div>
-            </div>
-            
-            <div id="controls">
-                <input type="text" id="cmd-input" placeholder="Type action ID (e.g. act_min_pick)..." value="act_srv_forage">
-                <button id="btn-act">EXECUTE</button>
-            </div>
+            <canvas id="game-canvas"></canvas>
         </main>
 
         <aside class="panel panel-right">
-            <h3>EQUIPMENT</h3>
-            <div class="inventory-grid" id="equip-grid">
-                <div class="inv-slot" title="Head"><span style="font-size:0.7em; color:#555;">HEAD</span></div>
-                <div class="inv-slot" title="Chest"><span style="font-size:0.7em; color:#555;">BODY</span></div>
-                <div class="inv-slot" title="Main Hand"><span style="font-size:0.7em; color:#555;">HAND</span></div>
-                <div class="inv-slot" title="Off Hand"><span style="font-size:0.7em; color:#555;">OFF</span></div>
-            </div>
-
             <h3>INVENTORY</h3>
-            <div class="inventory-grid" id="inv-grid">
-                </div>
+            <div class="inv-grid">
+                <div class="inv-slot"></div>
+                <div class="inv-slot"></div>
+                <div class="inv-slot"></div>
+                <div class="inv-slot"></div>
+                <div class="inv-slot"></div>
+                <div class="inv-slot"></div>
+            </div>
         </aside>
+
     </div>
 
     <script type="module" src="js/main.js"></script>
+
 </body>
 </html>
