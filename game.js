@@ -1,6 +1,6 @@
 /**
  * SPIRES ONLINE | MASTER ENGINE (game.js)
- * Alpha 1.3.2: Aggressive Initialization & Error Catching
+ * Alpha 1.3.3: Emergency Initialization Fix
  */
 
 import { Renderer } from './renderer.js';
@@ -11,7 +11,7 @@ import { Talents } from './talents.js';
 import { Admin } from './admin.js';
 
 export const Game = {
-    config: { tileSize: 64, fps: 60, version: "1.3.2" },
+    config: { tileSize: 64, fps: 60, version: "1.3.3" },
     state: {
         isRunning: false,
         locationName: "Unknown",
@@ -56,37 +56,38 @@ export const Game = {
     },
 
     async init() {
-        console.log("CORE: Initializing Spires...");
+        console.log("--- SYSTEM STARTUP ---");
         
-        try {
-            // 1. Initialize Sub-Systems
-            await Renderer.init();
-            Input.init();
-            Inventory.init();
-            Talents.init();
-            Admin.init();
+        // 1. Setup UI Globals first so they are available immediately
+        this.setupUI();
 
-            this.setupUI();
+        // 2. Initialize Sub-Systems (Wrapped in try/catch to prevent total crash)
+        try { await Renderer.init(); console.log("Renderer OK"); } catch(e) { console.error("Renderer Fail", e); }
+        try { Input.init(); console.log("Input OK"); } catch(e) { console.error("Input Fail", e); }
+        try { Inventory.init(); console.log("Inventory OK"); } catch(e) { console.error("Inventory Fail", e); }
+        try { Talents.init(); console.log("Talents OK"); } catch(e) { console.error("Talents Fail", e); }
+        try { Admin.init(); console.log("Admin OK"); } catch(e) { console.error("Admin Fail", e); }
 
-            // 2. Aggressive Button Binding
-            const tryBind = () => {
-                const btn = document.getElementById('btn-initialize');
-                if (btn) {
-                    btn.onclick = (e) => {
-                        e.preventDefault();
-                        console.log("CORE: Initialize Clicked");
-                        this.startGame();
-                    };
-                    console.log("CORE: Button successfully bound.");
-                } else {
-                    console.warn("CORE: Button not found, retrying...");
-                    setTimeout(tryBind, 500);
-                }
-            };
-            tryBind();
+        // 3. Force-Bind the button using a safer method
+        this.bindStartButton();
+    },
 
-        } catch (err) {
-            console.error("CRITICAL STARTUP ERROR:", err);
+    bindStartButton() {
+        const btn = document.getElementById('btn-initialize');
+        if (btn) {
+            // Remove old listeners to be safe
+            btn.replaceWith(btn.cloneNode(true));
+            const newBtn = document.getElementById('btn-initialize');
+            
+            newBtn.addEventListener('click', () => {
+                console.log("INITIALIZE SESSION CLICKED");
+                this.startGame();
+            });
+            console.log("SUCCESS: Button is hot and ready.");
+        } else {
+            console.error("FATAL: Button 'btn-initialize' missing from HTML.");
+            // Fallback: Try again in 1 second
+            setTimeout(() => this.bindStartButton(), 1000);
         }
     },
 
@@ -108,21 +109,19 @@ export const Game = {
     },
 
     startGame() {
-        console.log("CORE: Executing startGame()");
         const screenAuth = document.getElementById('screen-auth');
         const screenHud = document.getElementById('screen-hud');
 
         if (screenAuth && screenHud) {
-            screenAuth.style.display = 'none'; // Force hide
+            screenAuth.classList.add('hidden');
             screenHud.classList.remove('hidden');
-            screenHud.style.display = 'flex'; // Force show
             
             this.loadMap('town');
             this.state.isRunning = true;
             this.loop();
-            this.ui.log("Neural link established.");
+            this.ui.log("Connection stable. Welcome, Wanderer.");
         } else {
-            alert("UI Elements missing! Check index.html for screen-auth and screen-hud.");
+            console.error("CRITICAL: Auth or HUD screens missing.");
         }
     },
 
@@ -152,28 +151,31 @@ export const Game = {
             const logs = document.getElementById('chat-logs');
             if (!logs) return;
             const entry = document.createElement('div');
-            entry.className = "text-slate-300 py-0.5 border-l-2 border-blue-500/50 pl-2 text-xs";
+            entry.className = "text-slate-300 py-0.5 border-l-2 border-blue-500/50 pl-2 text-[11px]";
             entry.innerHTML = msg;
             logs.appendChild(entry);
             logs.scrollTop = logs.scrollHeight;
         },
         updateVitals() {
             const p = Game.state.player;
-            document.getElementById('orb-hp').style.height = `${(p.hp / p.maxHp) * 100}%`;
-            document.getElementById('orb-mana').style.height = `${(p.mana / p.maxMana) * 100}%`;
-            document.getElementById('txt-hp').innerText = Math.ceil(p.hp);
-            document.getElementById('txt-mana').innerText = Math.ceil(p.mana);
-            document.getElementById('val-total-level').innerText = p.level;
+            const hpOrb = document.getElementById('orb-hp');
+            const manaOrb = document.getElementById('orb-mana');
+            if(hpOrb) hpOrb.style.height = `${(p.hp / p.maxHp) * 100}%`;
+            if(manaOrb) manaOrb.style.height = `${(p.mana / p.maxMana) * 100}%`;
+            
+            const hpText = document.getElementById('txt-hp');
+            if(hpText) hpText.innerText = Math.ceil(p.hp);
         },
         updateProfile() {
-            document.getElementById('profile-level').innerText = Game.state.player.level;
+            const lvl = document.getElementById('profile-level');
+            if(lvl) lvl.innerText = Game.state.player.level;
         },
         showFloatText(x, y, text, color = '#fff') {
             const layer = document.getElementById('layer-fx');
             if (!layer) return;
             const el = document.createElement('div');
             el.innerText = text;
-            el.className = "absolute text-lg font-black pointer-events-none transition-all duration-1000";
+            el.className = "absolute text-sm font-black pointer-events-none";
             el.style.color = color;
             layer.appendChild(el);
             setTimeout(() => el.remove(), 1000);
@@ -181,7 +183,9 @@ export const Game = {
     }
 };
 
-// Initialize on Load
-window.addEventListener('DOMContentLoaded', () => {
+// Start logic
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => Game.init());
+} else {
     Game.init();
-});
+}
