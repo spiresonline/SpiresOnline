@@ -1,0 +1,205 @@
+ID,Category,Name,Unlock_Condition,Effect_Logic,Description,Visibility
+prk_sk_BLD_10,Skill,Blade Basics,skill_BLD:10,unlock_technique:Parry_BLD,Unlocks basic parry window for Blades.,Visible
+prk_sk_BLD_25,Skill,Blade Maintenance,skill_BLD:25,action_unlock:Field_Sharpen,Unlock Action: Sharpen weapon in field without tools.,Visible
+prk_sk_BLD_50,Skill,Blade Stance,skill_BLD:50,unlock_stance:BLD_Duelist,"Unlock Stance: Lower defense, higher crit/speed.",Visible
+prk_sk_BLD_75,Skill,Blade Expert,skill_BLD:75,unlock_finisher:Execute,Action: Instantly kill stunned target.,Visible
+prk_sk_BLD_100,Skill,Blade Master,skill_BLD:100,grant_title:Blade Saint|world_effect:Aura,Title: Blade Saint. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_BLN_10,Skill,Blunt Basics,skill_BLN:10,unlock_technique:Parry_BLN,Unlocks basic parry window for Blunts.,Visible
+prk_sk_BLN_25,Skill,Blunt Maintenance,skill_BLN:25,action_unlock:Field_Sharpen,Unlock Action: Sharpen weapon in field without tools.,Visible
+prk_sk_BLN_50,Skill,Blunt Stance,skill_BLN:50,unlock_stance:BLN_Duelist,"Unlock Stance: Lower defense, higher crit/speed.",Visible
+prk_sk_BLN_75,Skill,Blunt Expert,skill_BLN:75,unlock_finisher:Execute,Action: Instantly kill stunned target.,Visible
+prk_sk_BLN_100,Skill,Blunt Master,skill_BLN:100,grant_title:Blade Saint|world_effect:Aura,Title: Blade Saint. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_SPR_10,Skill,Spear Basics,skill_SPR:10,unlock_technique:Parry_SPR,Unlocks basic parry window for Spears.,Visible
+prk_sk_SPR_25,Skill,Spear Maintenance,skill_SPR:25,action_unlock:Field_Sharpen,Unlock Action: Sharpen weapon in field without tools.,Visible
+prk_sk_SPR_50,Skill,Spear Stance,skill_SPR:50,unlock_stance:SPR_Duelist,"Unlock Stance: Lower defense, higher crit/speed.",Visible
+prk_sk_SPR_75,Skill,Spear Expert,skill_SPR:75,unlock_finisher:Execute,Action: Instantly kill stunned target.,Visible
+prk_sk_SPR_100,Skill,Spear Master,skill_SPR:100,grant_title:Blade Saint|world_effect:Aura,Title: Blade Saint. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_LGT_10,Skill,Light Wpn Basics,skill_LGT:10,unlock_technique:Parry_LGT,Unlocks basic parry window for Light Wpns.,Visible
+prk_sk_LGT_25,Skill,Light Wpn Maintenance,skill_LGT:25,action_unlock:Field_Sharpen,Unlock Action: Sharpen weapon in field without tools.,Visible
+prk_sk_LGT_50,Skill,Light Wpn Stance,skill_LGT:50,unlock_stance:LGT_Duelist,"Unlock Stance: Lower defense, higher crit/speed.",Visible
+prk_sk_LGT_75,Skill,Light Wpn Expert,skill_LGT:75,unlock_finisher:Execute,Action: Instantly kill stunned target.,Visible
+prk_sk_LGT_100,Skill,Light Wpn Master,skill_LGT:100,grant_title:Blade Saint|world_effect:Aura,Title: Blade Saint. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_UNARMED_10,Skill,Unarmed Basics,skill_UNARMED:10,unlock_technique:Parry_UNARMED,Unlocks basic parry window for Unarmeds.,Visible
+prk_sk_UNARMED_25,Skill,Unarmed Maintenance,skill_UNARMED:25,action_unlock:Field_Sharpen,Unlock Action: Sharpen weapon in field without tools.,Visible
+prk_sk_UNARMED_50,Skill,Unarmed Stance,skill_UNARMED:50,unlock_stance:UNARMED_Duelist,"Unlock Stance: Lower defense, higher crit/speed.",Visible
+prk_sk_UNARMED_75,Skill,Unarmed Expert,skill_UNARMED:75,unlock_finisher:Execute,Action: Instantly kill stunned target.,Visible
+prk_sk_UNARMED_100,Skill,Unarmed Master,skill_UNARMED:100,grant_title:Blade Saint|world_effect:Aura,Title: Blade Saint. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_BOW_10,Skill,Archery Basics,skill_BOW:10,unlock_mechanic:Ammo_Retrieval,Chance to retrieve ammo from corpses.,Visible
+prk_sk_BOW_25,Skill,Archery Maintenance,skill_BOW:25,action_unlock:Field_Clean,Unlock Action: Clean gun/bow to prevent jamming.,Visible
+prk_sk_BOW_50,Skill,Archery Focus,skill_BOW:50,unlock_mode:Aim_Down_Sights,Unlock Mode: Zoom in for precision hits.,Visible
+prk_sk_BOW_75,Skill,Archery Expert,skill_BOW:75,unlock_shot:Crippling_Shot,Action: Shot that guarantees limb break.,Visible
+prk_sk_BOW_100,Skill,Archery Master,skill_BOW:100,grant_title:Phantom|world_effect:Aura,Title: Phantom. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_CBW_10,Skill,Crossbow Basics,skill_CBW:10,unlock_mechanic:Ammo_Retrieval,Chance to retrieve ammo from corpses.,Visible
+prk_sk_CBW_25,Skill,Crossbow Maintenance,skill_CBW:25,action_unlock:Field_Clean,Unlock Action: Clean gun/bow to prevent jamming.,Visible
+prk_sk_CBW_50,Skill,Crossbow Focus,skill_CBW:50,unlock_mode:Aim_Down_Sights,Unlock Mode: Zoom in for precision hits.,Visible
+prk_sk_CBW_75,Skill,Crossbow Expert,skill_CBW:75,unlock_shot:Crippling_Shot,Action: Shot that guarantees limb break.,Visible
+prk_sk_CBW_100,Skill,Crossbow Master,skill_CBW:100,grant_title:Phantom|world_effect:Aura,Title: Phantom. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_GUN_10,Skill,Firearms Basics,skill_GUN:10,unlock_mechanic:Ammo_Retrieval,Chance to retrieve ammo from corpses.,Visible
+prk_sk_GUN_25,Skill,Firearms Maintenance,skill_GUN:25,action_unlock:Field_Clean,Unlock Action: Clean gun/bow to prevent jamming.,Visible
+prk_sk_GUN_50,Skill,Firearms Focus,skill_GUN:50,unlock_mode:Aim_Down_Sights,Unlock Mode: Zoom in for precision hits.,Visible
+prk_sk_GUN_75,Skill,Firearms Expert,skill_GUN:75,unlock_shot:Crippling_Shot,Action: Shot that guarantees limb break.,Visible
+prk_sk_GUN_100,Skill,Firearms Master,skill_GUN:100,grant_title:Phantom|world_effect:Aura,Title: Phantom. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_SHD_10,Skill,Shields Basics,skill_SHD:10,unlock_mechanic:Stamina_Refund,Perfect timing refunds Stamina cost.,Visible
+prk_sk_SHD_25,Skill,Shields Conditioning,skill_SHD:25,passive:Second_Wind,"Once per combat, gain burst of stamina when low.",Visible
+prk_sk_SHD_50,Skill,Shields Flow,skill_SHD:50,unlock_reaction:Counter_Throw,Defensive moves can transition into throws.,Visible
+prk_sk_SHD_75,Skill,Shields Expert,skill_SHD:75,unlock_skill:Unstoppable,Action: Ignore all crowd control for 5s.,Visible
+prk_sk_SHD_100,Skill,Shields Master,skill_SHD:100,grant_title:Juggernaut|world_effect:Aura,Title: Juggernaut. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_DOG_10,Skill,Dodging Basics,skill_DOG:10,unlock_mechanic:Stamina_Refund,Perfect timing refunds Stamina cost.,Visible
+prk_sk_DOG_25,Skill,Dodging Conditioning,skill_DOG:25,passive:Second_Wind,"Once per combat, gain burst of stamina when low.",Visible
+prk_sk_DOG_50,Skill,Dodging Flow,skill_DOG:50,unlock_reaction:Counter_Throw,Defensive moves can transition into throws.,Visible
+prk_sk_DOG_75,Skill,Dodging Expert,skill_DOG:75,unlock_skill:Unstoppable,Action: Ignore all crowd control for 5s.,Visible
+prk_sk_DOG_100,Skill,Dodging Master,skill_DOG:100,grant_title:Juggernaut|world_effect:Aura,Title: Juggernaut. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_RFX_10,Skill,Reflexes Basics,skill_RFX:10,unlock_mechanic:Stamina_Refund,Perfect timing refunds Stamina cost.,Visible
+prk_sk_RFX_25,Skill,Reflexes Conditioning,skill_RFX:25,passive:Second_Wind,"Once per combat, gain burst of stamina when low.",Visible
+prk_sk_RFX_50,Skill,Reflexes Flow,skill_RFX:50,unlock_reaction:Counter_Throw,Defensive moves can transition into throws.,Visible
+prk_sk_RFX_75,Skill,Reflexes Expert,skill_RFX:75,unlock_skill:Unstoppable,Action: Ignore all crowd control for 5s.,Visible
+prk_sk_RFX_100,Skill,Reflexes Master,skill_RFX:100,grant_title:Juggernaut|world_effect:Aura,Title: Juggernaut. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_RES_10,Skill,Resistance Basics,skill_RES:10,unlock_mechanic:Stamina_Refund,Perfect timing refunds Stamina cost.,Visible
+prk_sk_RES_25,Skill,Resistance Conditioning,skill_RES:25,passive:Second_Wind,"Once per combat, gain burst of stamina when low.",Visible
+prk_sk_RES_50,Skill,Resistance Flow,skill_RES:50,unlock_reaction:Counter_Throw,Defensive moves can transition into throws.,Visible
+prk_sk_RES_75,Skill,Resistance Expert,skill_RES:75,unlock_skill:Unstoppable,Action: Ignore all crowd control for 5s.,Visible
+prk_sk_RES_100,Skill,Resistance Master,skill_RES:100,grant_title:Juggernaut|world_effect:Aura,Title: Juggernaut. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_JMP_10,Skill,Jumping Basics,skill_JMP:10,unlock_mechanic:Stamina_Refund,Perfect timing refunds Stamina cost.,Visible
+prk_sk_JMP_25,Skill,Jumping Conditioning,skill_JMP:25,passive:Second_Wind,"Once per combat, gain burst of stamina when low.",Visible
+prk_sk_JMP_50,Skill,Jumping Flow,skill_JMP:50,unlock_reaction:Counter_Throw,Defensive moves can transition into throws.,Visible
+prk_sk_JMP_75,Skill,Jumping Expert,skill_JMP:75,unlock_skill:Unstoppable,Action: Ignore all crowd control for 5s.,Visible
+prk_sk_JMP_100,Skill,Jumping Master,skill_JMP:100,grant_title:Juggernaut|world_effect:Aura,Title: Juggernaut. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_ATH_10,Skill,Athletics Basics,skill_ATH:10,unlock_mechanic:Stamina_Refund,Perfect timing refunds Stamina cost.,Visible
+prk_sk_ATH_25,Skill,Athletics Conditioning,skill_ATH:25,passive:Second_Wind,"Once per combat, gain burst of stamina when low.",Visible
+prk_sk_ATH_50,Skill,Athletics Flow,skill_ATH:50,unlock_reaction:Counter_Throw,Defensive moves can transition into throws.,Visible
+prk_sk_ATH_75,Skill,Athletics Expert,skill_ATH:75,unlock_skill:Unstoppable,Action: Ignore all crowd control for 5s.,Visible
+prk_sk_ATH_100,Skill,Athletics Master,skill_ATH:100,grant_title:Juggernaut|world_effect:Aura,Title: Juggernaut. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_MIN_10,Skill,Mining Basics,skill_MIN:10,unlock_ui:Material_Highlight,Highlights Mining materials in the world.,Visible
+prk_sk_MIN_25,Skill,Mining Efficiency,skill_MIN:25,passive:Scrap_Recycle,Breaking down items yields components.,Visible
+prk_sk_MIN_50,Skill,Mining Improvisation,skill_MIN:50,unlock_recipe:Improvised_MIN,Craft Mining tools from garbage.,Visible
+prk_sk_MIN_75,Skill,Mining Expert,skill_MIN:75,unlock_feature:Masterwork_Slot,Add a 4th mod slot to crafted items.,Visible
+prk_sk_MIN_100,Skill,Mining Master,skill_MIN:100,grant_title:Artisan|world_effect:Aura,Title: Artisan. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_BSM_10,Skill,Smithing Basics,skill_BSM:10,unlock_ui:Material_Highlight,Highlights Smithing materials in the world.,Visible
+prk_sk_BSM_25,Skill,Smithing Efficiency,skill_BSM:25,passive:Scrap_Recycle,Breaking down items yields components.,Visible
+prk_sk_BSM_50,Skill,Smithing Improvisation,skill_BSM:50,unlock_recipe:Improvised_BSM,Craft Smithing tools from garbage.,Visible
+prk_sk_BSM_75,Skill,Smithing Expert,skill_BSM:75,unlock_feature:Masterwork_Slot,Add a 4th mod slot to crafted items.,Visible
+prk_sk_BSM_100,Skill,Smithing Master,skill_BSM:100,grant_title:Artisan|world_effect:Aura,Title: Artisan. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_ENG_10,Skill,Engineering Basics,skill_ENG:10,unlock_ui:Material_Highlight,Highlights Engineering materials in the world.,Visible
+prk_sk_ENG_25,Skill,Engineering Efficiency,skill_ENG:25,passive:Scrap_Recycle,Breaking down items yields components.,Visible
+prk_sk_ENG_50,Skill,Engineering Improvisation,skill_ENG:50,unlock_recipe:Improvised_ENG,Craft Engineering tools from garbage.,Visible
+prk_sk_ENG_75,Skill,Engineering Expert,skill_ENG:75,unlock_feature:Masterwork_Slot,Add a 4th mod slot to crafted items.,Visible
+prk_sk_ENG_100,Skill,Engineering Master,skill_ENG:100,grant_title:Artisan|world_effect:Aura,Title: Artisan. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_TRP_10,Skill,Trapping Basics,skill_TRP:10,unlock_ui:Material_Highlight,Highlights Trapping materials in the world.,Visible
+prk_sk_TRP_25,Skill,Trapping Efficiency,skill_TRP:25,passive:Scrap_Recycle,Breaking down items yields components.,Visible
+prk_sk_TRP_50,Skill,Trapping Improvisation,skill_TRP:50,unlock_recipe:Improvised_TRP,Craft Trapping tools from garbage.,Visible
+prk_sk_TRP_75,Skill,Trapping Expert,skill_TRP:75,unlock_feature:Masterwork_Slot,Add a 4th mod slot to crafted items.,Visible
+prk_sk_TRP_100,Skill,Trapping Master,skill_TRP:100,grant_title:Artisan|world_effect:Aura,Title: Artisan. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_ALC_10,Skill,Alchemy Basics,skill_ALC:10,unlock_ui:Material_Highlight,Highlights Alchemy materials in the world.,Visible
+prk_sk_ALC_25,Skill,Alchemy Efficiency,skill_ALC:25,passive:Scrap_Recycle,Breaking down items yields components.,Visible
+prk_sk_ALC_50,Skill,Alchemy Improvisation,skill_ALC:50,unlock_recipe:Improvised_ALC,Craft Alchemy tools from garbage.,Visible
+prk_sk_ALC_75,Skill,Alchemy Expert,skill_ALC:75,unlock_feature:Masterwork_Slot,Add a 4th mod slot to crafted items.,Visible
+prk_sk_ALC_100,Skill,Alchemy Master,skill_ALC:100,grant_title:Artisan|world_effect:Aura,Title: Artisan. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_SCR_10,Skill,Scrounging Basics,skill_SCR:10,unlock_ui:Material_Highlight,Highlights Scrounging materials in the world.,Visible
+prk_sk_SCR_25,Skill,Scrounging Efficiency,skill_SCR:25,passive:Scrap_Recycle,Breaking down items yields components.,Visible
+prk_sk_SCR_50,Skill,Scrounging Improvisation,skill_SCR:50,unlock_recipe:Improvised_SCR,Craft Scrounging tools from garbage.,Visible
+prk_sk_SCR_75,Skill,Scrounging Expert,skill_SCR:75,unlock_feature:Masterwork_Slot,Add a 4th mod slot to crafted items.,Visible
+prk_sk_SCR_100,Skill,Scrounging Master,skill_SCR:100,grant_title:Artisan|world_effect:Aura,Title: Artisan. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_SUR_10,Skill,Survival Basics,skill_SUR:10,unlock_ui:Material_Highlight,Highlights Survival materials in the world.,Visible
+prk_sk_SUR_25,Skill,Survival Efficiency,skill_SUR:25,passive:Scrap_Recycle,Breaking down items yields components.,Visible
+prk_sk_SUR_50,Skill,Survival Improvisation,skill_SUR:50,unlock_recipe:Improvised_SUR,Craft Survival tools from garbage.,Visible
+prk_sk_SUR_75,Skill,Survival Expert,skill_SUR:75,unlock_feature:Masterwork_Slot,Add a 4th mod slot to crafted items.,Visible
+prk_sk_SUR_100,Skill,Survival Master,skill_SUR:100,grant_title:Artisan|world_effect:Aura,Title: Artisan. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_MED_10,Skill,Medicine Basics,skill_MED:10,unlock_ui:Material_Highlight,Highlights Medicine materials in the world.,Visible
+prk_sk_MED_25,Skill,Medicine Efficiency,skill_MED:25,passive:Scrap_Recycle,Breaking down items yields components.,Visible
+prk_sk_MED_50,Skill,Medicine Improvisation,skill_MED:50,unlock_recipe:Improvised_MED,Craft Medicine tools from garbage.,Visible
+prk_sk_MED_75,Skill,Medicine Expert,skill_MED:75,unlock_feature:Masterwork_Slot,Add a 4th mod slot to crafted items.,Visible
+prk_sk_MED_100,Skill,Medicine Master,skill_MED:100,grant_title:Artisan|world_effect:Aura,Title: Artisan. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_CHA_10,Skill,Charisma Basics,skill_CHA:10,unlock_dialogue_tag:CHA,Unlocks basic 'Charisma' dialogue options.,Visible
+prk_sk_CHA_25,Skill,Charisma Insight,skill_CHA:25,ui_reveal:Disposition,Shows NPC disposition/mood toward you.,Visible
+prk_sk_CHA_50,Skill,Charisma Manipulation,skill_CHA:50,action_unlock:Rumor_Plant,Action: Plant false rumors in town.,Visible
+prk_sk_CHA_75,Skill,Charisma Expert,skill_CHA:75,unlock_feature:Recruit_Elite,Can recruit Elite NPCs (Guards/Specialists).,Visible
+prk_sk_CHA_100,Skill,Charisma Master,skill_CHA:100,grant_title:Puppetmaster|world_effect:Aura,Title: Puppetmaster. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_PSN_10,Skill,Persuasion Basics,skill_PSN:10,unlock_dialogue_tag:PSN,Unlocks basic 'Persuasion' dialogue options.,Visible
+prk_sk_PSN_25,Skill,Persuasion Insight,skill_PSN:25,ui_reveal:Disposition,Shows NPC disposition/mood toward you.,Visible
+prk_sk_PSN_50,Skill,Persuasion Manipulation,skill_PSN:50,action_unlock:Rumor_Plant,Action: Plant false rumors in town.,Visible
+prk_sk_PSN_75,Skill,Persuasion Expert,skill_PSN:75,unlock_feature:Recruit_Elite,Can recruit Elite NPCs (Guards/Specialists).,Visible
+prk_sk_PSN_100,Skill,Persuasion Master,skill_PSN:100,grant_title:Puppetmaster|world_effect:Aura,Title: Puppetmaster. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_IDM_10,Skill,Intimidation Basics,skill_IDM:10,unlock_dialogue_tag:IDM,Unlocks basic 'Intimidation' dialogue options.,Visible
+prk_sk_IDM_25,Skill,Intimidation Insight,skill_IDM:25,ui_reveal:Disposition,Shows NPC disposition/mood toward you.,Visible
+prk_sk_IDM_50,Skill,Intimidation Manipulation,skill_IDM:50,action_unlock:Rumor_Plant,Action: Plant false rumors in town.,Visible
+prk_sk_IDM_75,Skill,Intimidation Expert,skill_IDM:75,unlock_feature:Recruit_Elite,Can recruit Elite NPCs (Guards/Specialists).,Visible
+prk_sk_IDM_100,Skill,Intimidation Master,skill_IDM:100,grant_title:Puppetmaster|world_effect:Aura,Title: Puppetmaster. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_UND_10,Skill,Underworld Basics,skill_UND:10,unlock_dialogue_tag:UND,Unlocks basic 'Underworld' dialogue options.,Visible
+prk_sk_UND_25,Skill,Underworld Insight,skill_UND:25,ui_reveal:Disposition,Shows NPC disposition/mood toward you.,Visible
+prk_sk_UND_50,Skill,Underworld Manipulation,skill_UND:50,action_unlock:Rumor_Plant,Action: Plant false rumors in town.,Visible
+prk_sk_UND_75,Skill,Underworld Expert,skill_UND:75,unlock_feature:Recruit_Elite,Can recruit Elite NPCs (Guards/Specialists).,Visible
+prk_sk_UND_100,Skill,Underworld Master,skill_UND:100,grant_title:Puppetmaster|world_effect:Aura,Title: Puppetmaster. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_LAN_10,Skill,Linguistics Basics,skill_LAN:10,unlock_dialogue_tag:LAN,Unlocks basic 'Linguistics' dialogue options.,Visible
+prk_sk_LAN_25,Skill,Linguistics Insight,skill_LAN:25,ui_reveal:Disposition,Shows NPC disposition/mood toward you.,Visible
+prk_sk_LAN_50,Skill,Linguistics Manipulation,skill_LAN:50,action_unlock:Rumor_Plant,Action: Plant false rumors in town.,Visible
+prk_sk_LAN_75,Skill,Linguistics Expert,skill_LAN:75,unlock_feature:Recruit_Elite,Can recruit Elite NPCs (Guards/Specialists).,Visible
+prk_sk_LAN_100,Skill,Linguistics Master,skill_LAN:100,grant_title:Puppetmaster|world_effect:Aura,Title: Puppetmaster. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_OCC_10,Skill,Occultism Basics,skill_OCC:10,unlock_hud:Focus_Meter,Adds a UI element to track mental strain.,Hidden
+prk_sk_OCC_25,Skill,Occultism Clarity,skill_OCC:25,passive:Stress_Warning,Screen edges flash before mental break occurs.,Visible
+prk_sk_OCC_50,Skill,Occultism Resilience,skill_OCC:50,passive:Mental_Fortress,Immune to low-level fear/charm effects.,Visible
+prk_sk_OCC_75,Skill,Occultism Expert,skill_OCC:75,unlock_ritual:Mind_Wipe,Action: Erase NPC memory of your crimes.,Visible
+prk_sk_OCC_100,Skill,Occultism Master,skill_OCC:100,grant_title:Oracle|world_effect:Aura,Title: Oracle. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_DIS_10,Skill,Discipline Basics,skill_DIS:10,unlock_hud:Focus_Meter,Adds a UI element to track mental strain.,Hidden
+prk_sk_DIS_25,Skill,Discipline Clarity,skill_DIS:25,passive:Stress_Warning,Screen edges flash before mental break occurs.,Visible
+prk_sk_DIS_50,Skill,Discipline Resilience,skill_DIS:50,passive:Mental_Fortress,Immune to low-level fear/charm effects.,Visible
+prk_sk_DIS_75,Skill,Discipline Expert,skill_DIS:75,unlock_ritual:Mind_Wipe,Action: Erase NPC memory of your crimes.,Visible
+prk_sk_DIS_100,Skill,Discipline Master,skill_DIS:100,grant_title:Oracle|world_effect:Aura,Title: Oracle. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_MOR_10,Skill,Morality Basics,skill_MOR:10,unlock_hud:Focus_Meter,Adds a UI element to track mental strain.,Hidden
+prk_sk_MOR_25,Skill,Morality Clarity,skill_MOR:25,passive:Stress_Warning,Screen edges flash before mental break occurs.,Visible
+prk_sk_MOR_50,Skill,Morality Resilience,skill_MOR:50,passive:Mental_Fortress,Immune to low-level fear/charm effects.,Visible
+prk_sk_MOR_75,Skill,Morality Expert,skill_MOR:75,unlock_ritual:Mind_Wipe,Action: Erase NPC memory of your crimes.,Visible
+prk_sk_MOR_100,Skill,Morality Master,skill_MOR:100,grant_title:Oracle|world_effect:Aura,Title: Oracle. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_TOR_10,Skill,Torture Basics,skill_TOR:10,unlock_hud:Focus_Meter,Adds a UI element to track mental strain.,Hidden
+prk_sk_TOR_25,Skill,Torture Clarity,skill_TOR:25,passive:Stress_Warning,Screen edges flash before mental break occurs.,Visible
+prk_sk_TOR_50,Skill,Torture Resilience,skill_TOR:50,passive:Mental_Fortress,Immune to low-level fear/charm effects.,Visible
+prk_sk_TOR_75,Skill,Torture Expert,skill_TOR:75,unlock_ritual:Mind_Wipe,Action: Erase NPC memory of your crimes.,Visible
+prk_sk_TOR_100,Skill,Torture Master,skill_TOR:100,grant_title:Oracle|world_effect:Aura,Title: Oracle. Passive Aura affects all nearby NPCs.,Visible
+prk_sk_LCK_10,Skill,Lockpicking Basics,skill_LCK:10,unlock_hud:Focus_Meter,Adds a UI element to track mental strain.,Hidden
+prk_sk_LCK_25,Skill,Lockpicking Clarity,skill_LCK:25,passive:Stress_Warning,Screen edges flash before mental break occurs.,Visible
+prk_sk_LCK_50,Skill,Lockpicking Resilience,skill_LCK:50,passive:Mental_Fortress,Immune to low-level fear/charm effects.,Visible
+prk_sk_LCK_75,Skill,Lockpicking Expert,skill_LCK:75,unlock_ritual:Mind_Wipe,Action: Erase NPC memory of your crimes.,Visible
+prk_sk_LCK_100,Skill,Lockpicking Master,skill_LCK:100,grant_title:Oracle|world_effect:Aura,Title: Oracle. Passive Aura affects all nearby NPCs.,Visible
+prk_st_STR_30,Attribute,STR Feat,stat_STR:30,unlock_interaction:Lift_Heavy,Unlocks environmental interaction for STR.,Visible
+prk_st_STR_60,Attribute,STR Dominance,stat_STR:60,dialogue_override:Physically_Threaten,Unlocks unique dialogue resolution using STR.,Visible
+prk_st_STR_90,Attribute,STR Mythic,stat_STR:90,passive:Wall_Smash,Unlocks supernatural ability: Wall Smash.,Visible
+prk_st_DEX_30,Attribute,DEX Feat,stat_DEX:30,unlock_interaction:Balance_Beam,Unlocks environmental interaction for DEX.,Visible
+prk_st_DEX_60,Attribute,DEX Dominance,stat_DEX:60,dialogue_override:Sleight_Hand,Unlocks unique dialogue resolution using DEX.,Visible
+prk_st_DEX_90,Attribute,DEX Mythic,stat_DEX:90,passive:Water_Run,Unlocks supernatural ability: Water Run.,Visible
+prk_st_INT_30,Attribute,INT Feat,stat_INT:30,unlock_interaction:Repair_Circuit,Unlocks environmental interaction for INT.,Visible
+prk_st_INT_60,Attribute,INT Dominance,stat_INT:60,dialogue_override:Logic_Trap,Unlocks unique dialogue resolution using INT.,Visible
+prk_st_INT_90,Attribute,INT Mythic,stat_INT:90,passive:Mind_Read,Unlocks supernatural ability: Mind Read.,Visible
+prk_st_VIT_30,Attribute,VIT Feat,stat_VIT:30,unlock_interaction:Hold_Breath,Unlocks environmental interaction for VIT.,Visible
+prk_st_VIT_60,Attribute,VIT Dominance,stat_VIT:60,dialogue_override:Drink_Contest,Unlocks unique dialogue resolution using VIT.,Visible
+prk_st_VIT_90,Attribute,VIT Mythic,stat_VIT:90,passive:Regenerator,Unlocks supernatural ability: Regenerator.,Visible
+prk_st_END_30,Attribute,END Feat,stat_END:30,unlock_interaction:Force_March,Unlocks environmental interaction for END.,Visible
+prk_st_END_60,Attribute,END Dominance,stat_END:60,dialogue_override:Outlast,Unlocks unique dialogue resolution using END.,Visible
+prk_st_END_90,Attribute,END Mythic,stat_END:90,passive:Sleepless,Unlocks supernatural ability: Sleepless.,Visible
+prk_st_FOR_30,Attribute,FOR Feat,stat_FOR:30,unlock_interaction:Endure_Heat,Unlocks environmental interaction for FOR.,Visible
+prk_st_FOR_60,Attribute,FOR Dominance,stat_FOR:60,dialogue_override:Pain_Compliance,Unlocks unique dialogue resolution using FOR.,Visible
+prk_st_FOR_90,Attribute,FOR Mythic,stat_FOR:90,passive:Unkillable,Unlocks supernatural ability: Unkillable.,Visible
+prk_st_PER_30,Attribute,PER Feat,stat_PER:30,unlock_interaction:Spot_Hidden,Unlocks environmental interaction for PER.,Visible
+prk_st_PER_60,Attribute,PER Dominance,stat_PER:60,dialogue_override:Cold_Read,Unlocks unique dialogue resolution using PER.,Visible
+prk_st_PER_90,Attribute,PER Mythic,stat_PER:90,passive:Future_Sight,Unlocks supernatural ability: Future Sight.,Visible
+prk_pers_extro,Personality,The Face,meet_npcs:50,passive:Crowd_Energy,Gain Stamina Regen when near 3+ Allies.,Visible
+prk_pers_intro,Personality,Lone Wolf,solo_time:10h,passive:Solo_Focus,Gain +10% Crit and Stealth when alone.,Visible
+prk_pers_sens,Personality,Observer,inspect_items:100,ui:Detailed_Tooltips,See exact stats/durability numbers on items.,Visible
+prk_pers_intui,Personality,Visionary,dialogue_abstract:20,ui:Quest_Hints,Vague hunches appear on your map for unsolved quests.,Visible
+prk_pers_think,Personality,Cold Logic,dialogue_logic:20,immune:Guilt_Trips,Immune to NPC emotional manipulation/begging.,Visible
+prk_pers_feel,Personality,Empath,dialogue_empathy:20,action:Sooth_Pain,Action: Heal ally Sanity by talking.,Visible
+prk_pers_judge,Personality,Planner,craft_queue:50,passive:Prep_Bonus,First attack in combat deals +50% dmg if you strike first.,Visible
+prk_pers_perc,Personality,Improviser,weapon_break:10,passive:Scramble,Gain speed/dmg boost when equipment breaks or plan fails.,Visible
+prk_cbt_blood,Combat,Bloodletter,kill_total:1000,passive:Lifesteal_1%,Heal 1% of dmg dealt. Title: 'Bloodletter'.,Visible
+prk_soc_stub,Social,Stubborn Mule,persuade_fail:20,stat_boost:Willpower,Gain temporary Willpower stacking on failed checks.,Visible
+prk_soc_flirt,Social,Heartthrob,flirt_succ:10,action:Seduce_Guard,Action: Distract guards with charm.,Visible
+prk_exp_forest,Exploration,Ranger of the Wild,forest_quests:10,summon:Wolf_Companion,Call a temporary wolf ally in forests.,Visible
+prk_soc_hustle,Social,Street Hustler,visit_und:20,access:Black_Market_Anywhere,Access Black Market menu from any alleyway.,Visible
+prk_fail_clumsy,Failure,Walking Disaster,trap_trigger:20,mechanic:Trap_Redirect,Traps you trigger damage enemies instead.,Visible
+prk_fail_drunk,Failure,Iron Liver,drink_count:100,mechanic:Drunken_Master,Unlocks unique 'Drunken' fighting style moves.,Visible
+prk_soc_noble,Social,Blue Blood,gold_held:50000,access:High_Society,Guards salute. Access to Noble district parties.,Visible
+prk_exp_night,Exploration,Vampiric Nature,night_activity:20h,passive:Sun_Sickness,"Buffed stats at night, debuffed in day.",Visible
+prk_crf_hoard,Crafting,Pack Rat,inv_full_time:10h,mechanic:Overburdened_Charge,Can sprint-tackle enemies using your weight.,Visible
+prk_cbt_boss,Combat,Godslayer,kill_boss:10,trophy:Boss_Head,Can mount boss heads on belt to fear enemies.,Visible
+prk_soc_peace,Social,Pacifist,peace_resolutions:50,action:Sanctuary,Create a zone where violence is disabled.,Visible
+prk_occ_insane,Mental,Void Touched,sanity_zero:5,dialogue:Voices,The Void whispers secrets (hints) to you.,Visible
+prk_cbt_bare,Combat,Monk,kill_unarmed:200,mechanic:Chi_Strike,Unarmed attacks project force (Range increase).,Visible
+prk_exp_fall,Exploration,Gravity Defier,fall_survive:20,mechanic:Wall_Run,Can wall-run for short distances.,Visible

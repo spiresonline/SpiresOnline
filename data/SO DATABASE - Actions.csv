@@ -1,0 +1,19 @@
+ID,Category,Name,Skill_ID,Stat_Scaling,Req_Tool,Unlock_Req,Time_ms,Cost,Description
+act_soc_persuade,Social,Persuade,sk_psn,INT:0.5|CHA:0.5,none,default,3000,Energy:5,Reason with NPC to improve disposition.
+act_soc_threat,Social,Threaten,sk_idm,STR:0.6|CHA:0.4,none,default,2000,Energy:10,Force compliance through fear.
+act_soc_bribe,Social,Bribe,sk_und,CHA:0.5|LCK:0.5,gold,default,1000,Gold:Var,Pay NPC to ignore crimes or give info.
+act_soc_gossip,Social,Gossip,sk_und,CHA:0.6|PER:0.4,none,Perk:prk_soc_gossip,5000,Energy:10,Extract rumors from local NPCs.
+act_soc_flirt,Social,Charm,sk_cha,CHA:0.7|FSH:0.3,none,Perk:prk_soc_flirt,3000,Energy:5,Unlock special dialogue with attracted NPCs.
+act_srv_forage,Gather,Forage,sk_sur,PER:0.6|INT:0.4,none,default,4000,Energy:15,Find food/herbs in wilderness.
+act_srv_skin,Gather,Skin Beast,sk_sur,DEX:0.6|VIT:0.4,knife,default,6000,Energy:20,Harvest leather/meat from corpse.
+act_min_pick,Gather,Mine Ore,sk_min,STR:0.8|END:0.2,pickaxe,default,3000,Energy:35,Extract raw ore from veins.
+act_crf_repair,Craft,Field Repair,sk_bsm,STR:0.5|DEX:0.5,repair_kit,default,8000,Energy:30,Restore item durability (Max 80%).
+act_crf_brew,Craft,Brew Potion,sk_alc,INT:0.8|PER:0.2,alchemy_set,default,5000,Energy:10,Combine herbs into usable potions.
+act_sec_pick,Infiltrate,Pick Lock,sk_lck,DEX:0.6|PER:0.4,lockpick,default,4000,Energy:15,Open locked doors/chests silently.
+act_sec_hack,Infiltrate,Hack Terminal,sk_eng,INT:0.8|DEX:0.2,deck,default,5000,Energy:20,Bypass electronic security.
+act_mnt_sharp,Maint,Sharpen Blade,sk_bsm,DEX:1.0,whetstone,Talent:sk_bld_25,10000,Energy:20,Buff weapon damage for 1 hour.
+act_mnt_clean,Maint,Clean Gun,sk_eng,INT:1.0,gun_oil,Talent:sk_gun_25,10000,Energy:15,Prevent jamming for 1 hour.
+act_rst_nap,Rest,Short Rest,sk_sur,VIT:1.0,none,default,15000,Time:1h,Recover Stamina and small HP amount.
+act_rst_sleep,Rest,Deep Sleep,sk_sur,VIT:1.0,bedroll,default,60000,Time:8h,Full reset of Fatigue and Sanity.
+act_men_focus,Mental,Meditate,sk_dis,FOR:0.6|INT:0.4,focus_beads,Talent:sk_dis_10,12000,Sanity:+10,Recover Sanity at cost of Time.
+act_men_void,Mental,Void Gaze,sk_occ,INT:0.5|FOR:0.5,void_lens,Perk:prk_occ_gaze,5000,Sanity:-5,Reveal hidden magic/traps nearby.

@@ -1,0 +1,13 @@
+ID,NPC_ID,Title,Category,Requirement,Reward,Description
+qst_dan_01,npc_bar_01,The First Sip,Tutorial,none,50_gold|sk_cha:XP,Buy a drink and talk to regulars to find the Forge.
+qst_thr_01,npc_grd_01,Alley Sweep,Combat,REP > 0|sk_bld:10,200_gold|REP:5,Clear 5 Scavengers from Shadow Row for the Guard.
+qst_ela_01,npc_med_01,Triage Duty,Medical,sk_med:10|it_med_02,300_gold|sk_med:XP,Treat 3 wounded citizens in the Hollow Pit square.
+qst_kae_01,npc_bsm_01,Heart of Steel,Mining,STR:20|sk_min:10,wpn_bld_iron|Perk_Point:1,Gather 10 Iron Ore from the Whistling Woods for the Smith.
+qst_sil_01,npc_eng_01,Steam Leak,Engineering,sk_eng:10|it_eng_01,wpn_gun_scrap|sk_eng:XP,Repair the main steam valve in the Bar's basement.
+qst_min_01,npc_und_01,The Quiet Mark,Stealth,sk_stl:15|sk_lck:10,150_gold|REP:-10,Infiltrate the Guard Post and steal the Bribe Ledger.
+qst_mal_01,npc_occ_01,Void Echoes,Occult,sk_occ:10|FOR:30,it_occ_02|Perk_Point:1,Survive a night at the Silent Chapel without losing your mind.
+qst_fnc_01,npc_fnc_01,The Big Score,Underworld,REP < -20|sk_und:20,1000_gold|Perk_Point:1,Steal the Overseer Key from the Noble District.
+qst_nob_01,npc_nob_01,High Society,Social,FSH > 70|REP > 20,eq_neck_02|REP:15,Attend the Gala and convince the Ruler to lower taxes.
+qst_tor_01,npc_tor_01,Truth Extractor,Mental,sk_tor:10|MOR < 0,it_tor_03|sk_tor:XP,Extract the location of the rebel camp from the prisoner.
+qst_iv_01,npc_alc_01,Toxic Harvest,Alchemy,sk_alc:15|sk_sur:10,it_mat_sludge|sk_alc:XP,Gather 5 Toxic Sludge samples from the sewers.
+qst_bos_01,npc_grd_01,End of Tyrany,Boss,REP > 50|STR:50,Title: Liberator|Perk_Point:5,Assassinate The Ruler and free the town.

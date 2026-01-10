@@ -1,0 +1,9 @@
+ID,Type,Name,Passive_Source,Primary_Effect,Secondary_Effect,Influenced_Skills,Description,Visibility,Range_Desc (0-20|21-50|51-80|81+)
+STR,Core,Strength,Muscle Density,Melee Power,Carry Capacity,"BLN, SHD, MIN, BSM",Raw kinetic force application.,Visible,Weak|Average|Athletic|Herculean
+INT,Core,Intelligence,Neural Plasticity,Mana Pool,Skill Learn Speed,"MED, ENG, ALC, OCC",Processing speed and logic.,Hidden,Simple|Average|Sharp|Genius
+DEX,Core,Dexterity,Proprioception,Attack Speed,Crit Chance,"BLD, BOW, STL, LCK",Fine motor control and balance.,Visible,Clumsy|Average|Nimble|Surgical
+VIT,Core,Vitality,Metabolism,Max Health,Disease Resist,"RES, SUR",Systemic biological integrity.,Visible,Sickly|Healthy|Robust|Vigorous
+END,Core,Endurance,Cardio,Max Stamina,Trauma Threshold,"ATH, JMP",Anaerobic threshold and recovery.,Visible,Winded|Fit|Tireless|Unstoppable
+FOR,Core,Fortitude,Pain Tolerance,Status Resist,Sanity Pool,"DIS, MOR, TOR",Psychological hardening.,Hidden,Fragile|Stable|Hardened|Unbreakable
+PER,Core,Perception,Sensory Acuity,Vision Range,Trap Detect,"SCR, LAN, UND",Detail analysis and awareness.,Visible,Oblivious|Observant|Vigilant|Omniscient
+REP,Global,Reputation,Actions,Price Modifier,Unlock Quests,"CHA, SOC, FSH",Global fame and trustworthiness (-100 to 100).,Visible,Hated|Unknown|Known|Legendary

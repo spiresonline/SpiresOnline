@@ -1,0 +1,22 @@
+ID,Name,Skill_ID,Stat_Scaling,Req_Weapon,Unlock_Req,Time_ms,Cost,Description
+atk_def_unarmed,Punch,sk_una,STR:0.5|DEX:0.5,none,default,500,Energy:10,Basic unarmed strike.
+atk_def_kick,Kick,sk_una,STR:0.8,none,default,800,Energy:20,"Push back enemy. Low damage, high stagger."
+atk_bld_quick,Quick Slash,sk_bld,DEX:0.8,type:blade,default,400,Energy:12,"Fast, low-commitment strike."
+atk_bld_heavy,Heavy Cleave,sk_bld,STR:0.8|DEX:0.2,type:blade,default,1000,Energy:25,"High damage swing, vulnerable during windup."
+atk_bld_bleed,Arterial Cut,sk_bld,DEX:1.0,type:blade,Talent:sk_bld_50,600,Energy:30,Precise strike that causes severe Bleeding.
+atk_bln_bash,Pommel Bash,sk_bln,STR:0.6,type:blunt,default,300,Energy:10,Quick interrupt to stop enemy casting/attack.
+atk_bln_smash,Skullcrusher,sk_bln,STR:1.0,type:blunt,Talent:sk_bln_50,1500,Energy:45,Ignores 50% armor. High stun chance.
+atk_spr_poke,Reach Poke,sk_spr,DEX:0.8,type:spear,default,500,Energy:15,Attack from safety range.
+atk_spr_impale,Impale,sk_spr,STR:0.6|DEX:0.4,type:spear,Talent:sk_spr_75,1000,Energy:40,Pin enemy in place. Deals massive DMG if they move.
+atk_bow_snap,Snap Shot,sk_bow,DEX:0.8,type:bow,default,600,Energy:20,"Fast shot, low accuracy penalty."
+atk_bow_aim,Sniper Shot,sk_bow,PER:1.0,type:bow,Talent:sk_bow_50,2500,Energy:40,Guaranteed Critical Hit if unseen.
+atk_gun_hip,Hip Fire,sk_gun,DEX:0.6,type:firearm,default,300,Energy:10,Spray and pray. High spread.
+atk_gun_head,Execution,sk_gun,PER:1.0,type:firearm,Perk:prk_cbt_exec,1500,Energy:30,Instant kill on Stunned/Downed targets.
+atk_lgt_back,Backstab,sk_lgt,DEX:1.0,type:light,Talent:sk_lgt_25,500,Energy:20,300% Damage if attacking from stealth/behind.
+atk_dirty,Sand Throw,sk_und,DEX:0.5,none,Perk:prk_soc_scum,200,Energy:15,Blinds target for 3 seconds.
+def_block,Block,sk_shd,STR:0.8,type:shield,default,200,Energy:5,Mitigate physical damage based on Shield Rating.
+def_parry,Parry,sk_bld,DEX:1.0,type:blade,Talent:sk_bld_25,100,Energy:10,"Deflect attack. If timed perfectly, staggers enemy."
+def_dodge,Roll,sk_dog,DEX:0.5|AGI:0.5,none,default,400,Energy:25,Invulnerability frame. Relocates player.
+def_brace,Brace,sk_res,VIT:1.0,none,default,0,Energy:0,"Stance: Take 20% less damage, cannot move."
+tac_taunt,Taunt,sk_idm,CHA:0.8,none,default,500,Energy:10,Draw aggro from allies. Lowers enemy defense.
+tac_feint,Feint,sk_psn,INT:0.8,type:melee,Talent:sk_bld_25,400,Energy:15,Fake attack. Next real attack cannot be blocked.

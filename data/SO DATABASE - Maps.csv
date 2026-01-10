@@ -1,0 +1,13 @@
+ID,Name,Type,Accessibility_Req,Description,Discovery_XP
+map_bar_01,The Rusty Valve,Interior,none,A dimly lit pub powered by hissing steam pipes. The social hub.,100
+map_for_01,Whistling Woods,Wilderness,none,"A dense, fog-heavy forest filled with feral beasts and ruins.",200
+map_sqr_01,The Hollow Pit,Town Square,none,A muddy central plaza where the town’s few remaining laws are enforced.,150
+map_aly_01,Shadow Row,Alleyway,sk_stl:15,A labyrinth of narrow paths where the Underworld thrives. Hidden to the unobservant.,300
+map_frg_01,Iron Pulse Forge,Interior,STR:20,A massive soot-covered workshop where metal is beaten into shape.,150
+map_chp_01,The Silent Chapel,Interior,sk_occ:10,A crumbling shrine dedicated to the Void. Smells of old incense and copper.,250
+map_cln_01,The Bone-Setters,Interior,none,A crude clinic for trauma victims and plague-watchers.,100
+map_mkt_01,The Black Market,Hidden,sk_und:25|REP:-20,A secret cellar accessible only to those known by the criminal element.,500
+map_nob_01,Gold Heights,District,FSH:60|REP:30,"The clean, guarded district where the wealthy hide from the smog.",400
+map_void_01,The Rift,Void,sk_occ:50|FOR:40,A pocket dimension where reality is torn. Only for the strong-willed.,1000
+map_lab_01,Old Bio-Lab,Interior,sk_eng:30|INT:35,A pre-collapse facility filled with toxic sludge and ancient tech.,600
+map_tun_01,Sewers,Wilderness,sk_sur:15,"A flooded, stinking maze beneath the city. Home to rats and worse.",300

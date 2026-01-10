@@ -1,0 +1,13 @@
+ID,Name,LocationID,Role,Skill_Check,Social_Tags,Social_Check_Logic,Trade_Type,Description
+npc_bar_01,Danny,map_bar_01,Information,sk_cha/sk_psn,"bribery,gossip",REP > 10,Drinks/Info,Friendly but knows everyone's price. Won't talk to nobodies.
+npc_grd_01,Thorne,map_sqr_01,Law Enforcement,sk_idm/sk_mor,rank_authority,FSH > 50,Bounties,Strict and scarred. Respects a uniform or an expensive suit.
+npc_fnc_01,Faceless,map_mkt_01,Fence,sk_und/sk_lck,"underworld,criminal",REP < -20,Illegal_Goods,Only deals with known criminals. Never shows his face.
+npc_nob_01,Lady V,map_sqr_01,Noble,sk_cha/sk_psn,"snob,flirt",FSH > 80,Luxury_Items,Ignores anyone not dressed in peak high fashion.
+npc_beg_01,Rat,map_aly_01,Beggar,none,"pity,bribery",none,Tips,A source of gutter rumors who will talk to anyone for a coin.
+npc_med_01,Doctor Elara,map_cln_01,Healer,sk_med/sk_alc,"pity,medical",none,Medical,Ex-military surgeon with a shaky hand but a brilliant mind.
+npc_bsm_01,Kaelen the Smith,map_frg_01,Blacksmith,sk_bsm/sk_min,intimidate,STR > 30,Repairs/Gear,Giant of a man. Values physical strength more than reputation.
+npc_und_01,Mina the Urchin,map_aly_01,Informant,sk_und/sk_stl,"pity,deceive",none,Secrets,A child of the shadows who hears things guards want hidden.
+npc_occ_01,Father Malachi,map_chp_01,Priest,sk_occ/sk_dis,occult,FOR > 40,Cures/Tomes,"Claims the Void whispers to him. Only trusts the ""hardened""."
+npc_eng_01,Silas the Scrapper,map_sqr_01,Engineer,sk_eng/sk_scr,"bribery,tech",INT > 30,Scrap/Tools,A genius at fixing junk. Hates the Law; loves high-tech components.
+npc_alc_01,Old Mother Ivy,map_for_01,Alchemist,sk_alc/sk_sur,"deceive,nature",none,Alchemy,Lives in a swamp hut. Knows which mushrooms kill and which cure.
+npc_tor_01,The Inquisitor,map_aly_01,Torturer,sk_tor/sk_dis,"intimidate,fear",MOR < 10,Intel/Pain,"A shadow figure extracting ""truth"" for the highest bidder."

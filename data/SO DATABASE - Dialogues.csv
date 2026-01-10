@@ -1,0 +1,23 @@
+ID,NPC_ID,Trigger_Tag,Condition,Text_Content,Effect_On_Select
+dlg_dan_01,npc_bar_01,greeting,none,Welcome to the Valve. Don't mind the steam; it keeps the ale warm.,none
+dlg_dan_02,npc_bar_01,ambient_bark,none,Steam's getting low today... hope the boiler isn't acting up again.,none
+dlg_dan_03,npc_bar_01,ask_forge,sk_cha > 10,You look like you've got business with Kaelen. I'll mark the Forge for you.,unlock_map:map_frg_01
+dlg_thr_01,npc_grd_01,greeting,REP < 0,I smell the gutter on you. Keep your hands where I can see them.,behavior:aggressive
+dlg_thr_02,npc_grd_01,ambient_bark,none,"Move along, citizen. Nothing to see but the smog.",none
+dlg_thr_03,npc_grd_01,quest_offer,sk_idm > 20,You've got a spine. We need people who aren't afraid of the Shadow Row.,offer_quest:qst_thr_01
+dlg_ela_01,npc_med_01,greeting,none,Don't bleed on the floor. I just cleaned it. Mostly.,none
+dlg_ela_02,npc_med_01,ambient_bark,none,I need more clean bandages... and less patients.,none
+dlg_ela_03,npc_med_01,medical_help,sk_med > 15,A fellow student of the blade and bone? Help me stitch this artery.,grant_item:it_med_02
+dlg_kae_01,npc_bsm_01,ambient_bark,none,Strike while the iron is hot. Or don't. I'm busy.,none
+dlg_kae_02,npc_bsm_01,repair_check,STR > 25,"You look like you can swing a hammer. I'll fix your gear, but it'll cost you.",unlock:act_crf_repair
+dlg_min_01,npc_und_01,greeting,REP < 10,The shadows are whispering today. You want to hear what they said about the Guard?,none
+dlg_min_02,npc_und_01,ambient_bark,none,"Eyes open, pockets closed. That's the rule here.",none
+dlg_min_03,npc_und_01,secret_info,sk_und > 15,I saw a Guard drop a ledger near the post. Might be worth something to the right person.,offer_quest:qst_min_01
+dlg_nob_01,npc_nob_01,greeting,FSH < 50,The smell of the lower districts is quite... pungent on you. Move along.,behavior:ignore
+dlg_nob_02,npc_nob_01,ambient_bark,none,I wonder if the Ruler will ever fix the filtration in Gold Heights.,none
+dlg_nob_03,npc_nob_01,social_check,FSH > 80,"Finally, someone who understands the importance of silk. Come, let's talk.",offer_quest:qst_nob_01
+dlg_mal_01,npc_occ_01,void_talk,FOR < 30,"The Void is calling you, child. You're shaking. Can you hear the humming?",apply_status:eff_fear
+dlg_mal_02,npc_occ_01,ambient_bark,none,The silence is a lie. The Void is never quiet.,none
+dlg_fnc_01,npc_fnc_01,greeting,REP > -20,I don't know you. I don't want to know you. Get out.,behavior:close_shop
+dlg_fnc_02,npc_fnc_01,ambient_bark,none,Everything has a price. Even your life.,none
+dlg_fnc_03,npc_fnc_01,trade_unlock,sk_und > 30,Fine. You've got the look of a criminal. Let's see your 'found' goods.,unlock:trade_illegal

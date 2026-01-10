@@ -3,171 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPIRES ONLINE | ALPHA 1.3</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css"> 
+    <title>Spires Online - Alpha 2.0</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #00bcd4; /* Cyan for Tech */
+            --danger-color: #f44336; /* Red for HP */
+            --stamina-color: #4caf50; /* Green for Stamina */
+            --sanity-color: #9c27b0; /* Purple for Void/Sanity */
+            --border-color: #333;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #game-container {
+            display: grid;
+            grid-template-columns: 250px 1fr 250px;
+            grid-template-rows: 60px 1fr 150px;
+            width: 100%;
+            max-width: 1200px;
+            height: 100vh;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+        }
+
+        /* --- Header --- */
+        header {
+            grid-column: 1 / -1;
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        h1 { margin: 0; font-size: 1.2rem; color: var(--accent-color); text-transform: uppercase; letter-spacing: 2px; }
+        .world-info span { margin-left: 15px; font-weight: bold; }
+
+        /* --- Left Panel: Stats --- */
+        #left-panel {
+            grid-row: 2 / -1;
+            background-color: #181818;
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stat-group h3 { margin: 0 0 10px 0; font-size: 0.9rem; color: #888; border-bottom: 1px solid #333; }
+        
+        .bar-container {
+            margin-bottom: 15px;
+        }
+        .bar-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; }
+        .bar-track { background: #333; height: 10px; width: 100%; border-radius: 2px; }
+        .bar-fill { height: 100%; width: 100%; transition: width 0.3s ease; }
+        
+        #hp-bar { background-color: var(--danger-color); }
+        #stm-bar { background-color: var(--stamina-color); }
+        #san-bar { background-color: var(--sanity-color); }
+
+        .attr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem; }
+        .attr-box { background: #222; padding: 5px; text-align: center; border: 1px solid #333; }
+        .attr-val { display: block; font-size: 1.1rem; font-weight: bold; color: var(--accent-color); }
+
+        /* --- Center Panel: Game Log --- */
+        #main-view {
+            grid-column: 2;
+            grid-row: 2;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #121212;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #game-log {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        #game-log div { animation: fadeIn 0.2s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Right Panel: Info/Debug --- */
+        #right-panel {
+            grid-row: 2 / -1;
+            background-color: #181818;
+            border-left: 1px solid var(--border-color);
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        /* --- Footer: Controls --- */
+        #controls-area {
+            grid-column: 2;
+            grid-row: 3;
+            background-color: var(--panel-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-group { display: flex; gap: 10px; }
+        input[type="text"] {
+            flex-grow: 1;
+            background: #111;
+            border: 1px solid #444;
+            color: white;
+            padding: 10px;
+            font-family: inherit;
+        }
+        button {
+            background: var(--accent-color);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        button:hover { opacity: 0.9; }
+        button.secondary { background: #444; color: white; }
+
+        .quick-actions { display: flex; gap: 10px; }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-50 overflow-hidden select-none font-sans">
+<body>
 
-    <div id="app-interface" class="relative w-screen h-screen">
-        
-        <div id="screen-auth" class="view-layer flex flex-col items-center justify-center p-6 text-center z-50 bg-slate-950">
-            <h1 class="text-8xl font-black italic tracking-tighter mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-emerald-400">SPIRES<span class="text-white">.</span></h1>
-            <p class="text-slate-500 uppercase tracking-[0.4em] text-[10px] mb-12 font-bold">Alpha 1.3 | Systems Update</p>
-            <button id="btn-initialize" class="btn-primary">INITIALIZE SESSION</button>
-        </div>
+    <div id="game-container">
+        <header>
+            <h1>Spires Online <span style="font-size:0.6em; color:#666;">ALPHA 2.0</span></h1>
+            <div class="world-info">
+                LOC: <span id="location-text">LOADING...</span> | 
+                TIME: <span id="time-text">00:00</span>
+            </div>
+        </header>
 
-        <canvas id="game-canvas" class="absolute inset-0 z-0"></canvas>
-        
-        <div id="overlay-time" class="view-layer z-0 pointer-events-none transition-colors duration-[5000ms] mix-blend-multiply bg-transparent"></div>
-
-        <div id="layer-fx" class="view-layer z-5 pointer-events-none overflow-hidden"></div>
-
-        <div id="screen-hud" class="view-layer hidden pointer-events-none z-10 flex flex-col justify-between p-4">
-            
-            <div class="flex justify-between items-start pointer-events-auto">
-                <div class="glass-panel px-4 py-2 flex flex-col">
-                    <h2 id="txt-location" class="text-xs font-black tracking-widest text-slate-400 uppercase">Unknown Zone</h2>
-                    <span id="txt-time" class="text-[10px] text-yellow-500 font-mono">12:00 PM</span>
+        <aside id="left-panel">
+            <div class="stat-group">
+                <h3>Vitals</h3>
+                <div class="bar-container">
+                    <div class="bar-label"><span>HP</span> <span id="hp-val"></span></div>
+                    <div class="bar-track"><div id="hp-bar" class="bar-fill" style="width: 100%;"></div></div>
                 </div>
-
-                <div class="flex space-x-2">
-                    <button onclick="window.UI.toggleModal('admin')" class="glass-panel px-3 py-2 hover:bg-red-500/20 text-red-400 text-xs font-bold tracking-widest transition">ADMIN</button>
-                    
-                    <div class="relative group">
-                        <button class="glass-panel px-4 py-2 hover:bg-white/10 text-xs font-bold tracking-widest transition">SYSTEM ▼</button>
-                        <div class="absolute right-0 mt-2 w-48 glass-panel flex flex-col hidden group-hover:flex">
-                            <button onclick="window.UI.toggleModal('profile')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold border-b border-white/5">👤 PROFILE</button>
-                            <button onclick="window.UI.toggleModal('inventory')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold border-b border-white/5">🎒 INVENTORY (I)</button>
-                            <button onclick="window.UI.toggleModal('talents')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold border-b border-white/5">🔮 TALENTS (N)</button>
-                            <button onclick="window.UI.toggleModal('settings')" class="text-left px-4 py-3 hover:bg-white/10 text-xs font-bold">⚙️ SETTINGS</button>
-                        </div>
-                    </div>
+                <div class="bar-container">
+                    <div class="bar-label"><span>STM</span> <span id="stm-val"></span></div>
+                    <div class="bar-track"><div id="stm-bar" class="bar-fill" style="width: 100%;"></div></div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-label"><span>SANITY</span> <span id="san-val"></span></div>
+                    <div class="bar-track"><div id="san-bar" class="bar-fill" style="width: 100%;"></div></div>
                 </div>
             </div>
 
-            <div class="flex-grow flex items-center justify-between">
-                <div class="pointer-events-auto w-80 h-64 glass-panel flex flex-col mt-4">
-                    <div class="bg-black/40 px-3 py-1 text-[10px] font-bold text-slate-500 border-b border-white/5">COMMS LOG</div>
-                    <div id="chat-logs" class="flex-grow overflow-y-auto p-2 space-y-1 text-xs font-mono scrollbar-hide"></div>
-                    <div class="p-2 border-t border-white/5">
-                        <input type="text" id="chat-input" placeholder="Enter command..." class="w-full bg-transparent text-xs focus:outline-none text-white">
+            <div class="stat-group">
+                <h3>Attributes</h3>
+                <div class="attr-grid">
+                    <div class="attr-box">STR <span id="stat-str" class="attr-val">0</span></div>
+                    <div class="attr-box">DEX <span id="stat-dex" class="attr-val">0</span></div>
+                    <div class="attr-box">INT <span id="stat-int" class="attr-val">0</span></div>
                     </div>
-                </div>
-
-                <div id="quest-tracker" class="pointer-events-auto w-64 glass-panel p-4 self-start mt-12 mr-4 opacity-90">
-                    <h3 class="text-xs font-black text-amber-500 uppercase mb-2 border-b border-white/10 pb-1">Current Objectives</h3>
-                    <div id="quest-list" class="space-y-3">
-                        <div class="text-xs text-slate-400 italic">No active quests.</div>
-                    </div>
-                </div>
             </div>
+        </aside>
 
-            <div class="flex items-end justify-between pointer-events-auto relative mt-4">
-                <div class="orb-container relative w-32 h-32 bg-black rounded-full border-4 border-slate-800 overflow-hidden shadow-2xl">
-                    <div id="orb-hp" class="absolute bottom-0 w-full bg-red-600 transition-all duration-300" style="height: 100%"></div>
-                    <div class="absolute inset-0 orb-shine rounded-full"></div>
-                    <span id="txt-hp" class="absolute inset-0 flex items-center justify-center font-black text-xl text-shadow text-white">100</span>
-                </div>
-
-                <div class="flex-grow mx-4 mb-4 flex flex-col justify-end">
-                    <div class="flex justify-between text-[10px] font-bold text-slate-400 mb-1 px-1">
-                        <span>TOTAL LEVEL: <span id="val-total-level" class="text-white">1</span></span>
-                        <span>PROGRESS: <span id="val-xp-rem">0 XP</span></span>
-                    </div>
-                    <div class="w-full h-2 bg-slate-900 rounded-full mb-2 border border-slate-700 overflow-hidden">
-                        <div id="bar-xp" class="h-full bg-purple-500 w-[0%] transition-all"></div>
-                    </div>
-                    <div class="flex justify-center space-x-2">
-                        <div class="slot-hotkey">1</div>
-                        <div class="slot-hotkey">2</div>
-                        <div class="slot-hotkey">3</div>
-                        <div class="slot-hotkey">4</div>
-                        <div class="slot-hotkey">5</div>
-                    </div>
-                </div>
-
-                <div class="orb-container relative w-32 h-32 bg-black rounded-full border-4 border-slate-800 overflow-hidden shadow-2xl">
-                    <div id="orb-mana" class="absolute bottom-0 w-full bg-blue-600 transition-all duration-300" style="height: 100%"></div>
-                    <div class="absolute inset-0 orb-shine rounded-full"></div>
-                    <span id="txt-mana" class="absolute inset-0 flex items-center justify-center font-black text-xl text-shadow text-white">100</span>
-                </div>
+        <main id="main-view">
+            <div id="game-log">
+                <div>> Initializing Neural Link...</div>
+                <div>> Connecting to Spires Database...</div>
             </div>
-        </div>
+        </main>
 
-        <div id="modal-admin" class="modal hidden">
-            <div class="modal-content w-[600px] h-[500px] p-6 flex flex-col bg-slate-900">
-                <h2 class="text-2xl font-black text-red-500 mb-6">⚡ ADMIN CONSOLE</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-2">
-                        <h3 class="text-xs font-bold text-slate-500 uppercase">Player</h3>
-                        <button id="btn-admin-heal" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs text-left">Full Heal</button>
-                        <button id="btn-admin-xp" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs text-left">+1000 Global XP</button>
-                        <button id="btn-admin-talent" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs text-left">+1 Talent Point</button>
-                        <button id="btn-admin-god" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs text-left text-red-400">Toggle God Mode</button>
-                    </div>
-                    <div class="space-y-2">
-                        <h3 class="text-xs font-bold text-slate-500 uppercase">World</h3>
-                        <button id="btn-admin-spawn-goblin" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs text-left">Spawn Goblin</button>
-                        <button id="btn-admin-spawn-item" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs text-left">Spawn Random Loot</button>
-                        <button id="btn-admin-time" class="w-full bg-slate-800 hover:bg-slate-700 p-2 text-xs text-left">Toggle Day/Night</button>
-                    </div>
-                </div>
-                <button class="absolute top-4 right-4 text-slate-500" onclick="window.UI.toggleModal('admin')">✖</button>
+        <section id="controls-area">
+            <div class="input-group">
+                <input type="text" id="action-input" placeholder="Enter Action ID (e.g., act_min_pick)..." value="act_srv_forage">
+                <button id="btn-action">EXECUTE</button>
             </div>
-        </div>
-
-        <div id="modal-profile" class="modal hidden">
-            <div class="modal-content w-[800px] h-[600px] flex">
-                <div class="w-1/3 bg-slate-900/50 p-6 border-r border-white/10 flex flex-col items-center text-center">
-                    <div class="w-32 h-32 bg-slate-800 rounded-full mb-4 flex items-center justify-center text-4xl">👤</div>
-                    <h2 id="profile-name" class="text-2xl font-black italic">WANDERER</h2>
-                    <p class="text-xs text-blue-400 font-bold mb-6">LEVEL <span id="profile-level">1</span></p>
-                    <textarea class="w-full h-32 bg-black/40 border border-white/10 rounded p-2 text-xs" placeholder="Bio..."></textarea>
-                </div>
-                <div class="w-2/3 p-6 overflow-y-auto">
-                    <h3 class="font-bold text-slate-500 mb-4 border-b border-white/10 pb-2">SKILL MASTERY</h3>
-                    <div id="profile-skills" class="space-y-3"></div>
-                </div>
-                <button class="absolute top-4 right-4 text-slate-500" onclick="window.UI.toggleModal('profile')">✖</button>
+            <div class="quick-actions">
+                <button class="secondary" id="btn-rest">Rest (1h)</button>
+                <button class="secondary" id="btn-debug-dmg" style="background:#522;">Test Damage</button>
             </div>
-        </div>
+        </section>
 
-        <div id="modal-inventory" class="modal hidden">
-            <div class="modal-content w-[900px] h-[600px] flex">
-                <div class="w-1/3 bg-slate-900/50 p-6 border-r border-white/10 flex flex-col items-center relative">
-                    <h3 class="font-bold text-slate-500 mb-8 uppercase text-xs tracking-widest">Equipment</h3>
-                    <div class="slot-equip mb-2" data-slot="head">HEAD</div>
-                    <div class="flex justify-between w-full px-8 my-2">
-                        <div class="slot-equip" data-slot="weapon">WEAPON</div>
-                        <div class="slot-equip" data-slot="body">BODY</div>
-                    </div>
-                    <div class="slot-equip mt-2" data-slot="legs">LEGS</div>
-                </div>
-                <div class="w-2/3 p-6">
-                    <h3 class="font-bold text-slate-500 mb-4 flex justify-between text-xs tracking-widest">
-                        <span>BACKPACK</span>
-                        <span id="txt-gold-inv" class="text-yellow-500">0 GOLD</span>
-                    </h3>
-                    <div id="inventory-grid" class="grid grid-cols-5 gap-2"></div>
-                </div>
-                <button class="absolute top-4 right-4 text-slate-500" onclick="window.UI.toggleModal('inventory')">✖</button>
-            </div>
-        </div>
-
-        <div id="modal-talents" class="modal hidden">
-            <div class="modal-content w-[1000px] h-[700px] p-0 flex flex-col">
-                <div class="p-4 border-b border-white/10 bg-black/20 flex justify-between items-center">
-                    <h2 class="font-black italic text-2xl">NEURAL TALENT TREE</h2>
-                    <span class="text-xs font-mono text-purple-400">POINTS: <span id="txt-talent-points">0</span></span>
-                </div>
-                <div id="talents-container" class="flex-grow relative overflow-hidden"></div>
-                <button class="absolute top-4 right-4 text-slate-500" onclick="window.UI.toggleModal('talents')">✖</button>
-            </div>
-        </div>
-
+        <aside id="right-panel">
+            <h3>Debug Status</h3>
+            <pre id="debug-info">Waiting for core...</pre>
+            <p style="margin-top:20px; color:#444;">
+                Tip: Use Browser Console (F12) to see full object logs.
+            </p>
+        </aside>
     </div>
 
-    <script type="module" src="game.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

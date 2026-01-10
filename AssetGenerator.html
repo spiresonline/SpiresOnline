@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spires Online - SpritesStudio 2.0</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body { background: #1a1a1a; color: #eee; font-family: monospace; display: flex; flex-direction: column; align-items: center; }
+        h1 { color: #00bcd4; }
+        #canvas-container { display: flex; flex-wrap: wrap; gap: 10px; padding: 20px; justify-content: center; }
+        .sprite-card { background: #222; padding: 5px; border: 1px solid #444; text-align: center; width: 64px; }
+        .sprite-card img { width: 32px; height: 32px; image-rendering: pixelated; transform: scale(1.5); margin: 5px; }
+        .sprite-card span { display: block; font-size: 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        button { padding: 15px 30px; font-size: 1.2rem; background: #4caf50; color: white; border: none; cursor: pointer; margin-bottom: 20px; }
+        button:hover { background: #45a049; }
+        #status { color: #aaa; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>SpritesStudio 2.0 (Alpha Patcher)</h1>
+    <div id="status">Loading Database...</div>
+    <button id="btn-download" disabled>GENERATE & DOWNLOAD ALL ASSETS</button>
+    <div id="canvas-container"></div>
+
+    <script type="module">
+        import { TSVParser } from './js/TSVParser.js';
+        
+        // Configuration
+        const FILES_TO_LOAD = [
+            { url: 'data/SO DATABASE.xlsx - Items.csv', category: 'Items' },
+            { url: 'data/SO DATABASE.xlsx - Equipment.csv', category: 'Items' }, // Treat Equip as Items for art
+            { url: 'data/SO DATABASE.xlsx - Monsters.csv', category: 'Monsters' }
+        ];
+
+        const CANVAS_SIZE = 32;
+        const SPRITES = {}; // Store base64 data
+
+        // Main Execution
+        window.addEventListener('load', async () => {
+            const status = document.getElementById('status');
+            const container = document.getElementById('canvas-container');
+            const btn = document.getElementById('btn-download');
+
+            // 1. Load Data
+            let combinedData = {};
+            
+            try {
+                for (let file of FILES_TO_LOAD) {
+                    let text = await fetch(file.url).then(r => r.text());
+                    // Quick parse to get IDs and Types (Reusing your parser logic roughly)
+                    // We manually parse here to be lightweight or use the imported one if available
+                    // For the generator, we just need ID, Name, Type
+                    let rows = parseCSV(text);
+                    rows.forEach(row => {
+                        if(row.ID) combinedData[row.ID] = row;
+                    });
+                }
+            } catch (e) {
+                status.innerText = "Error loading CSVs. Run a local server!";
+                return;
+            }
+
+            status.innerText = `Database Loaded. Found ${Object.keys(combinedData).length} entities. Generating Sprites...`;
+
+            // 2. Generate Sprites
+            for (let id in combinedData) {
+                let entity = combinedData[id];
+                let canvas = document.createElement('canvas');
+                canvas.width = CANVAS_SIZE;
+                canvas.height = CANVAS_SIZE;
+                let ctx = canvas.getContext('2d');
+
+                // Draw Procedural Art
+                drawSprite(ctx, entity);
+
+                // Save to display
+                let imgData = canvas.toDataURL("image/png");
+                SPRITES[id] = imgData;
+
+                // Create UI Card
+                let card = document.createElement('div');
+                card.className = 'sprite-card';
+                let img = document.createElement('img');
+                img.src = imgData;
+                let lbl = document.createElement('span');
+                lbl.innerText = id;
+                card.appendChild(img);
+                card.appendChild(lbl);
+                container.appendChild(card);
+            }
+
+            status.innerText = "Generation Complete. Ready to Download.";
+            btn.disabled = false;
+            btn.onclick = downloadAll;
+        });
+
+        // --- Helper: Simple CSV Parser for the Tool ---
+        function parseCSV(text) {
+            let lines = text.split('\n');
+            // Skip empty leading lines
+            let start = 0; 
+            while(lines[start] && lines[start].trim().replace(/,/g,'') === '') start++;
+            
+            let delimiter = lines[start].includes('\t') ? '\t' : ',';
+            let headers = lines[start].split(delimiter).map(h=>h.trim());
+            
+            // Handle empty first col issue
+            let skipFirst = headers[0] === "";
+            if(skipFirst) headers = headers.slice(1);
+
+            let res = [];
+            for(let i=start+1; i<lines.length; i++) {
+                if(!lines[i].trim()) continue;
+                let cols = splitCSV(lines[i], delimiter);
+                if(skipFirst) cols = cols.slice(1);
+                
+                let obj = {};
+                headers.forEach((h, idx) => obj[h] = cols[idx]?.replace(/"/g, ''));
+                res.push(obj);
+            }
+            return res;
+        }
+
+        function splitCSV(str, delimiter) {
+            if(delimiter === '\t') return str.split('\t');
+            const matches = str.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+            return matches || str.split(',');
+        }
+
+        // --- Procedural Drawing Logic ---
+        function drawSprite(ctx, data) {
+            let id = data.ID.toLowerCase();
+            let type = (data.Type || "").toLowerCase();
+            let name = (data.Name || "").toLowerCase();
+
+            // Background (Transparent usually, but let's add a faint glow for rarity)
+            ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+            // Determine Color based on ID prefix or Value
+            let mainColor = '#888'; // Grey
+            if (id.includes('gold') || id.includes('legendary') || id.includes('godly')) mainColor = '#ffd700'; // Gold
+            else if (id.includes('blood') || id.includes('red')) mainColor = '#d32f2f'; // Red
+            else if (id.includes('void') || id.includes('occ')) mainColor = '#9c27b0'; // Purple
+            else if (id.includes('tox') || id.includes('slime')) mainColor = '#4caf50'; // Green
+
+            // Shape Logic
+            if (id.includes('swd') || id.includes('bld') || id.includes('blade')) {
+                drawSword(ctx, mainColor);
+            } else if (id.includes('pot') || id.includes('med') || id.includes('alc')) {
+                drawPotion(ctx, mainColor);
+            } else if (id.includes('arm') || id.includes('chest') || id.includes('vest')) {
+                drawArmor(ctx, mainColor);
+            } else if (id.includes('helm') || id.includes('head')) {
+                drawHelm(ctx, mainColor);
+            } else if (id.includes('mob') || id.includes('rat') || id.includes('mut')) {
+                drawMonster(ctx, mainColor, id);
+            } else if (id.includes('gun') || id.includes('pistol')) {
+                drawGun(ctx, mainColor);
+            } else {
+                drawGeneric(ctx, mainColor);
+            }
+        }
+
+        // --- Drawing Primitives (Pixel Art Algorithms) ---
+        function drawSword(ctx, color) {
+            ctx.fillStyle = color;
+            // Blade
+            for(let i=0; i<16; i++) ctx.fillRect(16+i, 4+i, 2, 2); // Diagonal
+            // Hilt
+            ctx.fillStyle = '#5d4037';
+            ctx.fillRect(12, 20, 6, 2); // Crossguard
+            ctx.fillRect(10, 22, 2, 6); // Handle
+        }
+
+        function drawPotion(ctx, color) {
+            ctx.fillStyle = '#eee';
+            ctx.fillRect(14, 4, 4, 6); // Neck
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(16, 20, 8, 0, Math.PI*2); // Bulb
+            ctx.fill();
+            // Shine
+            ctx.fillStyle = 'rgba(255,255,255,0.6)';
+            ctx.fillRect(18, 16, 2, 2);
+        }
+
+        function drawArmor(ctx, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(6, 6, 20, 20); // Plate
+            ctx.fillStyle = '#111';
+            ctx.fillRect(14, 6, 4, 4); // Neck hole
+        }
+
+        function drawHelm(ctx, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(8, 8, 16, 16);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(10, 14, 12, 2); // Visor
+        }
+
+        function drawGun(ctx, color) {
+            ctx.fillStyle = '#333';
+            ctx.fillRect(8, 12, 4, 10); // Handle
+            ctx.fillStyle = color;
+            ctx.fillRect(8, 8, 16, 6); // Barrel
+        }
+
+        function drawMonster(ctx, color, id) {
+            ctx.fillStyle = color;
+            // Blob shape
+            ctx.fillRect(8, 10, 16, 14);
+            ctx.fillStyle = '#f00';
+            // Eyes
+            ctx.fillRect(10, 14, 2, 2);
+            ctx.fillRect(20, 14, 2, 2);
+            
+            if (id.includes('rat')) {
+                ctx.fillStyle = '#555'; // Tail
+                ctx.fillRect(4, 20, 4, 2);
+            }
+        }
+
+        function drawGeneric(ctx, color) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.strokeRect(8, 8, 16, 16);
+            ctx.fillStyle = color;
+            ctx.font = "20px monospace";
+            ctx.fillText("?", 11, 23);
+        }
+
+        // --- Export Logic ---
+        function downloadAll() {
+            var zip = new JSZip();
+            var imgFolder = zip.folder("images");
+
+            for (let id in SPRITES) {
+                // Remove data:image/png;base64, header
+                let data = SPRITES[id].split(',')[1];
+                imgFolder.file(id + ".png", data, {base64: true});
+            }
+
+            zip.generateAsync({type:"blob"})
+            .then(function(content) {
+                saveAs(content, "SpiresOnline_Assets.zip");
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+ID,Tree,Tier,Name,Req_Primary,Req_Alt,Req_Parent,Effect_Logic,Description
+tal_hvy_01,Vanguard,1,Conditioning,STR:10,VIT:12,none,max_hp_+20,Increases Max HP by 20.
+tal_hvy_02,Vanguard,2,Iron Skin,STR:15,END:15,tal_hvy_01,dmg_resist_phys_5%,Natural resistance to physical damage.
+tal_hvy_03,Vanguard,3,Bulldoze,STR:20,BLN:10,tal_hvy_02,unlock_action:chg_bash,Unlocks 'Shield Charge' action.
+tal_hvy_04,Vanguard,4,Heavy Lifter,STR:25,none,tal_hvy_02,equip_load_+20%,Can wear heavy armor with less penalty.
+tal_hvy_05,Vanguard,5,Pain Feeder,VIT:20,FOR:15,tal_hvy_03,dmg_to_stamina,Taking damage restores 5 Stamina.
+tal_hvy_06,Vanguard,6,Immovable,STR:35,END:30,tal_hvy_05,immune_knockback,Cannot be knocked back or staggered.
+tal_hvy_07,Vanguard,7,Sunder,STR:45,BLN:40,tal_hvy_06,armor_break_50%,Heavy attacks ignore 50% of armor.
+tal_hvy_08,Vanguard,8,Titan's Grip,STR:60,none,tal_hvy_06,2h_as_1h,Can wield Two-Handed weapons in one hand.
+tal_hvy_09,Vanguard,9,Adrenaline,VIT:50,STR:50,tal_hvy_08,cheat_death_1,Survive fatal damage once per combat (1HP).
+tal_hvy_10,Vanguard,10,Warlord,STR:80,none,tal_hvy_09,aura_fear_radius,Enemies near you suffer -20 Morale/Sec.
+tal_dul_01,Duelist,1,Flow State,DEX:10,RFX:5,none,stamina_regen_+10%,Stamina recovers faster.
+tal_dul_02,Duelist,2,Parry King,DEX:15,BLD:10,tal_dul_01,parry_window_+200ms,Doubles the timing window for parries.
+tal_dul_03,Duelist,3,Riposte,DEX:20,none,tal_dul_02,crit_after_parry,Next hit after Parry is 100% Crit.
+tal_dul_04,Duelist,4,Disarm,DEX:25,LGT:15,tal_dul_03,disarm_chance_10%,Chance to knock weapon from enemy hand.
+tal_dul_05,Duelist,5,Smart Fighter,INT:20,PER:20,tal_dul_02,stat_scale:INT_to_MELEE,Add 50% of INT to Melee Damage.
+tal_dul_06,Duelist,6,Feint,DEX:35,PSN:20,tal_dul_04,atk_bypass_block,Attacks have 25% chance to ignore shields.
+tal_dul_07,Duelist,7,Bleed Out,DEX:45,BLD:40,tal_dul_06,bleed_stack_max,Bleed effects can stack infinite times.
+tal_dul_08,Duelist,8,Flash Step,DEX:60,AGI:50,tal_dul_06,dodge_teleport,Dodge roll becomes an instant teleport.
+tal_dul_09,Duelist,9,Untouchable,RFX:60,DEX:60,tal_dul_08,evade_cap_90%,Max Evasion cap increased to 90%.
+tal_dul_10,Duelist,10,Sword Saint,DEX:80,none,tal_dul_09,atk_count_+1,Every basic attack hits twice.
+tal_sha_01,Shadow,1,Soft Step,DEX:10,STL:5,none,noise_move_-20%,Movement noise reduced.
+tal_sha_02,Shadow,2,Night Eyes,PER:12,OCC:5,tal_sha_01,vision_dark_+5m,See clearly in darkness.
+tal_sha_03,Shadow,3,Backstab,DEX:20,LGT:10,tal_sha_02,dmg_back_+50%,Bonus damage from behind.
+tal_sha_04,Shadow,4,Calculated,INT:20,none,tal_sha_03,stat_scale:INT_to_STL,Add 100% of INT to Stealth Skill.
+tal_sha_05,Shadow,5,Vanish,DEX:30,STL:25,tal_sha_03,unlock_action:vanish,Action: Turn invisible for 5s (Combat).
+tal_sha_06,Shadow,6,Poison Blade,INT:30,ALC:20,tal_sha_04,apply_toxin_auto,Melee hits auto-apply equipped poison.
+tal_sha_07,Shadow,7,Ghost,DEX:45,none,tal_sha_05,detect_delay_2x,Enemies take 2x longer to spot you.
+tal_sha_08,Shadow,8,Execution,STR:40,DEX:50,tal_sha_07,kill_stealth_instant,Sneak attack on non-boss is instant kill.
+tal_sha_09,Shadow,9,Shadow Step,OCC:40,DEX:60,tal_sha_07,teleport_shadow,Teleport to any shadow within 20m.
+tal_sha_10,Shadow,10,Void Walker,DEX:80,OCC:50,tal_sha_09,perm_stealth,Stealth does not break when moving fast.
+tal_rng_01,Marksman,1,Steady Aim,PER:10,DEX:10,none,sway_-30%,Reduces weapon sway.
+tal_rng_02,Marksman,2,Eagle Eye,PER:15,none,tal_rng_01,view_dist_+20%,Camera zoom/view distance increased.
+tal_rng_03,Marksman,3,Knee-Capper,DEX:20,GUN:10,tal_rng_02,cripple_chance_20%,Leg shots slow enemies by 50%.
+tal_rng_04,Marksman,4,Recycle,LCK:15,ENG:10,tal_rng_02,ammo_save_25%,25% chance not to consume ammo.
+tal_rng_05,Marksman,5,Ballistics,INT:25,ENG:20,tal_rng_03,stat_scale:INT_to_RNG,Add 50% of INT to Ranged Damage.
+tal_rng_06,Marksman,6,Piercing,STR:30,CBW:25,tal_rng_03,ignore_armor_25%,Projectiles ignore 25% armor.
+tal_rng_07,Marksman,7,Overwatch,PER:45,none,tal_rng_05,react_fire_auto,Auto-shoot enemies entering range (Turn/CD).
+tal_rng_08,Marksman,8,Ricochet,LCK:40,DEX:50,tal_rng_06,bounce_1,Projectiles bounce to 1 nearby target.
+tal_rng_09,Marksman,9,Sniper,PER:60,STL:40,tal_rng_07,crit_dist_scale,Crit chance increases with distance.
+tal_rng_10,Marksman,10,One Shot,PER:80,none,tal_rng_09,dmg_head_5x,Headshot damage multiplier becomes 5x.
+tal_eng_01,Tech,1,Scrapper,INT:10,PER:10,none,loot_scrap_+50%,More scrap from machines.
+tal_eng_02,Tech,2,Tinker,INT:15,ENG:5,tal_eng_01,repair_eff_+30%,Repair kits restore more durability.
+tal_eng_03,Tech,3,Jury Rig,INT:20,LCK:10,tal_eng_02,use_broken_item,Can use items at 0 Durability (50% stats).
+tal_eng_04,Tech,4,Turret Ops,INT:25,ENG:15,tal_eng_03,turret_control,Can hack and control hostile turrets.
+tal_eng_05,Tech,5,Exo-Pilot,STR:20,ENG:20,tal_eng_03,req_str_override,Use INT instead of STR for Heavy Armor req.
+tal_eng_06,Tech,6,Sapper,DEX:30,TRP:25,tal_eng_04,trap_dmg_+50%,Explosives/Traps deal more damage.
+tal_eng_07,Tech,7,Bot Master,INT:45,CHA:20,tal_eng_04,drone_slot_+1,Can have an additional active drone.
+tal_eng_08,Tech,8,Overclock,INT:60,none,tal_eng_06,firerate_mech_+50%,Mechanical weapons fire 50% faster.
+tal_eng_09,Tech,9,Cybernetics,INT:70,VIT:40,tal_eng_08,stat_cap_break,Stats from Gear can exceed racial caps.
+tal_eng_10,Tech,10,Technomancer,INT:80,none,tal_eng_09,consumable_reuse,50% chance Tools/Consumables aren't used up.
+tal_soc_01,Face,1,Haggler,CHA:10,LCK:10,none,store_price_-10%,Better buy/sell prices.
+tal_soc_02,Face,2,Rumor Mill,CHA:15,UND:5,tal_soc_01,unlock_map_info,Taverns reveal map locations for free.
+tal_soc_03,Face,3,Silver Tongue,CHA:20,PSN:10,tal_soc_02,dialogue_retry,Can retry failed Persuasion checks once.
+tal_soc_04,Face,4,Entourage,CHA:25,IDM:15,tal_soc_03,follower_slot_+1,Can recruit a generic NPC guard.
+tal_soc_05,Face,5,Blackmail,INT:20,UND:20,tal_soc_03,bribe_cost_0,Bribing costs 0 if you have 'Intel' items.
+tal_soc_06,Face,6,Inspiring,CHA:35,MOR:20,tal_soc_04,aura_buff_allies,Allies gain +10% Stats near you.
+tal_soc_07,Face,7,Cultist,CHA:45,OCC:30,tal_soc_04,recruit_hostile,Can recruit hostile human mobs (low HP).
+tal_soc_08,Face,8,Pacifist,CHA:60,MOR:50,tal_soc_06,xp_peaceful,Gain Combat XP for resolving peacefully.
+tal_soc_09,Face,9,Merchant,CHA:70,LCK:50,tal_soc_01,remote_shop,Can access shop menu from anywhere.
+tal_soc_10,Face,10,Ruler,CHA:80,none,tal_soc_08,guards_neutral,City Guards never attack you.
+tal_occ_01,Void,1,Whisper,INT:10,FOR:10,none,detect_magic,Sense magical items/containers nearby.
+tal_occ_02,Void,2,Mind Shield,FOR:15,DIS:10,tal_occ_01,sanity_loss_-20%,Resist sanity damage.
+tal_occ_03,Void,3,Blood Magic,VIT:20,OCC:10,tal_occ_02,hp_to_mana,Spend HP to cast spells if Mana empty.
+tal_occ_04,Void,4,Grimoire,INT:25,OCC:15,tal_occ_03,spell_slot_+1,Unlock extra spell memory slot.
+tal_occ_05,Void,5,Soul Eater,INT:30,none,tal_occ_03,mana_on_kill,Restore Mana when killing enemies.
+tal_occ_06,Void,6,Dark Vision,PER:30,OCC:25,tal_occ_02,see_through_walls,See enemies through walls (short range).
+tal_occ_07,Void,7,Necro,INT:45,OCC:35,tal_occ_05,raise_dead,Dead enemies rise as temp allies.
+tal_occ_08,Void,8,Void Skin,FOR:50,END:40,tal_occ_03,dmg_resist_mag_50%,50% resistance to magic/void damage.
+tal_occ_09,Void,9,Entropy,INT:60,OCC:50,tal_occ_07,aura_decay,Enemies near you lose HP/sec.
+tal_occ_10,Void,10,Lichdom,INT:80,FOR:80,tal_occ_09,no_hunger_thirst,"Immune to Hunger, Thirst, Disease."
+tal_sur_01,Wild,1,Scout,END:10,VIT:10,none,move_speed_wild,#ERROR!
+tal_sur_02,Wild,2,Forager,PER:15,SUR:5,tal_sur_01,hunger_rate_-20%,Need to eat less often.
+tal_sur_03,Wild,3,Beast Speak,CHA:20,SUR:10,tal_sur_02,animals_passive,Wolves/Bears do not attack first.
+tal_sur_04,Wild,4,Herbalist,INT:20,ALC:10,tal_sur_02,pot_effect_+20%,Consumed plants give better buffs.
+tal_sur_05,Wild,5,Alpha,STR:25,CHA:25,tal_sur_03,tame_pet,Can tame a beast companion.
+tal_sur_06,Wild,6,Ambusher,DEX:30,STL:20,tal_sur_01,first_hit_crit,First attack in any combat is Crit.
+tal_sur_07,Wild,7,Thick Skin,VIT:40,END:30,tal_sur_04,resist_elements,Resist Fire/Cold/Poison environment.
+tal_sur_08,Wild,8,Hunter,PER:50,BOW:40,tal_sur_06,track_boss,Bosses visible on map.
+tal_sur_09,Wild,9,Primal,STR:60,VIT:60,tal_sur_05,stat_scale:VIT_to_DMG,Add 20% of VIT to Melee Damage.
+tal_sur_10,Wild,10,Apex,ALL:50,none,tal_sur_09,regen_combat,Health regenerates even during combat.
+tal_med_01,Medic,1,First Aid,INT:10,DEX:10,none,bandages_instant,Bandages have 0 cast time.
+tal_med_02,Medic,2,Diagnosis,PER:15,MED:5,tal_med_01,view_enemy_hp,See exact HP numbers of enemies.
+tal_med_03,Medic,3,Field Doc,INT:20,MED:10,tal_med_02,med_kit_eff_+50%,Medkits heal 50% more.
+tal_med_04,Medic,4,Anatomy,INT:25,BLD:15,tal_med_02,crit_chance_+10%,Knowledge of vitals increases Crit.
+tal_med_05,Medic,5,Pharmacist,INT:30,ALC:20,tal_med_03,buff_duration_+50%,Stim/Drug buffs last longer.
+tal_med_06,Medic,6,Combat Med,STR:30,MED:25,tal_med_03,drag_body,Can drag downed allies/bodies at full speed.
+tal_med_07,Medic,7,Surgeon,DEX:40,MED:35,tal_med_06,remove_debuff,Medkits also cure Poison/Bleed/Fracture.
+tal_med_08,Medic,8,Stim Freak,VIT:40,END:40,tal_med_05,no_addiction,Immune to drug addiction side effects.
+tal_med_09,Medic,9,Life Link,CHA:50,OCC:20,tal_med_07,heal_aura,Allies near you regenerate HP.
+tal_med_10,Medic,10,Miracle,INT:80,none,tal_med_09,resurrect,Action: Bring a dead ally back to life.
+tal_bsm_01,Smith,1,Apprentice,STR:10,VIT:10,none,repair_speed_+50%,Repair items twice as fast.
+tal_bsm_02,Smith,2,Salvage,STR:15,SCR:10,tal_bsm_01,salvage_mats_+1,Get more materials when destroying items.
+tal_bsm_03,Smith,3,Forgemaster,STR:20,BSM:10,tal_bsm_02,craft_durability,Crafted items have +20% Max Durability.
+tal_bsm_04,Smith,4,Sharpen,DEX:20,BSM:15,tal_bsm_03,temp_buff_dmg,Whetstones give +10 DMG (was +5).
+tal_bsm_05,Smith,5,Socketing,INT:25,ENG:20,tal_bsm_03,add_gem_slot,Can add 1 Gem Slot to any armor.
+tal_bsm_06,Smith,6,Armorer,VIT:35,BSM:30,tal_bsm_03,craft_armor_bonus,Crafted Armor has +10% Resistance.
+tal_bsm_07,Smith,7,Weapon Smith,STR:35,BSM:30,tal_bsm_03,craft_wep_bonus,Crafted Weapons have +10% Damage.
+tal_bsm_08,Smith,8,Reforge,INT:50,BSM:50,tal_bsm_07,reroll_stats,Action: Reroll random stats on gear.
+tal_bsm_09,Smith,9,Metallurgy,INT:60,ALC:40,tal_bsm_08,alloy_craft,Can combine metals for lighter/stronger gear.
+tal_bsm_10,Smith,10,Masterpiece,STR:80,none,tal_bsm_09,craft_legendary,5% Chance to craft 'Legendary' tier items.
+tal_thf_01,Thief,1,Pockets,DEX:10,LCK:10,none,inv_slots_+5,#ERROR!
+tal_thf_02,Thief,2,Lockpicker,DEX:15,LCK:15,tal_thf_01,pick_speed_+50%,Lockpicking is faster.
+tal_thf_03,Thief,3,Sticky,DEX:20,STL:10,tal_thf_01,steal_equipped,Can pickpocket equipped weapons (low chance).
+tal_thf_04,Thief,4,Fence,CHA:20,UND:15,tal_thf_02,sell_stolen,Merchants buy stolen items.
+tal_thf_05,Thief,5,Safe Cracker,PER:30,LCK:25,tal_thf_02,force_lock_silent,Forcing locks makes no noise.
+tal_thf_06,Thief,6,Acrobat,DEX:35,ATH:30,tal_thf_01,fall_dmg_0,Take no damage from falling.
+tal_thf_07,Thief,7,Shadow,INT:40,STL:40,tal_thf_06,stat_scale:LCK_to_STL,Add 50% of LCK to Stealth.
+tal_thf_08,Thief,8,Heist,INT:50,ENG:40,tal_thf_05,bypass_alarm,Alarms/Traps do not trigger for you.
+tal_thf_09,Thief,9,Lucky Charm,LCK:60,none,tal_thf_01,find_gold_+50%,Find 50% more gold in chests.
+tal_thf_10,Thief,10,Guildmaster,LCK:80,UND:80,tal_thf_09,access_vault,Unlock global bank access from inventory.
+tal_alc_01,Alchemist,1,Brewer,INT:10,PER:10,none,brew_speed_+50%,Brewing potions is faster.
+tal_alc_02,Alchemist,2,Grenadier,DEX:15,ATH:10,tal_alc_01,throw_range_+30%,Throw potions/bombs further.
+tal_alc_03,Alchemist,3,Potency,INT:20,ALC:15,tal_alc_01,pot_heal_+20%,Healing potions are stronger.
+tal_alc_04,Alchemist,4,Poisoner,INT:25,ALC:20,tal_alc_03,poison_dmg_+20%,Poison effects deal more damage.
+tal_alc_05,Alchemist,5,Resistance,VIT:30,FOR:20,tal_alc_03,immune_poison,Immune to Poison status.
+tal_alc_06,Alchemist,6,Transmute,INT:40,OCC:20,tal_alc_05,lead_to_gold,Action: Turn Lead Ore into Gold Ore.
+tal_alc_07,Alchemist,7,Cluster,DEX:45,ENG:30,tal_alc_02,bomb_radius_+50%,Explosive potions hit larger area.
+tal_alc_08,Alchemist,8,Mutagen,VIT:50,ALC:50,tal_alc_05,stat_temp_boost,Potions can temporarily boost Stats > 20.
+tal_alc_09,Alchemist,9,Mad Science,INT:60,none,tal_alc_08,combine_effects,Mix two potions into one bottle.
+tal_alc_10,Alchemist,10,Philosopher,INT:90,none,tal_alc_09,elixir_life,Craft potion that prevents aging/death.

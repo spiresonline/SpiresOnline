@@ -1,0 +1,19 @@
+ID,Name,Danger_Tier,HP,Stamina,Stats_Logic,Skills_Logic,Behavior,Social_Tags,DropTableID,Description,Unique_Ability
+mob_rat_01,Plague Rat,1,30,50,DEX:15|VIT:10,sk_stl:10,Aggressive,none,dt_junk,Diseased vermin that attacks in swarms.,Infectious: 10% chance to apply eff_poison.
+mob_gob_01,Scavenger,1,90,80,STR:12|DEX:12,sk_scr:15,Cowardly,"bribery,pity",dt_junk,A desperate humanoid looking for scraps.,Panic: Flees if HP < 30%.
+mob_thg_01,Street Urchin,1,75,100,DEX:18|PER:15,sk_lgt:10,Skittish,"pity,deceive",dt_coins,A starving child with a sharpened shard.,Pickpocket: Steals 1 item on successful hit.
+mob_wlf_01,Feral Dog,2,120,120,STR:15|DEX:20,sk_sur:20,Pack_Hunter,none,dt_beasts,"Hungry, territorial, and fast.",Crippling Bite: 20% chance to cause eff_frac_01.
+mob_grd_01,Corrupt Guard,2,150,100,STR:20|END:15,sk_shd:15,Aggressive,"bribery,intimidate",dt_military,A militiaman who values gold over duty.,Shield Bash: Staggers player for 2s.
+mob_mec_01,Sentry Drone,2,60,200,DEX:25|PER:20,sk_gun:15,Patrol,none,dt_scrap,A hovering pre-collapse security bot.,Electric Shock: Drains 30 Stamina on hit.
+mob_hwy_01,Highwayman,3,180,150,STR:25|DEX:20,sk_bld:25,Tactical,"bribery,intimidate",dt_outlaw,Experienced bandit with decent gear.,Bleeding Strike: Guaranteed eff_bleed_01.
+mob_grd_snp,Militia Sniper,3,110,100,PER:30|DEX:25,sk_bow:30,Defensive,bribery,dt_military,Hiding in high ground with a heavy crossbow.,Longshot: Double damage if player is >10m away.
+mob_mut_01,Gutter Mutant,3,300,80,STR:40|VIT:50,sk_una:30,Aggressive,none,dt_sludge,A mass of muscle and chemical waste.,Thick Hide: Permanent 20% Physical Resist.
+mob_mut_02,Bloater,3,150,60,VIT:60|STR:10,sk_una:10,Suicidal,none,dt_sludge,A swelling mutant filled with corrosive gas.,Death Burst: Explodes on death applying eff_poison.
+mob_clt_01,Void Cultist,4,140,180,INT:30|FOR:30,sk_occ:35,Spellcaster,"occult,deceive",dt_occult,A fanatic wielding whispers of the void.,Mind Sear: Deals 10 Sanity damage per hit.
+mob_vmp_01,Fledgling,4,250,200,DEX:35|INT:20,sk_stl:40,Stalker,"occult,flirt",dt_occult,A pale figure lurking in the shadows.,Life Drain: Heals for 50% of damage dealt.
+mob_mec_02,Enforcer Bot,4,450,150,STR:45|END:40,sk_bln:30,Aggressive,none,dt_military,Heavy industrial bot repurposed for war.,Hydraulic Smash: High chance for eff_frac_01.
+mob_grd_05,Inquisitor,5,500,250,INT:40|FOR:50,sk_dis:50,Tactical,rank_authority,dt_legendary,Elite enforcer of the Ruler.,Neural Spike: Direct Sanity damage on hit.
+mob_void_01,Void Walker,5,400,300,INT:50|PER:40,sk_occ:60,Aggressive,none,dt_void,A shimmering rift in the shape of a man.,Ethereal: 50% chance to dodge physical hits.
+mob_occ_02,The Screamer,5,200,400,FOR:60|DEX:40,sk_occ:50,Skittish,none,dt_occult,A floating horror with a distorted face.,Sonic Wail: Applies eff_fear to all nearby.
+mob_bos_01,The Ruler,Boss,1500,500,ALL:60,ALL:80,Mastermind,rank_authority,dt_godly,The undisputed tyrant of the town.,Command: Summons 2 Guards every 30s.
+mob_bos_02,Void Entity,Boss,2500,1000,INT:100|FOR:80,sk_occ:100,Aggressive,none,dt_godly,A cosmic horror from beyond the veil.,Abyssal Gaze: Reduces Max Sanity by 5/sec.

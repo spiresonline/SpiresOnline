@@ -1,0 +1,28 @@
+TableID,ItemID,Chance_Percent,Min_Qty,Max_Qty,Description
+dt_junk,it_jnk_stone,60,1,3,Common stones found everywhere.
+dt_junk,it_jnk_glass,40,1,5,Broken shards from ruins.
+dt_junk,it_jnk_bottle,20,1,1,Empty glass bottles.
+dt_junk,it_med_01,10,1,1,Rare chance for a dirty bandage.
+dt_coins,gold_pile,100,5,50,Loose currency/scrip.
+dt_beasts,it_flesh_01,80,1,2,Raw meat from animal kills.
+dt_beasts,it_occ_01,10,1,1,Rare chance for a strange bone.
+dt_scrap,it_jnk_pipe,50,1,2,Metal pipes for scrapping.
+dt_scrap,it_jnk_wire,30,1,4,Copper wiring for engineering.
+dt_scrap,it_eng_01,10,1,1,Chance to find a working multitool.
+dt_military,it_amm_9mm,40,5,15,Standard guard ammunition.
+dt_military,eq_head_02,10,1,1,Guard Helm in usable condition.
+dt_military,it_med_02,15,1,1,Suture kit found in a locker.
+dt_outlaw,it_lck_01,30,1,3,Bent wires for picking locks.
+dt_outlaw,it_soc_01,5,1,1,The infamous Bribe Ledger.
+dt_outlaw,wpn_1h_01,20,1,1,A discarded rusty shiv.
+dt_occult,it_mat_void,50,1,3,Dust left behind by void entities.
+dt_occult,it_occ_02,20,1,1,A shadow candle for the ritual.
+dt_occult,it_occ_03,2,1,1,The rare Void Grimoire.
+dt_sludge,it_mat_sludge,90,1,3,Vials of toxic byproduct.
+dt_sludge,it_mat_void,10,1,1,Traces of void energy in the muck.
+dt_legendary,wpn_1h_03,5,1,1,High-tier Monofiber Blade.
+dt_legendary,eq_neck_03,2,1,1,The legendary Overseer Key.
+dt_legendary,it_tor_03,10,1,1,A Neural Spike for interrogation.
+dt_godly,eq_chest_03,15,1,1,Exo-Plate armor (Heavy Tier).
+dt_godly,wpn_2h_03,10,1,1,Auto-Bolt Gun (High Tier).
+dt_godly,it_lan_03,5,1,1,Ancient Neural Translator.

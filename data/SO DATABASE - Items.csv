@@ -1,0 +1,50 @@
+ID,Name,Type,Skill_ID,Buffs,Unique_ID,UseTime_ms,Value,FlavorText
+it_trap_01,Bear Trap,trap,sk_trp,STR:1,cripple,1500,35,Classic teeth and spring design.
+it_trap_02,Acid Mine,trap,sk_trp,sk_alc:3,melt_armor,2000,90,Corrodes metal and flesh alike.
+it_trap_03,Neural Snare,trap,sk_trp,INT:5,paralyze,2500,250,Electromagnetic pulse that shuts down nerves.
+it_med_01,Dirty Bandage,consumable,sk_med,VIT:1,bleed_stop_minor,3000,10,"Stops minor bleeding, but carries infection risk."
+it_med_02,Suture Kit,tool,sk_med,sk_med:5,null,5000,130,Needles and silk for deep wounds.
+it_med_03,Trauma Bag,tool,sk_med,sk_med:15,revive_ally,8000,800,State-of-the-art emergency medical gear.
+it_min_01,Rusty Pick,tool,sk_min,STR:1,null,2500,30,"It’s dull, but it digs."
+it_min_02,Hardened Pick,tool,sk_min,STR:3|sk_min:5,null,1800,110,Designed for deep-vein extraction.
+it_eng_01,Multitool,tool,sk_eng,INT:2|sk_eng:5,null,3000,150,"A collection of wrenches, drivers, and pliers."
+it_lck_01,Bent Wire,consumable,sk_lck,DEX:1,null,4000,5,A desperate tool for a desperate thief.
+it_lck_02,Lockpick Set,tool,sk_lck,sk_lck:5,null,5000,80,Professional tools for bypassing tumblers.
+it_alc_01,Portable Lab,tool,sk_alc,INT:2|sk_alc:5,null,8000,250,A compact set of vials and burners.
+it_beads_dis,Focus Beads,tool,sk_dis,FOR:1|sk_dis:3,calm_mind,2000,75,Smooth stones used to center the mind.
+it_mat_sludge,Toxic Sludge,material,none,none,poison_risk,0,15,A vial of glowing green ooze.
+it_mat_void,Void Dust,material,none,none,sanity_risk,0,50,Black powder that absorbs light.
+it_flesh_01,Raw Meat,consumable,sk_sur,VIT:1,hunger_reset,5000,12,Tough and bloody. Best cooked first.
+it_herb_01,Green Herb,material,sk_alc,none,null,0,8,Common medicinal plant found in the woods.
+it_lan_02,Scholarly Text,consumable,sk_lan,INT:4,null,10000,200,A book on the dead languages of the coast.
+it_lan_03,Neural Translator,tool,sk_lan,sk_lan:20,polyglot,0,1200,An implant that decodes all speech in real-time.
+it_occ_01,Strange Bone,material,sk_occ,sk_occ:1,null,0,60,It hums with a low frequency when held.
+it_occ_02,Shadow Candle,consumable,sk_occ,PER:4,dark_sight,3000,220,The flame reveals what is hidden in the void.
+it_occ_03,Void Grimoire,tool,sk_occ,INT:5|sk_occ:10,void_call,10000,900,The pages bleed when you open them.
+it_tor_01,Rusty Pliers,tool,sk_tor,STR:1|sk_tor:2,null,2000,50,A crude way to extract information.
+it_tor_02,The Rack,tool,sk_tor,STR:5,break_will,10000,300,A portable version of the classic device.
+it_tor_03,Neural Spike,tool,sk_tor,INT:8|sk_tor:15,total_collapse,1500,800,Stimulates pain centers directly in the brain.
+it_soc_01,Bribe Ledger,quest,sk_und,none,incriminate,0,100,Names and prices of local officials.
+it_soc_02,Guard Seal,tool,sk_idm,sk_idm:5,authority,0,250,A stolen badge of the Town Watch.
+it_soc_03,Diplomat Decree,consumable,sk_psn,CHA:15,null,2000,700,A high-level document signed by the Ruler.
+it_amm_arrow_01,Standard Arrow,ammo,sk_bow,none,null,0,2,Simple wooden shaft with a flint head.
+it_amm_arrow_02,Bodkin Arrow,ammo,sk_bow,pierce:5,armor_pen,0,8,Needle-like tip designed to slip through plates.
+it_amm_arrow_03,Broadhead,ammo,sk_bow,bleed:3,eff_bleed_01,0,12,Jagged edges that tear flesh upon entry.
+it_amm_bolt_01,Iron Bolt,ammo,sk_cbw,none,null,0,3,Heavy and reliable projectile for crossbows.
+it_amm_bolt_02,Fire Bolt,ammo,sk_cbw,fire:5,eff_burn,0,25,Wrapped in oil-soaked rags. Bright and deadly.
+it_amm_bolt_03,Heavy Lead Bolt,ammo,sk_cbw,stagger:10,impact,0,15,Weighted head designed to knock targets back.
+it_amm_9mm,9mm Round,ammo,sk_gun,none,null,0,5,Common handgun ammunition. Cheap and plentiful.
+it_amm_45acp,.45 ACP Round,ammo,sk_gun,dmg:4,stop_power,0,10,Heavy slug with high stopping power.
+it_amm_slug,Shotgun Slug,ammo,sk_gun,trauma:15,eff_frac_01,0,30,A solid lead block. Guaranteed to break bones.
+it_amm_hollow,Hollow Point,ammo,sk_gun,bleed:8,eff_bleed_02,0,20,Expands on impact. Causes massive internal trauma.
+it_amm_ap,AP Round,ammo,sk_gun,pierce:12,armor_ignore,0,40,Tungsten core. Makes high-tier armor feel like paper.
+it_jnk_stone,Loose Stone,junk,sk_scr,STR:1,distraction,500,0,A palm-sized rock. Good for throwing or sharpening.
+it_jnk_glass,Broken Glass,junk,sk_scr,DEX:1,hazard,1000,1,Jagged shards. Could be useful for a trap or a shiv.
+it_jnk_pipe,Bent Pipe,material,sk_bsm,STR:2,blunt_scrap,0,5,A heavy lead pipe. Pure scrap metal.
+it_jnk_nail,Rusty Nail,material,sk_eng,none,infection,0,1,Corroded but sharp. Useful for improvised traps.
+it_jnk_bottle,Empty Bottle,junk,sk_scr,none,noise_maker,500,2,A glass bottle. Makes a loud noise when broken.
+it_jnk_brick,Red Brick,junk,sk_min,STR:3,heavy_throw,1000,0,Solid and heavy. Can be used as a blunt projectile.
+it_jnk_paper,Charred Paper,junk,sk_lan,none,lore_hint,0,1,Burnt remains of a document. Some words are visible.
+it_jnk_cloth,Ragged Cloth,material,sk_fsh,none,bandage_base,0,2,Dirty fabric. Can be cleaned or used for padding.
+it_jnk_wire,Copper Wire,material,sk_eng,INT:1,circuitry,0,15,Valuable for electrical repairs.
+it_jnk_boot,Old Boot,junk,none,none,pure_trash,0,1,A sole-less leather boot. Truly worthless.

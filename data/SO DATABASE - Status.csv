@@ -1,0 +1,13 @@
+ID,Name,Type,Duration_sec,Effect_Logic,Cure_Action,Description
+eff_bleed_01,Minor Bleed,Physical,60,dot_hp:2,act_med_bandage,Small cut. Prevents health regen.
+eff_bleed_02,Hemorrhage,Physical,300,dot_hp:10,act_med_surgery,Arterial spray. Fatal if untreated.
+eff_frac_01,Fracture,Physical,Infinite,max_stamina_mult:0.5,act_med_surgery,Broken bone. Running is impossible.
+eff_concuss,Concussion,Physical,120,accuracy_mult:0.5,act_rst_nap,Blurred vision and ringing ears.
+eff_poison,Toxin,Chemical,300,stat_vit_mult:0.8,act_crf_antidote,Systemic poisoning. Lowers Vitality.
+eff_insane,Psychosis,Mental,60,input_randomize,act_men_focus,Loss of control. Inputs may be reversed.
+eff_fear,Terrified,Mental,30,force_retreat,act_men_focus,Uncontrollable urge to flee combat.
+eff_exhaust,Exhausted,Stamina,Infinite,action_spd_mult:0.5,act_rst_sleep,Muscles have given up. Actions are slow.
+eff_wellfed,Well Fed,Buff,1800,regen_hp_mult:1.2,none,Nutritional surplus boosting recovery.
+eff_drunk,Intoxicated,Buff,600,str:+5|int:-5,act_rst_nap,Liquid courage. Stronger but dumber.
+eff_void_rot,Void Rot,Curse,Infinite,max_sanity_mult:0.7,act_occ_cleanse,Touch of the void. Permanent sanity reduction.
+eff_hypothermia,Freezing,Environmental,Infinite,dot_stamina:5,act_env_warmth,Core temperature critical. Movements slowed.

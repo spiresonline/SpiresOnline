@@ -1,0 +1,25 @@
+Type,Level,Total_XP_Req,Points_Reward,Tier_Title,Notes
+Skill,1,50,-,Novice,Basic familiarity.
+Skill,5,250,-,Novice,-
+Skill,10,900,Talent:1,Novice,Comfortable usage.
+Skill,20,3200,Talent:1,Apprentice,-
+Skill,25,5000,Perk:1,Apprentice,Unlocks 'Maintenance' perks.
+Skill,30,7200,Talent:1,Apprentice,-
+Skill,40,12800,Talent:1,Journeyman,-
+Skill,50,20000,Perk:1|Talent:1,Journeyman,Unlocks 'Stance/Mode' perks.
+Skill,60,28800,Talent:1,Expert,-
+Skill,70,39200,Talent:1,Expert,-
+Skill,75,45000,Perk:1,Expert,Unlocks 'Finisher' actions.
+Skill,80,51200,Talent:1,Master,-
+Skill,90,64800,Talent:1,Master,-
+Skill,100,80000,Perk:1|Talent:2,Grandmaster,Unlocks 'Title' & 'Aura'.
+Attribute,1,100,-,Weak,Base level.
+Attribute,5,1500,Perk:1,Average,-
+Attribute,10,5000,Talent:1,Average,Human average.
+Attribute,20,18000,Perk:1,Strong,-
+Attribute,30,38000,Talent:1,Strong,Unlocks Environmental Feats.
+Attribute,40,65000,Perk:1,Heroic,-
+Attribute,50,100000,Talent:1,Heroic,-
+Attribute,60,145000,Perk:1,Legendary,Unlocks Dialogue Dominance.
+Attribute,80,260000,Talent:2,Legendary,-
+Attribute,100,400000,Perk:2,Godlike,Unlocks Supernatural Feats.

@@ -1,0 +1,19 @@
+Type,ID,Formula_Logic,Description,Notes
+Progression,Perk_Cost,Current_Perk_Count * 5000,XP needed to buy next Perk.,"XP buys Perks, not Levels."
+Derived_Stat,Max_HP,(VIT * 12) + (STR * 4) + 80,Health Points.,Base 80. Vitality is the main scaler.
+Derived_Stat,Max_Stamina,(END * 10) + (VIT * 2) + (ATH_Skill * 1),Energy for actions.,Athletics skill directly adds Stamina.
+Derived_Stat,Max_Mana,(INT * 10) + (OCC_Skill * 5) + (DIS_Skill * 5),Magic/Void resource.,Requires Occult or Discipline to grow.
+Derived_Stat,Max_Sanity,(FOR * 8) + (DIS_Skill * 12) + 50,Mental Health pool.,Discipline is more important than Fortitude.
+Derived_Stat,Carry_Weight,(STR * 8) + (END * 4) + 30,Max Load (kg).,Base 30kg.
+Derived_Stat,Crit_Chance,(PER * 0.5) + (LCK * 0.4) + (Skill_Lvl * 0.1),Base Critical Hit %.,Soft cap at 60%.
+Derived_Stat,Social_Power,(CHA * 3) + (FSH_Skill * 3) + (REP / 5),Influence Score.,Fashion and Charisma drive social checks.
+Derived_Stat,Stealth_Score,(DEX * 2) + (STL_Skill * 2) - (Gear_Weight * 3),Detection Difficulty.,Heavy gear weight destroys stealth score.
+Interaction,Trauma_Threshold,(VIT * 3) + (FOR * 3),Damage needed to cause Wound.,"If a single hit > Threshold, apply Bleed/Break."
+Action_Math,Success_Rate,(Main_Stat * 3) + (Skill_Lvl * 5),% Chance to succeed.,Skill Level is the primary success factor.
+Action_Math,Action_Speed,Base_Time * (1 - (Skill_Lvl * 0.005)),Reduction in cast time.,Max 50% speed reduction at Skill 100.
+Combat_Math,Melee_Dmg,Weapon_Dmg * (1 + (STR * 0.08)) + (Skill * 0.5),Physical hit damage.,Str scales weapon damage by % (8% per point).
+Combat_Math,Ranged_Dmg,Weapon_Dmg * (1 + (DEX * 0.08)) + (PER * 0.5),Projectile damage.,Dex scales weapon damage by %.
+Combat_Math,Magic_Dmg,Spell_Dmg * (1 + (INT * 0.10)) + (OCC * 0.5),Spell damage.,Int is the strongest scaler (10% per point).
+Economy,Price_Buy,Base_Value * (1.8 - (CHA * 0.01) - (REP * 0.005)),Shop purchase cost.,High Rep + Cha = massive discounts.
+Economy,Price_Sell,Base_Value * (0.2 + (CHA * 0.01) + (REP * 0.005)),Shop sell value.,Caps at roughly 80% of value.
+Economy,Bribe_Cost,500 / (1 + (UND_Skill * 0.1)),Cost to bribe NPC.,Underworld skill drastically lowers bribes.

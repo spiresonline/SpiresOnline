@@ -1,0 +1,15 @@
+ID,Name,Type,Skill_Required,Difficulty,DropTableID,Is_Trapped,Trap_Effect,Description
+con_lck_01,Rusty Lockbox,Mechanical,sk_lck,15,dt_junk,FALSE,none,A simple iron box with a corroded tumbler.
+con_lck_02,Merchant Safe,Mechanical,sk_lck,35,dt_coins,TRUE,eff_bleed_01,Reinforced steel with a hidden needle trap.
+con_lck_03,Vault Door,Mechanical,sk_lck,70,dt_legendary,TRUE,eff_concuss,The heavy mechanical seal of a pre-collapse bank.
+con_str_01,Nailed Crate,Physical,STR,15,dt_junk,FALSE,none,Wooden slats nailed shut. Requires prying or smashing.
+con_str_02,Iron Footlocker,Physical,STR,35,dt_military,FALSE,none,Heavy lid that requires raw power to force open.
+con_str_03,Barred Gate,Physical,STR,60,dt_weapons,TRUE,eff_bleed_01,A thick metal gate held by a heavy internal bar.
+con_eng_01,Junk Terminal,Electronic,sk_eng,20,dt_scrap,FALSE,none,A flickering screen controlling a small stash.
+con_eng_02,Security Console,Electronic,sk_eng,45,dt_military,TRUE,eff_concuss,Wires are exposed; failure causes an electric shock.
+con_eng_03,Mainframe Hub,Electronic,sk_eng,80,dt_godly,TRUE,eff_insane,The central logic core. Failure causes neural feedback.
+con_occ_01,Engraved Urn,Magical,sk_occ,25,dt_occult,TRUE,eff_fear,A clay vessel covered in protective Void runes.
+con_occ_02,Shadow Coffin,Magical,sk_occ,50,dt_undead,TRUE,eff_void_rot,A stone sarcophagus that drains light from the room.
+con_occ_03,Void Pillar,Magical,sk_occ,85,dt_godly,TRUE,eff_insane,A floating monolith pulsing with forbidden energy.
+con_scr_01,Loose Rubble,Search,sk_scr,10,dt_junk,FALSE,none,A pile of debris that might hide something useful.
+con_scr_02,Hidden Cache,Search,sk_scr,40,dt_outlaw,TRUE,eff_bleed_01,Cleverly hidden under floorboards with a tripwire.

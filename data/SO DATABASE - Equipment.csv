@@ -1,0 +1,21 @@
+ID,Name,Type,Slot,Buffs,Unique_ID,Value,Fashion_Score,Weight_kg,FlavorText
+eq_head_01,Scrap Mask,armor,head,RES:1,null,25,0,2,A rusted plate with eye-slits.
+eq_head_02,Guard Helm,armor,head,RES:4|FOR:2,null,160,20,4,Standard issue for the Town Watch.
+eq_head_03,Neural Visor,armor,head,PER:10|INT:5,thermal,850,60,1.5,Displays life signs through solid stone.
+eq_head_tophat,Top Hat,armor,head,CHA:2,null,400,50,0.5,Clean and stylish.
+eq_chest_01,Tattered Tunic,armor,chest,RES:1,null,30,0,1,Smells of sulfur and old blood.
+eq_chest_02,Reinforced Vest,armor,chest,RES:6|VIT:3,null,250,10,8,Hardened leather with steel inserts.
+eq_chest_03,Exo-Plate,armor,chest,RES:15|STR:6,sturdy,1100,30,25,Hydraulic-assisted plate armor.
+eq_chest_noble,Silk Doublet,armor,chest,CHA:5,null,1500,80,1,"Finest silk, grants entry to high society."
+eq_legs_01,Patchwork Pants,armor,legs,DOG:1,null,20,0,1,Stitched together from various rags.
+eq_legs_02,Iron Greaves,armor,legs,RES:4|END:2,null,140,10,10,"Heavier, but stops most blades."
+eq_legs_03,Powered Greaves,armor,legs,ATH:10|JMP:10,spring_step,900,40,15,Servo-motors assist with running and jumping.
+wpn_1h_01,Rusty Shiv,weapon,one hand,sk_lgt:3|DEX:1,bleed,40,0,0.5,A sharpened radiator shard.
+wpn_1h_02,Service Revolver,weapon,one hand,sk_gun:8|PER:2,loud,450,10,1.5,A reliable six-shooter.
+wpn_1h_03,Monofiber Blade,weapon,one hand,sk_bld:15|DEX:10,ignore_def,1200,70,0.2,Cuts through steel like a hot wire.
+wpn_2h_01,Heavy Maul,weapon,two hands,sk_bln:5|STR:4,stun,80,5,12,A massive sledgehammer for demolition.
+wpn_2h_02,Longbow,weapon,two hands,sk_bow:8|PER:5,null,220,10,2,Yew wood reinforced with carbon strips.
+wpn_2h_03,Auto-Bolt Gun,weapon,two hands,sk_cbw:15|sk_eng:8,rapid_fire,1500,40,8,Gravity-fed magazine for continuous fire.
+eq_neck_01,Bone Charm,accessory,neck,FOR:1|MOR:-1,null,50,0,0.1,Supposedly protects from the Void.
+eq_neck_02,Silver Torque,accessory,neck,CHA:4|sk_psn:2,null,200,40,0.2,A symbol of minor nobility.
+eq_neck_03,The Overseer Key,accessory,neck,INT:8|sk_und:8,access_all,1400,100,0.1,Legendary badge that bypasses city security.
