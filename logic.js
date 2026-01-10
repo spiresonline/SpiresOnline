@@ -1,19 +1,43 @@
 /**
  * SPIRES ONLINE | LOGIC SYSTEM (logic.js)
- * Handles combat math, AI behavior, and vital regeneration.
+ * Alpha 1.2: Portal Traversal, Stat-based Combat, and AI.
  */
 
 import { Game } from './game.js';
 import { LootTable } from './loot.js';
 
 export const Logic = {
-    aiTickRate: 60, // AI acts once per second at 60fps
+    aiTickRate: 60, // AI updates once per second (at 60 FPS)
 
     update() {
+        // 1. Passive Regeneration
         this.updateVitals();
         
+        // 2. Check for Zone Transitions
+        this.checkPortals();
+        
+        // 3. AI Behavior (Combat/Movement)
         if (Game.state.frame % this.aiTickRate === 0) {
             this.updateAI();
+        }
+    },
+
+    checkPortals() {
+        const { player, currentMap } = Game.state;
+        if (!currentMap.portals) return;
+
+        // Check if player is standing on a portal
+        const portal = currentMap.portals.find(p => p.x === player.x && p.y === player.y);
+        
+        if (portal) {
+            Game.ui.log(`System: Traveling to ${portal.target.toUpperCase()}...`);
+            
+            // Switch Maps
+            Game.loadMap(portal.target);
+            
+            // Set Player Position in new map
+            player.x = portal.targetX;
+            player.y = portal.targetY;
         }
     },
 
@@ -21,12 +45,16 @@ export const Logic = {
         const p = Game.state.player;
         const frame = Game.state.frame;
 
-        // Passive regeneration every 2 seconds
+        // Regen tick every 2 seconds (120 frames)
         if (frame % 120 === 0) {
-            if (p.hp < p.maxHp) p.hp = Math.min(p.maxHp, p.hp + 0.5);
-            if (p.mana < p.maxMana) p.mana = Math.min(p.maxMana, p.mana + 2);
-            if (p.energy < p.maxEnergy) p.energy = Math.min(p.maxEnergy, p.energy + 5);
+            // Regen Rates based on Stats (Stamina/Intellect)
+            const hpRegen = 0.5 + (p.stats.sta * 0.1);
+            const manaRegen = 1 + (p.stats.int * 0.2);
+
+            if (p.hp < p.maxHp) p.hp = Math.min(p.maxHp, p.hp + hpRegen);
+            if (p.mana < p.maxMana) p.mana = Math.min(p.maxMana, p.mana + manaRegen);
             
+            // Update UI Bars
             Game.ui.updateVitals();
         }
     },
@@ -36,25 +64,31 @@ export const Logic = {
         if (!currentMap) return;
 
         entities.forEach(en => {
+            // Only enemies (Goblins) react. NPCs (Town) just stand or wander safely.
             if (en.type !== 'goblin' || !en.alive) return;
 
             const dist = Math.abs(player.x - en.x) + Math.abs(player.y - en.y);
 
-            // Attack if adjacent
+            // Attack Range
             if (dist === 1) {
-                const defense = player.gear.body ? player.gear.body.stats.defense : 0;
-                const dmg = Math.max(1, 5 - (defense / 5));
+                // Defense Calculation: Gear Defense + Agility
+                const gearDef = player.gear.body ? player.gear.body.stats.defense : 0;
+                const totalDef = gearDef + (player.stats.agi * 0.5);
                 
-                player.hp = Math.max(0, player.hp - dmg);
-                Game.ui.log(`Combat: Goblin hit you for ${dmg.toFixed(1)} DMG.`);
+                // Damage Calculation
+                const rawDmg = 5; 
+                const finalDmg = Math.max(1, rawDmg - (totalDef / 5));
+                
+                player.hp = Math.max(0, player.hp - finalDmg);
+                Game.ui.log(`Combat: Took ${finalDmg.toFixed(1)} DMG.`);
                 Game.ui.updateVitals();
             } 
-            // Aggro/Pursuit range
-            else if (dist < 7) {
+            // Pursuit Range
+            else if (dist < 8) {
                 this.moveEntityToward(en, player.x, player.y);
             }
-            // Idle wander
-            else if (Math.random() > 0.7) {
+            // Idle Wander
+            else if (Math.random() > 0.8) {
                 this.moveEntityRandomly(en);
             }
         });
@@ -62,23 +96,36 @@ export const Logic = {
 
     playerAttack() {
         const { player, entities, worldItems } = Game.state;
-        const weaponBonus = player.gear.weapon ? player.gear.weapon.stats.attack : 0;
-        const attackPower = 15 + weaponBonus;
+        
+        // Damage Math: Weapon + Strength
+        const weaponDmg = player.gear.weapon ? player.gear.weapon.stats.attack : 0;
+        const strBonus = player.stats.str * 1.5;
+        const totalDmg = 5 + weaponDmg + strBonus;
 
         entities.forEach(en => {
-            if (!en.alive || en.type === 'bartender') return;
+            if (!en.alive || en.type === 'npc') return; // Cannot hurt NPCs
 
             const dist = Math.abs(player.x - en.x) + Math.abs(player.y - en.y);
             
             if (dist <= 1) {
-                en.hp -= attackPower;
-                Game.ui.log(`Combat: Struck Goblin for ${attackPower} DMG.`);
+                en.hp -= totalDmg;
+                Game.ui.log(`Combat: Hit ${en.type} for ${totalDmg.toFixed(0)} DMG.`);
 
                 if (en.hp <= 0) {
                     en.alive = false;
-                    Game.ui.log("Combat: Enemy neutralized.");
+                    Game.ui.log(`Combat: ${en.type} neutralized.`);
                     
-                    // Trigger Loot System
+                    // Award XP (Simple)
+                    player.xp += 20;
+                    if (player.xp >= player.maxXp) {
+                        player.xp = 0;
+                        player.level++;
+                        player.maxXp *= 1.5;
+                        Game.ui.log(`LEVEL UP! You are now Level ${player.level}.`);
+                    }
+                    Game.ui.updateVitals();
+
+                    // Generate Loot
                     const dropId = LootTable.generateDrop(en.type);
                     if (dropId) {
                         worldItems.push({ 
@@ -87,7 +134,7 @@ export const Logic = {
                             itemId: dropId, 
                             id: Date.now() 
                         });
-                        Game.ui.log(`Loot: ${en.type} dropped an item.`);
+                        Game.ui.log("Loot: Enemy dropped an item.");
                     }
                 }
             }
@@ -114,8 +161,9 @@ export const Logic = {
         const nX = entity.x + dX;
         const nY = entity.y + dY;
 
-        if (nX < 0 || nX >= currentMap.size || nY < 0 || nY >= currentMap.size) return;
+        if (nX < 0 || nX >= currentMap.width || nY < 0 || nY >= currentMap.height) return;
         
+        // Collision Checks
         const isPlayer = (nX === player.x && nY === player.y);
         const isEntity = entities.some(e => e.alive && e !== entity && e.x === nX && e.y === nY);
 

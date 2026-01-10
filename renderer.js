@@ -1,105 +1,155 @@
 /**
  * SPIRES ONLINE | RENDERER SYSTEM (renderer.js)
- * Handles Canvas drawing, camera offsets, and visual updates.
+ * Alpha 1.2: Sprite rendering, Camera logic, and Zone themes.
  */
 
 import { Game } from './game.js';
+import { Sprites } from './sprites.js';
 import { ItemDatabase } from './items.js';
 
 export const Renderer = {
     canvas: null,
     ctx: null,
 
-    init() {
+    async init() {
         this.canvas = document.getElementById('game-canvas');
-        if (!this.canvas) return;
-
         this.ctx = this.canvas.getContext('2d', { alpha: false });
+        
+        // Handle window resizing
         this.resize();
-
         window.addEventListener('resize', () => this.resize());
+
+        // Wait for sprites to generate/load before first draw
+        await Sprites.init();
     },
 
     resize() {
-        if (!this.canvas) return;
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-        this.ctx.imageSmoothingEnabled = false;
+        if (this.canvas) {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            this.ctx.imageSmoothingEnabled = false; // Pixel art style
+        }
     },
 
     draw() {
+        if (!this.ctx) return;
         const { ctx, canvas } = this;
         const { currentMap, player, entities, worldItems } = Game.state;
         const { tileSize } = Game.config;
 
         if (!currentMap) return;
 
-        // 1. Clear Screen
-        ctx.fillStyle = '#020617';
+        // 1. Camera Calculation (Center on Player)
+        const cameraX = (canvas.width / 2) - (player.x * tileSize) - (tileSize / 2);
+        const cameraY = (canvas.height / 2) - (player.y * tileSize) - (tileSize / 2);
+
+        // 2. Clear Screen
+        ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 2. Camera Logic (Centered on Player)
-        const offsetX = (canvas.width / 2) - (player.x * tileSize) - (tileSize / 2);
-        const offsetY = (canvas.height / 2) - (player.y * tileSize) - (tileSize / 2);
+        // 3. Render Map Tiles
+        // Optimization: Only render visible tiles
+        const startCol = Math.floor(-cameraX / tileSize);
+        const endCol = startCol + (canvas.width / tileSize) + 1;
+        const startRow = Math.floor(-cameraY / tileSize);
+        const endRow = startRow + (canvas.height / tileSize) + 1;
 
-        // 3. Render World Grid
-        ctx.strokeStyle = '#1e293b';
-        ctx.lineWidth = 1;
-        for (let x = 0; x < currentMap.size; x++) {
-            for (let y = 0; y < currentMap.size; y++) {
-                const posX = offsetX + x * tileSize;
-                const posY = offsetY + y * tileSize;
+        // Determine Theme
+        let floorKey = 'floor_town';
+        if (currentMap.id === 'forest') floorKey = 'floor_grass';
 
-                // Optimization: Don't draw if off-screen
-                if (posX + tileSize < 0 || posX > canvas.width || posY + tileSize < 0 || posY > canvas.height) {
-                    continue;
+        const floorSprite = Sprites.get(floorKey);
+
+        for (let c = startCol; c <= endCol; c++) {
+            for (let r = startRow; r <= endRow; r++) {
+                if (c >= 0 && c < currentMap.width && r >= 0 && r < currentMap.height) {
+                    ctx.drawImage(floorSprite, Math.round(cameraX + c * tileSize), Math.round(cameraY + r * tileSize), tileSize, tileSize);
                 }
-
-                ctx.strokeRect(posX, posY, tileSize, tileSize);
             }
         }
 
-        // 4. Render World Items (Ground Loot)
+        // 4. Render Portals/Gates (Visual cues)
+        if (currentMap.portals) {
+            ctx.fillStyle = 'rgba(147, 51, 234, 0.3)'; // Purple glow
+            currentMap.portals.forEach(p => {
+                const px = Math.round(cameraX + p.x * tileSize);
+                const py = Math.round(cameraY + p.y * tileSize);
+                ctx.fillRect(px, py, tileSize, tileSize);
+                
+                // Draw Portal Text
+                ctx.fillStyle = '#fff';
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText("PORTAL", px + tileSize/2, py + tileSize/2);
+            });
+        }
+
+        // 5. Render Items
         worldItems.forEach(item => {
             const data = ItemDatabase[item.itemId];
-            const iX = offsetX + item.x * tileSize;
-            const iY = offsetY + item.y * tileSize;
-
-            if (data && data.icon) {
-                ctx.font = "24px serif";
-                ctx.textAlign = "center";
-                ctx.fillText(data.icon, iX + tileSize / 2, iY + tileSize / 2 + 8);
-            }
-        });
-
-        // 5. Render Entities (Enemies/NPCs)
-        entities.forEach(en => {
-            if (!en.alive) return;
-            const enX = offsetX + en.x * tileSize;
-            const enY = offsetY + en.y * tileSize;
-
-            ctx.fillStyle = en.type === 'goblin' ? '#f43f5e' : '#f59e0b';
+            const ix = Math.round(cameraX + item.x * tileSize);
+            const iy = Math.round(cameraY + item.y * tileSize);
             
-            // Draw square for entity
-            ctx.fillRect(enX + 10, enY + 10, tileSize - 20, tileSize - 20);
+            // Draw shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.beginPath();
+            ctx.ellipse(ix + tileSize/2, iy + tileSize - 10, 15, 5, 0, 0, Math.PI*2);
+            ctx.fill();
 
-            // Simple HP bar above head
-            if (en.hp !== undefined) {
-                ctx.fillStyle = '#000';
-                ctx.fillRect(enX + 10, enY + 2, tileSize - 20, 4);
+            // Draw Icon
+            ctx.font = "24px serif";
+            ctx.textAlign = "center";
+            ctx.fillText(data.icon, ix + tileSize/2, iy + tileSize/2 + 5);
+        });
+
+        // 6. Render Entities (NPCs / Enemies)
+        entities.forEach(en => {
+            if (en.hp !== undefined && !en.alive) return;
+            
+            const ex = Math.round(cameraX + en.x * tileSize);
+            const ey = Math.round(cameraY + en.y * tileSize);
+
+            // Shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.4)';
+            ctx.beginPath();
+            ctx.ellipse(ex + tileSize/2, ey + tileSize - 5, 20, 8, 0, 0, Math.PI*2);
+            ctx.fill();
+
+            // Sprite
+            let spriteKey = 'goblin';
+            if (en.type === 'npc') {
+                if (en.id === 'guard') spriteKey = 'npc_guard';
+                else spriteKey = 'npc_bartender';
+            }
+            
+            ctx.drawImage(Sprites.get(spriteKey), ex, ey, tileSize, tileSize);
+
+            // Name Tag
+            if (en.name) {
+                ctx.fillStyle = '#fff';
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(en.name, ex + tileSize/2, ey - 10);
+            }
+
+            // Health Bar (Only for enemies)
+            if (en.type === 'goblin') {
                 ctx.fillStyle = '#ef4444';
-                ctx.fillRect(enX + 10, enY + 2, (tileSize - 20) * (en.hp / en.maxHp), 4);
+                ctx.fillRect(ex + 10, ey - 5, (tileSize - 20) * (en.hp / en.maxHp), 4);
             }
         });
 
-        // 6. Render Player
-        const pX = offsetX + player.x * tileSize;
-        const pY = offsetY + player.y * tileSize;
+        // 7. Render Player
+        const px = Math.round(cameraX + player.x * tileSize);
+        const py = Math.round(cameraY + player.y * tileSize);
+        
+        // Player Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.beginPath();
+        ctx.ellipse(px + tileSize/2, py + tileSize - 5, 20, 8, 0, 0, Math.PI*2);
+        ctx.fill();
 
-        ctx.fillStyle = '#3b82f6';
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = 'rgba(59, 130, 246, 0.5)';
-        ctx.fillRect(pX + 12, pY + 12, tileSize - 24, tileSize - 24);
-        ctx.shadowBlur = 0;
+        // Player Sprite
+        ctx.drawImage(Sprites.get('player'), px, py, tileSize, tileSize);
     }
 };
