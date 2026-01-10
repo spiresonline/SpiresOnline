@@ -9,209 +9,162 @@
             --bg-color: #121212;
             --panel-bg: #1e1e1e;
             --text-color: #e0e0e0;
-            --accent-color: #00bcd4; /* Cyan for Tech */
-            --danger-color: #f44336; /* Red for HP */
-            --stamina-color: #4caf50; /* Green for Stamina */
-            --sanity-color: #9c27b0; /* Purple for Void/Sanity */
+            --accent-color: #00bcd4;
+            --danger-color: #f44336;
             --border-color: #333;
         }
 
         body {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Courier New', monospace;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            display: flex;
-            justify-content: center;
             height: 100vh;
             overflow: hidden;
-        }
-
-        #game-container {
             display: grid;
-            grid-template-columns: 250px 1fr 250px;
-            grid-template-rows: 60px 1fr 150px;
-            width: 100%;
-            max-width: 1200px;
-            height: 100vh;
-            border-left: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
+            grid-template-rows: 60px 1fr;
         }
 
-        /* --- Header --- */
+        /* Header */
         header {
-            grid-column: 1 / -1;
             background-color: var(--panel-bg);
             border-bottom: 1px solid var(--border-color);
+            padding: 0 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
+        }
+        h1 { margin: 0; font-size: 1.2rem; color: var(--accent-color); letter-spacing: 2px; }
+
+        /* Main Layout */
+        #game-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            height: 100%;
+            overflow: hidden;
         }
 
-        h1 { margin: 0; font-size: 1.2rem; color: var(--accent-color); text-transform: uppercase; letter-spacing: 2px; }
-        .world-info span { margin-left: 15px; font-weight: bold; }
-
-        /* --- Left Panel: Stats --- */
-        #left-panel {
-            grid-row: 2 / -1;
-            background-color: #181818;
+        /* Panels */
+        .panel {
+            background: #181818;
             border-right: 1px solid var(--border-color);
             padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 20px;
-        }
-
-        .stat-group h3 { margin: 0 0 10px 0; font-size: 0.9rem; color: #888; border-bottom: 1px solid #333; }
-        
-        .bar-container {
-            margin-bottom: 15px;
-        }
-        .bar-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; }
-        .bar-track { background: #333; height: 10px; width: 100%; border-radius: 2px; }
-        .bar-fill { height: 100%; width: 100%; transition: width 0.3s ease; }
-        
-        #hp-bar { background-color: var(--danger-color); }
-        #stm-bar { background-color: var(--stamina-color); }
-        #san-bar { background-color: var(--sanity-color); }
-
-        .attr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9rem; }
-        .attr-box { background: #222; padding: 5px; text-align: center; border: 1px solid #333; }
-        .attr-val { display: block; font-size: 1.1rem; font-weight: bold; color: var(--accent-color); }
-
-        /* --- Center Panel: Game Log --- */
-        #main-view {
-            grid-column: 2;
-            grid-row: 2;
-            padding: 20px;
             overflow-y: auto;
-            background-color: #121212;
+        }
+        .panel-right { border-left: 1px solid var(--border-color); border-right: none; }
+
+        /* Stats Bars */
+        .bar-box { margin-bottom: 10px; }
+        .bar-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
+        .bar-track { background: #333; height: 8px; width: 100%; }
+        .bar-fill { height: 100%; transition: width 0.3s; }
+        .hp { background: #d32f2f; }
+        .stm { background: #4caf50; }
+        .san { background: #9c27b0; }
+
+        /* Inventory Grid */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .inv-slot {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #222;
+            border: 1px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .inv-slot:hover { border-color: var(--accent-color); }
+        .inv-slot img { width: 80%; height: 80%; image-rendering: pixelated; }
+        .inv-qty {
+            position: absolute; bottom: 2px; right: 2px;
+            font-size: 10px; color: white; background: rgba(0,0,0,0.7);
+            padding: 1px 3px; border-radius: 2px;
+        }
+
+        /* Central Log */
+        #main-view {
+            padding: 20px;
             display: flex;
             flex-direction: column;
+            background: #121212;
         }
-
         #game-log {
             flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
             overflow-y: auto;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-
-        #game-log div { animation: fadeIn 0.2s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- Right Panel: Info/Debug --- */
-        #right-panel {
-            grid-row: 2 / -1;
-            background-color: #181818;
-            border-left: 1px solid var(--border-color);
-            padding: 20px;
-            font-size: 0.8rem;
-            color: #777;
-        }
-
-        /* --- Footer: Controls --- */
-        #controls-area {
-            grid-column: 2;
-            grid-row: 3;
-            background-color: var(--panel-bg);
-            border-top: 1px solid var(--border-color);
-            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 6px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
         }
-
-        .input-group { display: flex; gap: 10px; }
-        input[type="text"] {
-            flex-grow: 1;
-            background: #111;
-            border: 1px solid #444;
-            color: white;
-            padding: 10px;
-            font-family: inherit;
-        }
-        button {
-            background: var(--accent-color);
-            color: black;
-            border: none;
-            padding: 10px 20px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        button:hover { opacity: 0.9; }
-        button.secondary { background: #444; color: white; }
-
-        .quick-actions { display: flex; gap: 10px; }
+        .log-entry { padding: 4px 0; border-bottom: 1px solid #222; animation: fadeIn 0.2s; }
+        .log-entry.combat { color: #ff8a80; }
+        .log-entry.loot { color: #ffd740; }
+        
+        /* Controls */
+        #controls { display: flex; gap: 10px; }
+        input { flex-grow: 1; background: #222; border: 1px solid #444; color: white; padding: 10px; font-family: inherit; }
+        button { background: var(--accent-color); border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <header>
-            <h1>Spires Online <span style="font-size:0.6em; color:#666;">ALPHA 2.0</span></h1>
-            <div class="world-info">
-                LOC: <span id="location-text">LOADING...</span> | 
-                TIME: <span id="time-text">00:00</span>
-            </div>
-        </header>
+    <header>
+        <h1>Spires Online <span style="font-size:0.5em; opacity:0.7;">ALPHA 2.0</span></h1>
+        <div id="world-info">LOC: <span id="loc-id">LOADING</span> | TIME: <span id="time-val">0800</span></div>
+    </header>
 
-        <aside id="left-panel">
-            <div class="stat-group">
-                <h3>Vitals</h3>
-                <div class="bar-container">
-                    <div class="bar-label"><span>HP</span> <span id="hp-val"></span></div>
-                    <div class="bar-track"><div id="hp-bar" class="bar-fill" style="width: 100%;"></div></div>
-                </div>
-                <div class="bar-container">
-                    <div class="bar-label"><span>STM</span> <span id="stm-val"></span></div>
-                    <div class="bar-track"><div id="stm-bar" class="bar-fill" style="width: 100%;"></div></div>
-                </div>
-                <div class="bar-container">
-                    <div class="bar-label"><span>SANITY</span> <span id="san-val"></span></div>
-                    <div class="bar-track"><div id="san-bar" class="bar-fill" style="width: 100%;"></div></div>
-                </div>
+    <div id="game-layout">
+        <aside class="panel">
+            <h3>VITALS</h3>
+            <div class="bar-box">
+                <div class="bar-label"><span>HP</span> <span id="hp-txt">0/0</span></div>
+                <div class="bar-track"><div id="hp-bar" class="bar-fill hp" style="width: 0%"></div></div>
+            </div>
+            <div class="bar-box">
+                <div class="bar-label"><span>STM</span> <span id="stm-txt">0/0</span></div>
+                <div class="bar-track"><div id="stm-bar" class="bar-fill stm" style="width: 0%"></div></div>
             </div>
 
-            <div class="stat-group">
-                <h3>Attributes</h3>
-                <div class="attr-grid">
-                    <div class="attr-box">STR <span id="stat-str" class="attr-val">0</span></div>
-                    <div class="attr-box">DEX <span id="stat-dex" class="attr-val">0</span></div>
-                    <div class="attr-box">INT <span id="stat-int" class="attr-val">0</span></div>
-                    </div>
-            </div>
+            <h3>ACTIVE EFFECTS</h3>
+            <div id="status-list" style="font-size: 0.8rem; color: #888;">No active effects.</div>
         </aside>
 
         <main id="main-view">
             <div id="game-log">
-                <div>> Initializing Neural Link...</div>
-                <div>> Connecting to Spires Database...</div>
+                <div class="log-entry">> System Initializing...</div>
+            </div>
+            
+            <div id="controls">
+                <input type="text" id="cmd-input" placeholder="Type action ID (e.g. act_min_pick)..." value="act_srv_forage">
+                <button id="btn-act">EXECUTE</button>
             </div>
         </main>
 
-        <section id="controls-area">
-            <div class="input-group">
-                <input type="text" id="action-input" placeholder="Enter Action ID (e.g., act_min_pick)..." value="act_srv_forage">
-                <button id="btn-action">EXECUTE</button>
+        <aside class="panel panel-right">
+            <h3>EQUIPMENT</h3>
+            <div class="inventory-grid" id="equip-grid">
+                <div class="inv-slot" title="Head"><span style="font-size:0.7em; color:#555;">HEAD</span></div>
+                <div class="inv-slot" title="Chest"><span style="font-size:0.7em; color:#555;">BODY</span></div>
+                <div class="inv-slot" title="Main Hand"><span style="font-size:0.7em; color:#555;">HAND</span></div>
+                <div class="inv-slot" title="Off Hand"><span style="font-size:0.7em; color:#555;">OFF</span></div>
             </div>
-            <div class="quick-actions">
-                <button class="secondary" id="btn-rest">Rest (1h)</button>
-                <button class="secondary" id="btn-debug-dmg" style="background:#522;">Test Damage</button>
-            </div>
-        </section>
 
-        <aside id="right-panel">
-            <h3>Debug Status</h3>
-            <pre id="debug-info">Waiting for core...</pre>
-            <p style="margin-top:20px; color:#444;">
-                Tip: Use Browser Console (F12) to see full object logs.
-            </p>
+            <h3>INVENTORY</h3>
+            <div class="inventory-grid" id="inv-grid">
+                </div>
         </aside>
     </div>
 

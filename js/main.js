@@ -1,99 +1,100 @@
 import { GameManager } from './GameManager.js';
+import { GameDatabase } from './GameDataModels.js';
 
-// 1. Initialize Game on Window Load
 window.addEventListener('load', () => {
-    // The Game instance was attached to window in GameManager.js
     if (window.Game) {
         window.Game.initialize().then(() => {
-            setupUI();
+            log("Core Systems Loaded.");
+            log("Welcome to Spires Online Alpha 2.0.");
+            
+            // Give player starting items for testing
+            window.Game.player.addItem("it_med_01", 3);
+            window.Game.player.addItem("wpn_1h_01", 1);
+            
             updateUI();
-            logMessage("System: Alpha 2.0 Loaded. Welcome to Spires Online.");
         });
-    } else {
-        console.error("Game Core not found!");
     }
 });
 
-// 2. UI Setup & Event Listeners
-function setupUI() {
-    // Action Buttons
-    document.getElementById('btn-action').addEventListener('click', () => {
-        handleActionClick();
-    });
+// Setup Inputs
+document.getElementById('btn-act').addEventListener('click', () => {
+    const input = document.getElementById('cmd-input');
+    handleInput(input.value);
+});
 
-    document.getElementById('btn-rest').addEventListener('click', () => {
-        // Simple Rest Logic
-        window.Game.player.currentStamina = window.Game.player.maxStamina;
-        window.Game.world.advanceTime(100); // 1 Hour
-        logMessage("You rest for a while. Stamina restored.");
-        updateUI();
-    });
-    
-    // Debug / Test Buttons
-    document.getElementById('btn-debug-dmg').addEventListener('click', () => {
-        window.Game.player.takeDamage(10, "Physical");
-        updateUI();
-    });
-}
+document.getElementById('cmd-input').addEventListener('keypress', (e) => {
+    if(e.key === 'Enter') handleInput(e.target.value);
+});
 
-// 3. Handle Player Actions
-function handleActionClick() {
-    const actionInput = document.getElementById('action-input').value; // e.g., "act_min_pick"
-    
-    // Call the Action Controller
-    const result = window.Game.actions.attemptAction(actionInput, null);
-    
-    logMessage(result.message);
+function handleInput(cmd) {
+    const result = window.Game.actions.attemptAction(cmd, null);
+    log(result.message, result.success ? "normal" : "error");
     
     if (result.success) {
-        window.Game.world.advanceTime(50); // Advance time on action
+        window.Game.world.advanceTime(50);
+        updateUI();
     }
-    
-    updateUI();
 }
 
-// 4. Update the Screen
+// UI Loop
 function updateUI() {
-    const player = window.Game.player;
-    const world = window.Game.world;
-
-    // Update Stats Bars
-    updateBar('hp-bar', player.currentHP, player.maxHP);
-    updateBar('stm-bar', player.currentStamina, player.maxStamina);
-    updateBar('san-bar', player.sanity, 100);
-
-    // Update Text Stats
-    document.getElementById('stat-str').innerText = player.attributes.STR;
-    document.getElementById('stat-dex').innerText = player.attributes.DEX;
-    document.getElementById('stat-int').innerText = player.attributes.INT;
+    const p = window.Game.player;
     
-    // Update World Info
-    document.getElementById('location-text').innerText = world.currentMapID;
-    document.getElementById('time-text').innerText = formatTime(world.timeOfDay);
+    // Bars
+    setBar('hp', p.currentHP, p.maxHP);
+    setBar('stm', p.currentStamina, p.maxStamina);
     
-    // Debug Info
-    document.getElementById('debug-info').innerText = window.Game.debugStatus();
+    // Info
+    document.getElementById('loc-id').innerText = window.Game.world.currentMapID;
+    document.getElementById('time-val').innerText = window.Game.world.timeOfDay;
+
+    // Inventory Rendering
+    renderInventory(p.inventory);
 }
 
-// Helper: Log to the game console window
-function logMessage(msg) {
-    const logEl = document.getElementById('game-log');
-    const entry = document.createElement('div');
-    entry.innerText = `> ${msg}`;
-    logEl.appendChild(entry);
-    logEl.scrollTop = logEl.scrollHeight; // Auto-scroll to bottom
+function renderInventory(inv) {
+    const grid = document.getElementById('inv-grid');
+    grid.innerHTML = ""; // Clear current
+
+    // Group items (simple logic)
+    const counts = {};
+    inv.forEach(id => counts[id] = (counts[id] || 0) + 1);
+
+    for (let id in counts) {
+        const itemData = GameDatabase.Items[id];
+        const el = document.createElement('div');
+        el.className = 'inv-slot';
+        el.title = itemData ? itemData.Name : id;
+        
+        // Image
+        const img = document.createElement('img');
+        img.src = `assets/${id}.png`;
+        img.onerror = () => { img.src = ''; }; // Hide broken links
+        el.appendChild(img);
+
+        // Qty
+        if(counts[id] > 1) {
+            const qty = document.createElement('span');
+            qty.className = 'inv-qty';
+            qty.innerText = counts[id];
+            el.appendChild(qty);
+        }
+
+        grid.appendChild(el);
+    }
 }
 
-// Helper: Update CSS Width of bars
-function updateBar(elementId, current, max) {
-    const el = document.getElementById(elementId);
-    const pct = Math.max(0, Math.min(100, (current / max) * 100));
-    el.style.width = `${pct}%`;
-    el.innerText = `${Math.floor(current)}/${Math.floor(max)}`;
+function setBar(id, cur, max) {
+    const pct = Math.min(100, Math.max(0, (cur/max)*100));
+    document.getElementById(`${id}-bar`).style.width = `${pct}%`;
+    document.getElementById(`${id}-txt`).innerText = `${Math.floor(cur)}/${Math.floor(max)}`;
 }
 
-// Helper: Format 800 to "08:00"
-function formatTime(val) {
-    let str = val.toString().padStart(4, '0');
-    return `${str.substring(0,2)}:${str.substring(2,4)}`;
+function log(msg, type="normal") {
+    const box = document.getElementById('game-log');
+    const div = document.createElement('div');
+    div.className = `log-entry ${type}`;
+    div.innerText = `> ${msg}`;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
 }

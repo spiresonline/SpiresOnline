@@ -1,3 +1,4 @@
+// js/GameManager.js
 import { TSVParser } from './TSVParser.js';
 import { GameDatabase } from './GameDataModels.js';
 import { PlayerManager } from './PlayerManager.js';
@@ -11,83 +12,84 @@ export class GameManager {
         this.actions = null;
         this.isInitialized = false;
         
-        // Configuration
+        // The Big 18: Exact Clean Filenames
         this.dataFiles = [
-            { url: 'data/SO DATABASE.xlsx - Stats.csv', category: 'Stats' },
-            { url: 'data/SO DATABASE.xlsx - Skills.csv', category: 'Skills' },
-            { url: 'data/SO DATABASE.xlsx - Items.csv', category: 'Items' },
-            { url: 'data/SO DATABASE.xlsx - Actions.csv', category: 'Actions' },
-            { url: 'data/SO DATABASE.xlsx - Monsters.csv', category: 'Monsters' },
-            { url: 'data/SO DATABASE.xlsx - Maps.csv', category: 'Maps' },
-            { url: 'data/SO DATABASE.xlsx - NPCs.csv', category: 'NPCs' },
-            { url: 'data/SO DATABASE.xlsx - Dialogues.csv', category: 'Dialogues' },
-            { url: 'data/SO DATABASE.xlsx - Quests.csv', category: 'Quests' }
+            // Core
+            { url: 'data/Stats.csv', category: 'Stats' },
+            { url: 'data/Skills.csv', category: 'Skills' },
+            { url: 'data/Scaling.csv', category: 'Scaling' },
+            { url: 'data/Levels.csv', category: 'Levels' },
+            { url: 'data/Perks.csv', category: 'Perks' },
+            { url: 'data/Talents.csv', category: 'Talents' },
+            // Items
+            { url: 'data/Items.csv', category: 'Items' },
+            { url: 'data/Equipment.csv', category: 'Equipment' }, // Parser merges this into Items or keeps separate
+            { url: 'data/DropTables.csv', category: 'DropTables' },
+            // Actions & Effects
+            { url: 'data/Actions.csv', category: 'Actions' },
+            { url: 'data/Combat.csv', category: 'Combat' },
+            { url: 'data/Status.csv', category: 'Status' },
+            // World
+            { url: 'data/Monsters.csv', category: 'Monsters' },
+            { url: 'data/Maps.csv', category: 'Maps' },
+            { url: 'data/NPCs.csv', category: 'NPCs' },
+            { url: 'data/Containers.csv', category: 'Containers' },
+            { url: 'data/Quests.csv', category: 'Quests' },
+            { url: 'data/Dialogues.csv', category: 'Dialogues' }
         ];
     }
 
-    /**
-     * Step 1: Boot Sequence
-     * Loads all text files and parses them into GameDatabase.
-     */
     async initialize() {
-        console.log("Starting System Initialization...");
+        console.log("Starting Alpha 2.0 Initialization...");
+        console.log(`Loading ${this.dataFiles.length} database files...`);
 
         const loadPromises = this.dataFiles.map(file => {
             return fetch(file.url)
                 .then(response => {
-                    if (!response.ok) throw new Error(`Failed to load ${file.url}`);
+                    if (!response.ok) throw new Error(`HTTP Error ${response.status}: Failed to load ${file.url}`);
                     return response.text();
                 })
                 .then(text => {
                     TSVParser.parseData(text, file.category);
                 })
-                .catch(err => console.error(err));
+                .catch(err => console.error("Loader Error:", err));
         });
 
-        // Wait for all files to load
         await Promise.all(loadPromises);
         
-        console.log("Database Loaded Successfully.");
+        console.log("All Databases Loaded Successfully.");
         this.setupGameSystems();
     }
 
-    /**
-     * Step 2: System Setup
-     * Initialize the managers now that data exists.
-     */
     setupGameSystems() {
-        // Create Player
+        // Initialize Managers
         this.player = new PlayerManager();
-        this.player.recalculateStats(); // Apply base stats
+        this.player.recalculateStats();
 
-        // Create World
         this.world = new WorldState();
-        this.world.spawnEntitiesForMap(this.world.currentMapID);
+        // Spawns entities based on data loaded from Maps/NPCs/Monsters
+        if (this.world.currentMapID && GameDatabase.Maps[this.world.currentMapID]) {
+             this.world.spawnEntitiesForMap(this.world.currentMapID);
+        } else {
+            console.warn("Starting map ID not found in database.");
+        }
 
-        // Connect Actions
         this.actions = new ActionController(this.player);
 
         this.isInitialized = true;
-        console.log("Systems Online. Alpha 2.0 Ready.");
+        console.log("Systems Online.");
         
-        // Notify UI (if exists) that we are ready
         if (window.onGameReady) window.onGameReady();
     }
 
-    /**
-     * Debug Helper: Print status to console
-     */
     debugStatus() {
         if (!this.isInitialized) return "Loading...";
         return `
-        Location: ${this.world.currentMapID} | Time: ${this.world.timeOfDay}
+        Location: ${this.world.currentMapID}
         HP: ${this.player.currentHP}/${this.player.maxHP} | STM: ${this.player.currentStamina}
-        Active Effects: ${this.player.activeStatusEffects.length}
-        Nearby Entities: ${this.world.activeEntities.length}
+        Entities Nearby: ${this.world.activeEntities.length}
         `;
     }
 }
 
-// Global Access Point
 window.Game = new GameManager();
-// Usage in HTML: Game.initialize();
