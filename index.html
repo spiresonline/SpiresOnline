@@ -3,139 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spires Online - Grid Alpha</title>
+    <title>Spires Online - Alpha</title>
     <style>
-        :root {
-            --bg-color: #050505;
-            --panel-bg: #111;
-            --text-color: #aaa;
-            --accent-color: #00bcd4; /* Cyan */
-            --border-color: #333;
-        }
-
         body {
-            font-family: 'Courier New', monospace;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            height: 100vh;
-            overflow: hidden;
-            display: grid;
-            grid-template-rows: 50px 1fr;
-        }
-
-        /* --- HEADER --- */
-        header {
-            background-color: var(--panel-bg);
-            border-bottom: 1px solid var(--border-color);
+            overflow: hidden; /* Prevent scrolling, game handles view */
             display: flex;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
+            height: 100vh;
         }
-        h1 { margin: 0; font-size: 1.2rem; color: var(--accent-color); letter-spacing: 2px; text-transform: uppercase; }
 
-        /* --- MAIN LAYOUT --- */
-        #game-layout {
-            display: grid;
-            grid-template-columns: 250px 1fr 250px; /* Left - Game - Right */
+        #game-container {
+            position: relative;
+            width: 1024px;
+            height: 768px;
+            border: 2px solid #333;
+            background-color: #000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* The Game World */
+        canvas {
+            display: block;
+            image-rendering: pixelated; /* Essential for 64-bit look */
+        }
+
+        /* UI Overlay (HUD) */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
+            pointer-events: none; /* Let clicks pass through to canvas */
+            padding: 10px;
+            box-sizing: border-box;
         }
 
-        /* --- PANELS --- */
-        .panel {
-            background: #0a0a0a;
-            border-right: 1px solid var(--border-color);
-            padding: 15px;
+        .bar-container {
+            margin-bottom: 5px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #444;
+            width: 200px;
+            height: 20px;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            transition: width 0.2s;
+        }
+
+        #hp-bar { background-color: #d32f2f; width: 100%; }
+        #stamina-bar { background-color: #fbc02d; width: 100%; }
+        #mana-bar { background-color: #1976d2; width: 100%; }
+
+        .bar-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 0;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        /* Chat / Combat Log (Bottom Left) */
+        #game-console {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 400px;
+            height: 150px;
+            background: rgba(0,0,0,0.7);
+            border: 1px solid #444;
+            overflow-y: auto;
+            pointer-events: auto;
+            font-size: 12px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column-reverse; /* New messages at bottom */
+        }
+
+        .log-entry { margin: 2px 0; border-bottom: 1px solid #222; }
+        .log-info { color: #aaa; }
+        .log-combat { color: #ff5252; }
+        .log-gain { color: #69f0ae; }
+        
+        /* Loading Screen */
+        #loading-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-        }
-        .panel-right { border-left: 1px solid var(--border-color); border-right: none; }
-        
-        h3 { border-bottom: 1px solid #333; padding-bottom: 5px; margin: 0; font-size: 0.9rem; color: #fff; }
-
-        /* --- THE GAME VIEW (CANVAS) --- */
-        #main-view {
-            display: flex;
-            align-items: center;
             justify-content: center;
-            background-color: #000;
-            position: relative;
-            overflow: hidden;
+            align-items: center;
+            z-index: 999;
         }
-
-        canvas {
-            border: 2px solid #333;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
-            image-rendering: pixelated; /* Crucial for sharp 64x64 art */
-        }
-
-        /* --- STAT BARS --- */
-        .bar-container { width: 100%; background: #222; height: 10px; margin-top: 5px; }
-        .bar-fill { height: 100%; transition: width 0.2s; }
-        .hp { background: #d32f2f; width: 100%; }
-        .stm { background: #388e3c; width: 100%; }
-
-        /* --- INVENTORY GRID --- */
-        .inv-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
-        }
-        .inv-slot {
-            aspect-ratio: 1;
-            background: #151515;
-            border: 1px solid #333;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .inv-slot:hover { border-color: var(--accent-color); cursor: pointer; }
-        .inv-slot img { width: 80%; height: 80%; image-rendering: pixelated; }
-
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Spires Online</h1>
-        <div style="font-size: 0.8rem;">ALPHA 2.1 [GRID]</div>
-    </header>
+    <div id="game-container">
+        <canvas id="gameCanvas" width="1024" height="768"></canvas>
 
-    <div id="game-layout">
-        
-        <aside class="panel">
-            <div>
-                <h3>STATUS</h3>
-                <div style="margin-top:10px;">HP</div>
-                <div class="bar-container"><div class="bar-fill hp"></div></div>
-                <div style="margin-top:5px;">STM</div>
-                <div class="bar-container"><div class="bar-fill stm"></div></div>
+        <div id="ui-layer">
+            <div class="bar-container">
+                <div id="hp-bar" class="bar-fill"></div>
+                <div class="bar-text">HP: <span id="val-hp">100/100</span></div>
             </div>
-            <div>
-                <h3>COORDINATES</h3>
-                <div id="debug-coords" style="color: var(--accent-color); margin-top: 5px;">X: 0 | Y: 0</div>
+            <div class="bar-container">
+                <div id="mana-bar" class="bar-fill"></div>
+                <div class="bar-text">MP: <span id="val-mana">50/50</span></div>
             </div>
-        </aside>
-
-        <main id="main-view">
-            <canvas id="game-canvas"></canvas>
-        </main>
-
-        <aside class="panel panel-right">
-            <h3>INVENTORY</h3>
-            <div class="inv-grid">
-                <div class="inv-slot"></div>
-                <div class="inv-slot"></div>
-                <div class="inv-slot"></div>
-                <div class="inv-slot"></div>
-                <div class="inv-slot"></div>
-                <div class="inv-slot"></div>
+            <div class="bar-container">
+                <div id="stamina-bar" class="bar-fill"></div>
+                <div class="bar-text">STA: <span id="val-stamina">100/100</span></div>
             </div>
-        </aside>
+        </div>
 
+        <div id="game-console">
+            <div class="log-entry log-info">System: Welcome to Nowhere.</div>
+        </div>
+
+        <div id="loading-screen">
+            <h1 style="color:#d32f2f; letter-spacing: 5px;">SPIRES ONLINE</h1>
+            <div id="loading-text">Initializing Core...</div>
+        </div>
     </div>
 
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/Main.js"></script>
 
 </body>
 </html>

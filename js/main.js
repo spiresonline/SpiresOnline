@@ -1,91 +1,92 @@
-import { GameManager } from './GameManager.js';
-import { GameRenderer } from './Renderer.js';
+import { CONFIG } from './Config.js';
+import { Input } from './Input.js';
+import { DataLoader } from './DataLoader.js';
+import { Player } from './Player.js';
+import { Renderer } from './Renderer.js';
 
-// Global references for debugging
-let renderer = null;
+// --- GLOBAL SYSTEMS ---
+const renderer = new Renderer('gameCanvas');
+const loader = new DataLoader();
+const player = new Player();
+
+// --- GAME STATE ---
 let lastTime = 0;
+let moveTimer = 0;
 
-window.addEventListener('load', () => {
-    // 1. Initialize the Core Engine
-    if (window.Game) {
-        window.Game.initialize().then(async () => {
-            console.log("Core Systems Loaded. Starting Renderer...");
-            
-            // 2. Initialize the Visual Engine
-            renderer = new GameRenderer('game-canvas');
-            
-            // 3. Preload Critical Assets
-            // These names must match files in your /assets/ folder (e.g., player_male.png)
-            // If the files don't exist yet, the renderer handles it gracefully (black/cyan box).
-            await renderer.loadAssets([
-                'player_male', 
-                'floor_stone', 
-                'wall_stone',
-                'cursor'
-            ]);
-            
-            // 4. Set Initial Player Position (if not saved)
-            if (!window.Game.player.x) {
-                window.Game.player.x = 5; // Grid Coordinate X
-                window.Game.player.y = 5; // Grid Coordinate Y
-            }
+async function init() {
+    console.log("--- System Start ---");
 
-            // 5. Start the Game Loop
-            requestAnimationFrame(gameLoop);
-            
-            console.log("Visuals Online. 64x64 Grid System Active.");
-        });
-    }
-});
-
-// --- Game Loop ---
-function gameLoop(timestamp) {
-    const deltaTime = timestamp - lastTime;
-    lastTime = timestamp;
-
-    if (window.Game.isInitialized && renderer) {
-        // Render the current state of the World and Player
-        renderer.draw(window.Game.world, window.Game.player);
+    // 1. Load Data (Wait for it!)
+    const dataLoaded = await loader.loadAll();
+    if (!dataLoaded) {
+        alert("Critical Error: Failed to load game data. Check console.");
+        return;
     }
 
+    // 2. Initialize Input
+    Input.init();
+
+    // 3. Hide Loading Screen
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) loadingScreen.style.display = 'none';
+
+    // 4. Start the Loop
     requestAnimationFrame(gameLoop);
 }
 
-// --- Input Handling (Movement) ---
-document.addEventListener('keydown', (e) => {
-    const player = window.Game.player;
-    if (!player) return;
+function gameLoop(timestamp) {
+    // Calculate Delta Time (time passed since last frame)
+    const dt = timestamp - lastTime;
+    lastTime = timestamp;
 
-    // Prevent scrolling with arrows
-    if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
-        e.preventDefault();
-    }
+    update(dt);
+    draw();
+    updateUI();
 
-    // Grid Movement Logic
-    // In a full game, we would check for walls/collisions here before allowing the change.
-    switch(e.key) {
-        case 'ArrowUp': 
-        case 'w': 
-        case 'W':
-            player.y -= 1; 
-            break;
+    // Loop
+    requestAnimationFrame(gameLoop);
+}
+
+function update(dt) {
+    // --- MOVEMENT LOGIC ---
+    // We throttle movement so you don't fly across the screen at lightspeed.
+    // CONFIG.TICK_RATE (100ms) determines how fast you walk.
+    moveTimer += dt;
+    
+    if (moveTimer > CONFIG.TICK_RATE) {
+        const input = Input.getMovementVector();
+        
+        // If player is pressing keys
+        if (input.x !== 0 || input.y !== 0) {
+            // Attempt move
+            const moved = player.move(input.x, input.y);
             
-        case 'ArrowDown': 
-        case 's': 
-        case 'S':
-            player.y += 1; 
-            break;
-            
-        case 'ArrowLeft': 
-        case 'a': 
-        case 'A':
-            player.x -= 1; 
-            break;
-            
-        case 'ArrowRight': 
-        case 'd': 
-        case 'D':
-            player.x += 1; 
-            break;
+            if (moved) {
+                // Reset timer only if we actually moved
+                moveTimer = 0; 
+                
+                // Debug Log
+                // console.log(`Player at ${player.x}, ${player.y}`);
+            }
+        }
     }
-});
+}
+
+function draw() {
+    renderer.draw(player);
+}
+
+function updateUI() {
+    // Update HTML Overlay
+    document.getElementById('val-hp').innerText = `${player.stats.hp}/${player.stats.maxHp}`;
+    document.getElementById('val-mana').innerText = `${player.stats.mana}/${player.stats.maxMana}`;
+    document.getElementById('val-stamina').innerText = `${player.stats.stamina}/${player.stats.maxStamina}`;
+    
+    // Update Widths
+    document.getElementById('hp-bar').style.width = `${(player.stats.hp / player.stats.maxHp) * 100}%`;
+    document.getElementById('mana-bar').style.width = `${(player.stats.mana / player.stats.maxMana) * 100}%`;
+    document.getElementById('stamina-bar').style.width = `${(player.stats.stamina / player.stats.maxStamina) * 100}%`;
+}
+
+// Boot the Game
+init();
